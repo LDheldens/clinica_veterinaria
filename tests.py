@@ -168,6 +168,7 @@ type.icon = 'fas fa-hand-holding-usd'
 type.save()
 print('insertado {}'.format(type.name))
 
+
 module = Module()
 module.moduletype_id = 3
 module.name = 'Cuentas por cobrar'
@@ -182,6 +183,111 @@ for p in Permission.objects.filter(content_type__model=CtasCollect._meta.label.s
     module.permits.add(p)
 print('insertado {}'.format(module.name))
 
+# Modulo de calendario 
+type = ModuleType()
+type.name = 'Calendario'
+type.icon = 'fas fa-calendar-alt'
+type.save()
+print('insertado {}'.format(type.name))
+
+module = Module()
+module.moduletype_id = 4
+module.name = 'Calendario'
+module.url = '/pos/crm/calendario/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-calendar-alt'
+module.description = 'Permite visualisar las citas de a manera de calendario'
+module.save()
+for p in Permission.objects.filter(content_type__model=Cita._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
+module = Module()
+module.moduletype_id = 4
+module.name = 'Registro de citas'
+module.url = '/pos/crm/cita/add/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-calendar-plus'
+module.description = 'Permite registrar una cita'
+module.save()
+for p in Permission.objects.filter(content_type__model=Cita._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
+module = Module()
+module.moduletype_id = 4
+module.name = 'Listado de citas'
+module.url = '/pos/crm/cita/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-list-alt'
+module.description = 'Permite listar las citas'
+module.save()
+for p in Permission.objects.filter(content_type__model=Cita._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
+# Modulo de Usuarios
+type = ModuleType()
+type.name = 'Usuarios'
+type.icon = 'fas fa-user-friends'
+type.save()
+print('insertado {}'.format(type.name))
+
+module = Module()
+module.moduletype_id = 5
+module.name = 'Clientes'
+module.url = '/pos/crm/client/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-user-friends'
+module.description = 'Permite listar clientes'
+module.save()
+for p in Permission.objects.filter(content_type__model=Client._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
+module = Module()
+module.moduletype_id = 5
+module.name = 'Pacientes'
+module.url = '/pos/crm/paciente/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-paw'
+module.description = 'Permite listar pacientes'
+module.save()
+for p in Permission.objects.filter(content_type__model=Paciente._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
+type = ModuleType()
+type.name = 'Médicos'
+type.icon = 'fas fa-user-md'
+type.save()
+print('insertado {}'.format(type.name))
+
+module = Module()
+module.moduletype_id = 6
+module.name = 'Listado de médicos'
+module.url = '/pos/crm/medico/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-list'
+module.description = 'Permite listar los medicos'
+module.save()
+for p in Permission.objects.filter(content_type__model=Medico._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
+
 
 type = ModuleType()
 type.name = 'Facturación'
@@ -189,22 +295,22 @@ type.icon = 'fas fa-calculator'
 type.save()
 print('insertado {}'.format(type.name))
 
-module = Module()
-module.moduletype_id = 4
-module.name = 'Clientes'
-module.url = '/pos/crm/client/'
-module.is_active = True
-module.is_vertical = True
-module.is_visible = True
-module.icon = 'fas fa-user-friends'
-module.description = 'Permite administrar los clientes del sistema'
-module.save()
-for p in Permission.objects.filter(content_type__model=Client._meta.label.split('.')[1].lower()):
-    module.permits.add(p)
-print('insertado {}'.format(module.name))
+# module = Module()
+# module.moduletype_id = 4
+# module.name = 'Clientes'
+# module.url = '/pos/crm/client/'
+# module.is_active = True
+# module.is_vertical = True
+# module.is_visible = True
+# module.icon = 'fas fa-user-friends'
+# module.description = 'Permite administrar los clientes del sistema'
+# module.save()
+# for p in Permission.objects.filter(content_type__model=Client._meta.label.split('.')[1].lower()):
+#     module.permits.add(p)
+# print('insertado {}'.format(module.name))
 
 module = Module()
-module.moduletype_id = 4
+module.moduletype_id = 7
 module.name = 'Ventas'
 module.url = '/pos/crm/sale/admin/'
 module.is_active = True
@@ -217,16 +323,16 @@ for p in Permission.objects.filter(content_type__model=Sale._meta.label.split('.
     module.permits.add(p)
 print('insertado {}'.format(module.name))
 
-module = Module()
-module.name = 'Ventas'
-module.url = '/pos/crm/sale/client/'
-module.is_active = True
-module.is_vertical = False
-module.is_visible = True
-module.icon = 'fas fa-shopping-cart'
-module.description = 'Permite administrar las ventas de los productos'
-module.save()
-print('insertado {}'.format(module.name))
+# module = Module()
+# module.name = 'Ventas'
+# module.url = '/pos/crm/sale/client/'
+# module.is_active = True
+# module.is_vertical = False
+# module.is_visible = True
+# module.icon = 'fas fa-shopping-cart'
+# module.description = 'Permite administrar las ventas de los productos'
+# module.save()
+# print('insertado {}'.format(module.name))
 
 
 type = ModuleType()
@@ -236,7 +342,7 @@ type.save()
 print('insertado {}'.format(type.name))
 
 module = Module()
-module.moduletype_id = 5
+module.moduletype_id = 8
 module.name = 'Ventas'
 module.url = '/reports/sale/'
 module.is_active = True
@@ -249,7 +355,7 @@ print('insertado {}'.format(module.name))
 
 
 module = Module()
-module.moduletype_id = 5
+module.moduletype_id = 8
 module.name = 'Cuentas por Cobrar'
 module.url = '/reports/ctas/collect/'
 module.is_active = True
@@ -321,6 +427,24 @@ for m in Module.objects.filter().exclude(url__in=['/pos/crm/client/update/profil
         grouppermission.group_id = group.id
         grouppermission.permission_id = perm.id
         grouppermission.save()
+        
+group = Group()
+group.name = 'Medico'
+group.save()
+print('insertado {}'.format(group.name))
+for m in Module.objects.filter().exclude(url__in=['/pos/crm/client/update/profile/', '/pos/crm/sale/client/']):
+    gm = GroupModule()
+    gm.module = m
+    gm.group = group
+    gm.save()
+    for perm in m.permits.all():
+        group.permissions.add(perm)
+        grouppermission = GroupPermission()
+        grouppermission.module_id = m.id
+        grouppermission.group_id = group.id
+        grouppermission.permission_id = perm.id
+        grouppermission.save()
+
 
 group = Group()
 group.name = 'Cliente'

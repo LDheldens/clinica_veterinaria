@@ -2,7 +2,7 @@ import math
 import os
 import re
 from datetime import datetime
-
+from django.utils import timezone
 from django.db import models
 from django.db.models import FloatField
 from django.db.models import Sum
@@ -345,3 +345,52 @@ class PaymentsCtaCollect(models.Model):
         ordering = ['-id']
 
 
+# MODELOS 
+class Medico(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    especialidad = models.CharField(max_length = 150)
+    
+
+class TipoMascota(models.Model):
+    tipo_mascota = models.CharField(max_length = 150)
+    
+  
+class Paciente(models.Model):
+    identificacion = models.IntegerField(default=0)
+    propietario = models.ForeignKey(Client, on_delete=models.CASCADE)
+    nombre = models.CharField(max_length=150)
+    fecha_nacimiento = models.DateField(default=timezone.now())  
+    tipo_mascota = models.OneToOneField(TipoMascota, on_delete=models.CASCADE)
+    sexo = models.CharField(max_length=150, default="No especificado")
+    tamanio = models.DecimalField(max_digits=5, decimal_places=2) 
+    raza = models.CharField(max_length=150, blank=True)
+    edad = models.IntegerField()
+    peso = models.DecimalField(max_digits=5, decimal_places=2)
+    descipcion = models.TextField(blank=True)  
+    
+
+class Cita(models.Model):
+    medico = models.OneToOneField(Medico, on_delete=models.CASCADE)
+    asunto = models.TextField()
+    descipcion = models.TextField()
+    fecha_cita = models.DateField(auto_now=False, auto_now_add=False)
+    hora_cita = models.TimeField(auto_now=False, auto_now_add=False)
+    propietario = models.OneToOneField(Client, on_delete=models.CASCADE)
+    mascota = models.OneToOneField(Paciente, on_delete=models.CASCADE)
+    estado = models.BooleanField( default=False)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+    
+    

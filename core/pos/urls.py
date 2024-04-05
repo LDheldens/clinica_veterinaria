@@ -41,4 +41,29 @@ urlpatterns = [
     path('crm/sale/print/voucher/<int:pk>/', SalePrintVoucherView.as_view(), name='sale_print_ticket'),
     path('crm/sale/client/', SaleClientListView.as_view(), name='sale_client_list'),
 
+
+    # rutas de medicos
+    path('crm/medico/', ClientListView.as_view(), name='medico_list'),
+    path('crm/medico/add/', ClientCreateView.as_view(), name='medico_create'),
+    path('crm/medico/update/<int:pk>/', ClientUpdateView.as_view(), name='medico_update'),
+    path('crm/medico/delete/<int:pk>/', ClientDeleteView.as_view(), name='medico_delete'),
+    
+    # tipo mascota
+    path('crm/tipo_mascota/', ClientListView.as_view(), name='tipo_mascota_list'),
+    path('crm/tipo_mascota/add/', ClientCreateView.as_view(), name='tipo_mascota_create'),
+    path('crm/tipo_mascota/update/<int:pk>/', ClientUpdateView.as_view(), name='tipo_mascota_update'),
+    path('crm/tipo_mascota/delete/<int:pk>/', ClientDeleteView.as_view(), name='tipo_mascota_delete'),
+    
+    # paciente
+    path('crm/paciente/', ClientListView.as_view(), name='paciente_list'),
+    path('crm/paciente/add/', ClientCreateView.as_view(), name='paciente_create'),
+    path('crm/paciente/update/<int:pk>/', ClientUpdateView.as_view(), name='paciente_update'),
+    path('crm/paciente/delete/<int:pk>/', ClientDeleteView.as_view(), name='paciente_delete'),
+    
+    # citas
+    path('crm/cita/', ClientListView.as_view(), name='cita_list'),
+    path('crm/calendario/', ClientListView.as_view(), name='cita_list'),
+    path('crm/cita/add/', ClientCreateView.as_view(), name='cita_create'),
+    path('crm/cita/update/<int:pk>/', ClientUpdateView.as_view(), name='cita_update'),
+    path('crm/cita/delete/<int:pk>/', ClientDeleteView.as_view(), name='cita_delete'),
 ]
