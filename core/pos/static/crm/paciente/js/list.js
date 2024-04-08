@@ -79,7 +79,7 @@ function getData() {
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
-                    return data + ' años'
+                    return data + ' año'
                 }
             },
             {

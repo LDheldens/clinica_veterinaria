@@ -8,9 +8,9 @@ from django.db.models import FloatField
 from django.db.models import Sum
 from django.db.models.functions import Coalesce
 from django.forms import model_to_dict
-
+from django.core.exceptions import ValidationError
 from config import settings
-from core.pos.choices import payment_condition, payment_method, voucher, sexo
+from core.pos.choices import payment_condition, payment_method, voucher, sexo_mascota
 from core.user.models import User
 
 
@@ -349,6 +349,16 @@ class PaymentsCtaCollect(models.Model):
 class Medico(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     especialidad = models.CharField(max_length = 150)
+    mobile = models.CharField(max_length=10, unique=True, verbose_name='Teléfono')
+    
+    def __str__(self):
+        return '{} / {}'.format(self.user.get_full_name(), self.user.dni)
+    
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['full_name'] = self.user.get_full_name()
+        item['dni'] = self.user.dni
+        return item
 
 class TipoMascota(models.Model):
     tipo_mascota = models.CharField(max_length = 150)
@@ -356,38 +366,63 @@ class TipoMascota(models.Model):
         item = model_to_dict(self)
         return item
     def __str__(self):
-        return self.tipo_mascota
-    
+        return f'{self.tipo_mascota}'   
+  
 class Paciente(models.Model):
     identificacion = models.IntegerField(verbose_name='Identificación de la mascota')
     propietario = models.ForeignKey(Client, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=150, verbose_name='Nombre de la mascota')
     fecha_nacimiento = models.DateField(default=datetime.now, verbose_name='Fecha de nacimiento')  
     tipo_mascota = models.OneToOneField(TipoMascota, on_delete=models.CASCADE)
-    sexo = models.CharField(choices=sexo, max_length=150, default="sin especificar")
+    sexo = models.CharField(choices=sexo_mascota, max_length=150, default="sin especificar")
     tamanio = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Tamaño') 
     raza = models.CharField(max_length=150, null=True, blank=True)
     edad = models.IntegerField()
     peso = models.DecimalField(max_digits=5, decimal_places=2)
     descripcion = models.TextField(null=True, blank=True, verbose_name='Descripción')
-    def toJSON(self):
-            item = model_to_dict(self)
-            item['tipo_mascota'] = self.tipo_mascota.toJSON()['tipo_mascota']
-            item['propietario'] = self.propietario.toJSON()['user']['full_name']
-            item['fecha_nacimiento'] = self.fecha_nacimiento.strftime('%Y-%m-%d')
-            item['tamanio'] = format(self.tamanio, '.2f')
-            item['peso'] = format(self.peso, '.2f')
-            return item
+    
     def __str__(self):
-            return str(self.identificacion)
-
+        return f'{self.nombre} / {self.tipo_mascota} / {self.raza}'    
+    
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['tipo_mascota'] = self.tipo_mascota.toJSON()['tipo_mascota']
+        item['propietario'] = self.propietario.toJSON()['user']['full_name']
+        item['fecha_nacimiento'] = self.fecha_nacimiento.strftime('%Y-%m-%d')
+        item['tamanio'] = format(self.tamanio, '.2f')
+        item['peso'] = format(self.peso, '.2f')
+        return item
 
 class Cita(models.Model):
-    medico = models.OneToOneField(Medico, on_delete=models.CASCADE)
-    asunto = models.TextField()
-    descipcion = models.TextField()
-    fecha_cita = models.DateField(auto_now=False, auto_now_add=False)
-    hora_cita = models.TimeField(auto_now=False, auto_now_add=False)
-    propietario = models.OneToOneField(Client, on_delete=models.CASCADE)
-    mascota = models.OneToOneField(Paciente, on_delete=models.CASCADE)
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
+    asunto = models.TextField(verbose_name='Asunto')
+    descripcion = models.TextField(verbose_name='Descripción', null=True)
+    fecha_cita = models.DateField(auto_now=False, auto_now_add=False, verbose_name='Fecha de la cita')
+    hora_cita = models.TimeField(auto_now=False, auto_now_add=False, verbose_name='Hora de la cita')
+    propietario = models.ForeignKey(Client, on_delete=models.CASCADE)
+    mascota = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     estado = models.BooleanField( default=False)
+
+    def toJSON(self):
+        item = {
+            'id': self.id,
+            'asunto': self.asunto,
+            'descripcion': self.descripcion,
+            'fecha_cita': self.fecha_cita.strftime('%Y-%m-%d'),
+            'hora_cita': self.hora_cita.strftime('%H:%M:%S'),
+            'estado': self.estado,
+            'medico': {
+                'nombre': self.medico.user.first_name if self.medico else None,
+                'apellidos': self.medico.user.last_name if self.medico else None,
+            },
+            'propietario': {
+                'nombre': self.propietario.user.first_name if self.propietario else None,
+                'apellidos': self.propietario.user.last_name if self.propietario else None,
+            },
+            'mascota': self.mascota.nombre if self.mascota else None,
+        }
+        return item
+
+
+    
+    

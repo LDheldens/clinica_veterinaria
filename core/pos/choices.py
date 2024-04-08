@@ -1,12 +1,13 @@
+
 payment_condition = (
     ('contado', 'Contado'),
     ('credito', 'Credito'),
 )
 
-sexo = (
+sexo_mascota = (
     ('sin especificar', 'Sin especificar'),
-    ('hembra', 'Hembra'),
     ('macho', 'Macho'),
+    ('hembra', 'Hembra'),
 )
 
 payment_method = (

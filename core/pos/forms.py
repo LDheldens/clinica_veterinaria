@@ -359,4 +359,94 @@ class CompanyForm(ModelForm):
         return data
 
 
+class CitaForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CitaForm, self).__init__(*args, **kwargs)
+        
+        # Cargar opciones para el campo de selección de médico
+        medicos = Medico.objects.all()
+        self.fields['medico'].queryset = medicos
+        
+        # Cargar opciones para el campo de selección de propietario
+        propietarios = Client.objects.all()
+        self.fields['propietario'].queryset = propietarios
+        
+        # Cargar opciones para el campo de selección de mascota
+        mascotas = Paciente.objects.all()
+        self.fields['mascota'].queryset = mascotas
 
+    class Meta:
+        model = Cita
+        fields = ['medico', 'asunto', 'descripcion', 'fecha_cita', 'hora_cita', 'propietario', 'mascota']
+        labels = {
+            'medico': 'Médico',
+            'asunto': 'Asunto',
+            'descripcion': 'Descripción',
+            'fecha_cita': 'Fecha de la cita',
+            'hora_cita': 'Hora de la cita',
+            'propietario': 'Propietario',
+            'mascota': 'Mascota',
+        }
+        widgets = {
+            'fecha_cita': forms.DateInput(format='%Y-%m-%d',attrs={'type': 'date', 'class': 'form-control'}),
+            'hora_cita': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
+            'medico': forms.Select(attrs={'class': 'form-control'}),
+            'asunto': forms.TextInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control'}),
+            'propietario': forms.Select(attrs={'class': 'form-control'}),
+            'mascota': forms.Select(attrs={'class': 'form-control'}),
+        }
+        
+class MedicoForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = Medico
+        fields = ['especialidad', 'first_name', 'last_name', 'dni', 'email', 'mobile']
+        widgets = {
+            'especialidad': forms.TextInput(
+                attrs={
+                    'placeholder': 'Ingrese la especialidad',
+                    'class': 'form-control',
+                    'autocomplete': 'off'
+                }
+            ),
+            'mobile': forms.TextInput(
+                attrs={
+                    'placeholder': 'Ingrese su número celular',
+                    'class': 'form-control',
+                    'autocomplete': 'off',
+                    'max_length':9
+                }
+            ),
+        }
+
+    first_name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'autocomplete': 'off',
+        'placeholder': 'Ingrese sus nombres'
+    }), label='Nombres', max_length=50)
+
+    last_name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'autocomplete': 'off',
+        'placeholder': 'Ingrese sus apellidos'
+    }), label='Apellidos', max_length=50)
+
+    dni = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'autocomplete': 'off',
+        'placeholder': 'Ingrese su número de cedula'
+    }), label='Número de DNI', max_length=8)
+
+    email = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'autocomplete': 'off',
+        'placeholder': 'Ingrese su email'
+    }), label='Email', max_length=50)
+
+    # image = forms.ImageField(widget=forms.FileInput(attrs={
+    #     'class': 'form-control',
+    #     'autocomplete': 'off'
+    # }), label='Imagen')

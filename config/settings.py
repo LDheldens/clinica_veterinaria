@@ -112,15 +112,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2.2/topics/i18n/
 
-LANGUAGE_CODE = 'es-ec'
+LANGUAGE_CODE = 'es-pe'  # Español de Perú
 
-TIME_ZONE = 'US/Pacific'
+TIME_ZONE = 'America/Lima'  # Zona horaria de Perú
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False  # Desactivar el uso de zonas horarias
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2.2/howto/static-files/
@@ -165,7 +165,8 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 SESSION_COOKIE_NAME = 'polariss'
 
 GROUPS = {
-    'client': 2,
+    'client': 3,
+    'medic': 2,
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
