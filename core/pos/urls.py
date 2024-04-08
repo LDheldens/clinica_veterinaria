@@ -7,6 +7,8 @@ from core.pos.views.frm.ctascollect.views import *
 from core.pos.views.scm.product.views import *
 from core.pos.views.scm.category.views import *
 from core.pos.views.crm.client.views import *
+from core.pos.views.crm.cita.views import *
+from core.pos.views.crm.medico.views import *
 from core.pos.views.crm.sale.print.views import *
 
 
@@ -43,10 +45,11 @@ urlpatterns = [
 
 
     # rutas de medicos
-    path('crm/medico/', ClientListView.as_view(), name='medico_list'),
-    path('crm/medico/add/', ClientCreateView.as_view(), name='medico_create'),
-    path('crm/medico/update/<int:pk>/', ClientUpdateView.as_view(), name='medico_update'),
-    path('crm/medico/delete/<int:pk>/', ClientDeleteView.as_view(), name='medico_delete'),
+    path('crm/medico/', MedicoListView.as_view(), name='medico_list'),
+    path('crm/medico/add/', MedicoCreateView.as_view(), name='medico_create'),
+    path('crm/medico/update/<int:pk>/', MedicoUpdateView.as_view(), name='medico_update'),
+    path('crm/medico/delete/<int:pk>/', MedicoDeleteView.as_view(), name='medico_delete'),
+
     
     # tipo mascota
     path('crm/tipo_mascota/', ClientListView.as_view(), name='tipo_mascota_list'),
@@ -61,9 +64,9 @@ urlpatterns = [
     path('crm/paciente/delete/<int:pk>/', ClientDeleteView.as_view(), name='paciente_delete'),
     
     # citas
-    path('crm/cita/', ClientListView.as_view(), name='cita_list'),
-    path('crm/calendario/', ClientListView.as_view(), name='cita_list'),
-    path('crm/cita/add/', ClientCreateView.as_view(), name='cita_create'),
-    path('crm/cita/update/<int:pk>/', ClientUpdateView.as_view(), name='cita_update'),
-    path('crm/cita/delete/<int:pk>/', ClientDeleteView.as_view(), name='cita_delete'),
+    path('crm/cita/', CitaListView.as_view(), name='cita_list'),
+    path('crm/calendario/', ClientListView.as_view(), name='calendario_list'),
+    path('crm/cita/add/', CitaCreateView.as_view(), name='cita_create'),
+    path('crm/cita/update/<int:pk>/', CitaUpdateView.as_view(), name='cita_update'),
+    path('crm/cita/delete/<int:pk>/', CitaDeleteView.as_view(), name='cita_delete'),
 ]
