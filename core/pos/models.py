@@ -10,7 +10,7 @@ from django.db.models.functions import Coalesce
 from django.forms import model_to_dict
 
 from config import settings
-from core.pos.choices import payment_condition, payment_method, voucher
+from core.pos.choices import payment_condition, payment_method, voucher, sexo
 from core.user.models import User
 
 
@@ -349,25 +349,38 @@ class PaymentsCtaCollect(models.Model):
 class Medico(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     especialidad = models.CharField(max_length = 150)
-    
 
 class TipoMascota(models.Model):
     tipo_mascota = models.CharField(max_length = 150)
+    def toJSON(self):
+        item = model_to_dict(self)
+        return item
+    def __str__(self):
+        return self.tipo_mascota
     
-  
 class Paciente(models.Model):
-    identificacion = models.IntegerField(default=0)
+    identificacion = models.IntegerField(verbose_name='Identificación de la mascota')
     propietario = models.ForeignKey(Client, on_delete=models.CASCADE)
-    nombre = models.CharField(max_length=150)
-    fecha_nacimiento = models.DateField(default=timezone.now())  
+    nombre = models.CharField(max_length=150, verbose_name='Nombre de la mascota')
+    fecha_nacimiento = models.DateField(default=datetime.now, verbose_name='Fecha de nacimiento')  
     tipo_mascota = models.OneToOneField(TipoMascota, on_delete=models.CASCADE)
-    sexo = models.CharField(max_length=150, default="No especificado")
-    tamanio = models.DecimalField(max_digits=5, decimal_places=2) 
-    raza = models.CharField(max_length=150, blank=True)
+    sexo = models.CharField(choices=sexo, max_length=150, default="sin especificar")
+    tamanio = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Tamaño') 
+    raza = models.CharField(max_length=150, null=True, blank=True)
     edad = models.IntegerField()
     peso = models.DecimalField(max_digits=5, decimal_places=2)
-    descipcion = models.TextField(blank=True)  
-    
+    descripcion = models.TextField(null=True, blank=True, verbose_name='Descripción')
+    def toJSON(self):
+            item = model_to_dict(self)
+            item['tipo_mascota'] = self.tipo_mascota.toJSON()['tipo_mascota']
+            item['propietario'] = self.propietario.toJSON()['user']['full_name']
+            item['fecha_nacimiento'] = self.fecha_nacimiento.strftime('%Y-%m-%d')
+            item['tamanio'] = format(self.tamanio, '.2f')
+            item['peso'] = format(self.peso, '.2f')
+            return item
+    def __str__(self):
+            return str(self.identificacion)
+
 
 class Cita(models.Model):
     medico = models.OneToOneField(Medico, on_delete=models.CASCADE)
@@ -378,19 +391,3 @@ class Cita(models.Model):
     propietario = models.OneToOneField(Client, on_delete=models.CASCADE)
     mascota = models.OneToOneField(Paciente, on_delete=models.CASCADE)
     estado = models.BooleanField( default=False)
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-    
-    

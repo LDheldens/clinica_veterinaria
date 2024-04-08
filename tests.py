@@ -366,6 +366,16 @@ module.description = 'Permite ver los reportes de las cuentas por cobrar'
 module.save()
 print('insertado {}'.format(module.name))
 
+module = Module()
+module.name = 'Tipo de mascotas'
+module.url = '/pos/crm/tipo_mascota/'
+module.is_active = True
+module.is_vertical = False
+module.is_visible = True
+module.icon = 'fas fa-paw'
+module.description = 'Permite cambiar tu password de tu cuenta'
+module.save()
+print('insertado {}'.format(module.name))
 
 module = Module()
 module.name = 'Cambiar password'

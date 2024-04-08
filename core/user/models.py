@@ -17,7 +17,7 @@ class User(AbstractUser):
     is_change_password = models.BooleanField(default=False)
     token = models.UUIDField(primary_key=False, editable=False, null=True, blank=True, default=uuid.uuid4, unique=True)
 
-    def toJSON(self):
+    def toJSON(self):   
         item = model_to_dict(self, exclude=['last_login', 'token', 'password', 'user_permissions'])
         item['image'] = self.get_image()
         item['full_name'] = self.get_full_name()

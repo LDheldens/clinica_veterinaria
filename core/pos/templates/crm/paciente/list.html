@@ -1,0 +1,24 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+   <script src="{% static 'crm/paciente/js/list.js' %}"></script>
+{% endblock %}
+
+{% block columns %}
+    <th>Nro</th>
+    <th>Propietario de la mascota</th>
+    <th>Nombre de la mascota</th>
+    <th>Fecha de nacimiento</th>
+    <th>Tipo de mascota</th>
+    <th>Sexo</th>
+    <th>Edad</th>
+    <th class="text-center">Opciones</th>
+{% endblock %}
+
+{% block rows %}
+
+{% endblock %}
+
+{% block javascript_list %}
+
+{% endblock %}

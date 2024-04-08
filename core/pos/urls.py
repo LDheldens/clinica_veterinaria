@@ -49,16 +49,16 @@ urlpatterns = [
     path('crm/medico/delete/<int:pk>/', ClientDeleteView.as_view(), name='medico_delete'),
     
     # tipo mascota
-    path('crm/tipo_mascota/', ClientListView.as_view(), name='tipo_mascota_list'),
-    path('crm/tipo_mascota/add/', ClientCreateView.as_view(), name='tipo_mascota_create'),
-    path('crm/tipo_mascota/update/<int:pk>/', ClientUpdateView.as_view(), name='tipo_mascota_update'),
-    path('crm/tipo_mascota/delete/<int:pk>/', ClientDeleteView.as_view(), name='tipo_mascota_delete'),
+    path('crm/tipo_mascota/', TipoMascotaListView.as_view(), name='tipo_mascota_list'),
+    path('crm/tipo_mascota/add/', TipoMascotaCreateView.as_view(), name='tipo_mascota_create'),
+    path('crm/tipo_mascota/update/<int:pk>/', TipoMascotaUpdateView.as_view(), name='tipo_mascota_update'),
+    path('crm/tipo_mascota/delete/<int:pk>/', TipoMascotaDeleteView.as_view(), name='tipo_mascota_delete'),
     
     # paciente
-    path('crm/paciente/', ClientListView.as_view(), name='paciente_list'),
-    path('crm/paciente/add/', ClientCreateView.as_view(), name='paciente_create'),
-    path('crm/paciente/update/<int:pk>/', ClientUpdateView.as_view(), name='paciente_update'),
-    path('crm/paciente/delete/<int:pk>/', ClientDeleteView.as_view(), name='paciente_delete'),
+    path('crm/paciente/', PacienteListView.as_view(), name='paciente_list'),
+    path('crm/paciente/add/', PacienteCreateView.as_view(), name='paciente_create'),
+    path('crm/paciente/update/<int:pk>/', PacienteUpdateView.as_view(), name='paciente_update'),
+    path('crm/paciente/delete/<int:pk>/', PacienteDeleteView.as_view(), name='paciente_delete'),
     
     # citas
     path('crm/cita/', ClientListView.as_view(), name='cita_list'),

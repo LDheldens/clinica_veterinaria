@@ -55,6 +55,93 @@ class ProductForm(ModelForm):
             data['error'] = str(e)
         return data
 
+class TipoMascotaForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = TipoMascota
+        fields = ['tipo_mascota']
+        widgets = {
+            'tipo_mascota': forms.TextInput(
+                attrs={
+                    'placeholder': 'Ingrese el tipo de mascota',
+                    'class': 'form-control',
+                    'autocomplete': 'off'
+                }
+            )
+        }
+
+class PacienteForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = Paciente
+        fields = fields = '__all__'
+        widgets = {
+            'identificacion': forms.TextInput(
+                attrs={
+                    'placeholder': 'Ingrese la identificacion',
+                    'class': 'form-control',
+                    'autocomplete': 'off'
+                }
+            ),
+            'propietario': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
+            'nombre': forms.TextInput(
+                attrs={
+                    'placeholder': 'Ingrese el propietario',
+                    'class': 'form-control',
+                    'autocomplete': 'off'
+                }
+            ),
+            'fecha_nacimiento': forms.DateInput(format='%Y-%m-%d', attrs={
+                'class': 'form-control datetimepicker-input',
+                'id': 'fecha_nacimiento',
+                'value': datetime.now().strftime('%Y-%m-%d'),
+                'data-toggle': 'datetimepicker',
+                'data-target': '#fecha_nacimiento'
+            }),
+            'tipo_mascota': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
+            'sexo': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
+            'tamanio': forms.TextInput(
+                attrs={
+                    'placeholder': 'Ingrese el tamaño de la mascota',
+                    'class': 'form-control',
+                    'autocomplete': 'off'
+                }
+            ),
+            'raza': forms.TextInput(
+                attrs={
+                    'placeholder': 'Ingrese la raza',
+                    'class': 'form-control',
+                    'autocomplete': 'off'
+                }
+            ),
+            'edad': forms.TextInput(
+                attrs={
+                    'placeholder': 'Ingrese la edad',
+                    'class': 'form-control',
+                    'autocomplete': 'off'
+                }
+            ),
+            'peso': forms.TextInput(
+                attrs={
+                    'placeholder': 'Ingrese el peso',
+                    'class': 'form-control',
+                    'autocomplete': 'off'
+                }
+            ),
+            'descripcion': forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'autocomplete': 'off',
+                    'rows': 3,
+                    'cols': 3,
+                    'placeholder': 'Ingrese una descripción'
+                }
+            ),
+        }
 
 class ClientForm(ModelForm):
     def __init__(self, *args, **kwargs):
