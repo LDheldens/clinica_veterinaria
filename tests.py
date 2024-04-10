@@ -373,7 +373,18 @@ module.is_active = True
 module.is_vertical = False
 module.is_visible = True
 module.icon = 'fas fa-paw'
-module.description = 'Permite cambiar tu password de tu cuenta'
+module.description = 'Permite añadir un tipo de mascota'
+module.save()
+print('insertado {}'.format(module.name))
+
+module = Module()
+module.name = 'Hospitalización'
+module.url = '/pos/crm/hospitalizacion/'
+module.is_active = True
+module.is_vertical = False
+module.is_visible = True
+module.icon = 'fas fa-bed'
+module.description = 'Permite registrar una hospitalización de una mascota'
 module.save()
 print('insertado {}'.format(module.name))
 

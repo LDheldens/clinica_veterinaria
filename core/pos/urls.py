@@ -57,6 +57,12 @@ urlpatterns = [
     path('crm/tipo_mascota/update/<int:pk>/', TipoMascotaUpdateView.as_view(), name='tipo_mascota_update'),
     path('crm/tipo_mascota/delete/<int:pk>/', TipoMascotaDeleteView.as_view(), name='tipo_mascota_delete'),
     
+    # Hospitalización
+    path('crm/hospitalizacion/', HospitalizacionListView.as_view(), name='hospitalizacion_list'),
+    path('crm/hospitalizacion/add/', HospitalizacionCreateView.as_view(), name='hospitalizacion_create'),
+    path('crm/hospitalizacion/update/<int:pk>/', HospitalizacionUpdateView.as_view(), name='hospitalizacion_update'),
+    path('crm/hospitalizacion/delete/<int:pk>/', HospitalizacionDeleteView.as_view(), name='hospitalizacion_delete'),
+
     # paciente
     path('crm/paciente/', PacienteListView.as_view(), name='paciente_list'),
     path('crm/paciente/add/', PacienteCreateView.as_view(), name='paciente_create'),

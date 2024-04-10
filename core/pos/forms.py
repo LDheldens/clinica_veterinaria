@@ -72,6 +72,61 @@ class TipoMascotaForm(ModelForm):
             )
         }
 
+class HospitalizacionForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = Hospitalizacion
+        fields = fields = '__all__'
+        widgets = {
+            'mascota': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
+            'fecha_ingreso': forms.DateInput(format='%Y-%m-%d', attrs={
+                'class': 'form-control datetimepicker-input',
+                'id': 'fecha_ingreso',
+                'value': datetime.now().strftime('%Y-%m-%d'),
+                'data-toggle': 'datetimepicker',
+                'data-target': '#fecha_ingreso'
+            }),
+            'fecha_salida': forms.DateInput(format='%Y-%m-%d', attrs={
+                'class': 'form-control datetimepicker-input',
+                'id': 'fecha_salida',
+                'value': datetime.now().strftime('%Y-%m-%d'),
+                'data-toggle': 'datetimepicker',
+                'data-target': '#fecha_salida'
+            }),
+            'medicinas_aplicadas': forms.TextInput(
+                attrs={
+                    'placeholder': 'Ingrese las medicinas aplicadas',
+                    'class': 'form-control',
+                    'autocomplete': 'off'
+                }
+            ),
+            'motivo': forms.TextInput(
+                attrs={
+                    'placeholder': 'Ingrese el motivo',
+                    'class': 'form-control',
+                    'autocomplete': 'off'
+                }
+            ),
+            'antecedentes': forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'autocomplete': 'off',
+                    'rows': 3,
+                    'cols': 3,
+                    'placeholder': 'Ingrese los antecedentes de la mascota'
+                }
+            ),
+            'tratamiento': forms.TextInput(
+                attrs={
+                    'placeholder': 'Ingrese el tratamiento de la mascota',
+                    'class': 'form-control',
+                    'autocomplete': 'off'
+                }
+            ),
+        }
+
 class PacienteForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
