@@ -125,7 +125,11 @@ class HospitalizacionForm(ModelForm):
                     'autocomplete': 'off'
                 }
             ),
+            # 'internado': forms.CheckboxInput(attrs={'class': 'form-control-checkbox'})
+            # 'internado': forms.BooleanField()
         }
+        # exclude = ['internado']
+        # internado = forms.BooleanField(initial=True, required=False)
 
 class PacienteForm(ModelForm):
     def __init__(self, *args, **kwargs):

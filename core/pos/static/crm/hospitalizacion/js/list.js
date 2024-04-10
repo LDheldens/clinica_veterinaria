@@ -20,7 +20,7 @@ function getData() {
             {"data": "fecha_ingreso"},
             {"data": "medicinas_aplicadas"},
             {"data": "dias_internados"},
-            {"data": "estado"},
+            {"data": "internado"},
             {"data": "id"},
         ],
         columnDefs: [
@@ -61,7 +61,13 @@ function getData() {
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
-                    return data
+                    console.log({
+                        data
+                    })
+                    if (data) {
+                        return '<span class="badge bg-warning text-dark">Internado</span>'
+                    }
+                    return '<span class="badge bg-success">Dado de alta</span>'
                 }
             },
             {
@@ -70,7 +76,12 @@ function getData() {
                 orderable: false,
                 render: function (data, type, row) {
                     var buttons = '<a href="/pos/crm/hospitalizacion/update/' + row.id + '/" class="btn btn-warning btn-xs btn-flat"><i class="fas fa-edit"></i></a> ';
-                    buttons += '<a href="/pos/crm/hospitalizacion/delete/' + row.id + '/" class="btn btn-danger btn-xs btn-flat"><i class="fas fa-trash-alt"></i></a>';
+                    buttons += '<a href="/pos/crm/hospitalizacion/delete/' + row.id + '/" class="btn btn-danger btn-xs btn-flat"><i class="fas fa-trash-alt"></i></a> ';
+                    if(row.internado) {
+                        buttons += '<a href="/pos/crm/hospitalizacion/update_internamiento/' + row.id + '/" class="btn btn-success btn-xs btn-flat"> <span class="text-white">Dar de alta</span> <i class="fas fa-check"></i></a>';
+                    } else {
+                        buttons += '<a href="/pos/crm/hospitalizacion/update_internamiento/' + row.id + '/" class="btn btn-danger btn-xs btn-flat"> <span class="text-white">Dar de baja</span> <i class="fas fa-check"></i></a>';
+                    }
                     return buttons;
                 }
             },

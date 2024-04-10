@@ -254,6 +254,7 @@ class HospitalizacionUpdateView(PermissionMixin, UpdateView):
             'motivo': instance.motivo,
             'antecedentes': instance.antecedentes,
             'tratamiento': instance.tratamiento,
+            'internado': instance.internado,
         })
         return form
 
@@ -284,6 +285,7 @@ class HospitalizacionUpdateView(PermissionMixin, UpdateView):
                     hospitalizacion.motivo = request.POST['motivo']
                     hospitalizacion.antecedentes = request.POST['antecedentes']
                     hospitalizacion.tratamiento = request.POST['tratamiento']
+                    hospitalizacion.internado = request.POST.get('internado', False) == 'on'
                     hospitalizacion.save()
             elif action == 'validate_data':
                 return self.validate_data()
@@ -323,6 +325,28 @@ class HospitalizacionDeleteView(PermissionMixin, DeleteView):
         context['list_url'] = self.success_url
         return context
 
+class HospitalizacionUpdateInternamientoView(PermissionMixin, DeleteView):
+    model = Hospitalizacion
+    template_name = 'crm/hospitalizacion/udpate_internamiento.html'
+    success_url = reverse_lazy('hospitalizacion_list')
+    permission_required = 'delete_client'
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            with transaction.atomic():
+                instance = self.get_object()
+                instance.internado = False if instance.internado else True
+                instance.save()
+        except Exception as e:
+            data['error'] = str(e)
+        return HttpResponse(json.dumps(data), content_type='application/json')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Notificación de actualización de internamiento'
+        context['list_url'] = self.success_url
+        return context
 
 class PacienteListView(PermissionMixin, TemplateView):
     template_name = 'crm/paciente/list.html'
@@ -446,6 +470,7 @@ class PacienteUpdateView(PermissionMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         data = {}
         action = request.POST['action']
+        print(request)
         try:
             if action == 'edit':
                 with transaction.atomic():

@@ -431,14 +431,17 @@ class Hospitalizacion(models.Model):
     motivo = models.CharField(max_length=150, verbose_name='Motivo')
     antecedentes = models.TextField(verbose_name='Antecedentes')
     tratamiento = models.CharField(max_length=200, verbose_name='Tratamiento')
-    
-    def dias_internados():
-        return ''
+    internado = models.BooleanField(default=True, verbose_name='Internado')
+
+    def dias_internados(self):
+        now = datetime.now().date() 
+        result = now - self.fecha_ingreso
+        return result.days
 
     def toJSON(self):
         item = model_to_dict(self)
         item['fecha_ingreso'] = self.fecha_ingreso.strftime('%Y-%m-%d')
         item['fecha_salida'] = self.fecha_salida.strftime('%Y-%m-%d')
-        item['dias_internados'] = 1
-        item['estado'] = 'dado de alta'
+        item['dias_internados'] = self.dias_internados()
+        # item['estado'] = 'internado' if self.internado else 'dado de alta',
         return item
