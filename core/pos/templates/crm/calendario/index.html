@@ -1,0 +1,117 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+
+    <script src="{% static 'crm/calendario/js/fullCallendar.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{% static 'crm/calendario/js/calendario.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'crm/calendario/css/calendario.css' %}">
+{% endblock %}
+
+{% block content %}
+    <section id="calendar">
+
+    </section>
+
+    <section id="myModal" class="modal">
+        <div class="modal-contenedor">
+            <div class="modal-content">
+                <div class="d-flex justify-content-end">
+                    <button class="close-modal btn btn-danger"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-mensaje">
+                    <div data-id="" class="mensaje1">
+                        <div>
+                            <strong>Asunto: </strong>
+                            <p></p>
+                        </div>
+                        <div>
+                            <strong>Descripción: </strong>
+                            <p></p>
+                        </div>
+                        <div>
+                            <strong>Fecha de la cita:</strong>
+                            <p></p>
+                        </div>
+                        <div>
+                            <strong>Hora de la cita:</strong>
+                            <p></p>
+                        </div>
+                        <div>
+                            <strong>Estado:</strong>
+                            <p></p>
+                        </div>
+                        <div>
+                            <strong>Médico:</strong>
+                            <p></p>
+                        </div>
+                        <div>
+                            <strong>Propietario:</strong>
+                            <p></p>
+                        </div>
+                        <div>
+                            <strong>Paciente:</strong>
+                            <p></p>
+                        </div>
+                        <div class="botones mt-3">
+                            <button class="btn btn-success btn-editar"><i class="fas fa-edit"></i> Editar</button>
+                            <button class="btn-delete btn btn-danger"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                        </div>
+                    </div>
+                    <div class="mensaje2">
+                        <form novalidate class="formulario-cita">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="asunto" class="form-label">Asunto:</label>
+                                <input type="text" class="form-control" id="asunto" name="asunto" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label">Descripción:</label>
+                                <textarea class="form-control" id="descripcion" name="descripcion" required></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="fecha" class="form-label">Fecha:</label>
+                                        <input type="date" class="form-control" id="fecha" name="fecha" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="hora" class="form-label">Hora:</label>
+                                        <input type="time" class="form-control" id="hora" name="hora" required>
+                                    </div>
+                                </div>
+                            </div>
+        
+                            <div class="mb-3">
+                                <label for="doctor" class="form-label">Doctor:</label>
+                                <select class="form-select w-100" id="doctor" name="doctor" required>
+                                    <option class="text-center" value="">Seleccionar Doctor</option>
+                                    <!-- Aquí debes agregar las opciones del select de doctores -->
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="mascota" class="form-label">Mascota:</label>
+                                <select class="form-select w-100" id="mascota" name="mascota" required>
+                                    <option class="text-center" value="">Seleccionar Mascota</option>
+                                    <!-- Aquí debes agregar las opciones del select de mascotas -->
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="propietario" class="form-label">Propietario:</label>
+                                <select class="form-select w-100" id="propietario" name="propietario" required>
+                                    <option class="text-center" value="">Seleccionar Propietario</option>
+                                    <!-- Aquí debes agregar las opciones del select de propietarios -->
+                                </select>
+                            </div>
+                            <!-- Otros campos del formulario -->
+                            <button type="submit" class="btn-submit-cita btn btn-primary">Registrar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+

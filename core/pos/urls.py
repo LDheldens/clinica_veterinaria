@@ -9,6 +9,7 @@ from core.pos.views.scm.category.views import *
 from core.pos.views.crm.client.views import *
 from core.pos.views.crm.cita.views import *
 from core.pos.views.crm.medico.views import *
+from core.pos.views.crm.calendario.views import *
 from core.pos.views.crm.sale.print.views import *
 
 
@@ -65,8 +66,19 @@ urlpatterns = [
     
     # citas
     path('crm/cita/', CitaListView.as_view(), name='cita_list'),
-    path('crm/calendario/', ClientListView.as_view(), name='calendario_list'),
+    path('crm/cita/cambiar_estado/', CambiarEstadoCitaView.as_view(), name='cambiar_estado_cita'),
     path('crm/cita/add/', CitaCreateView.as_view(), name='cita_create'),
     path('crm/cita/update/<int:pk>/', CitaUpdateView.as_view(), name='cita_update'),
     path('crm/cita/delete/<int:pk>/', CitaDeleteView.as_view(), name='cita_delete'),
+    
+    #calendario
+    path('crm/calendario/', CalendarioListView.as_view(), name='calendario'),
+    path('api/citas/', ListaCitasView.as_view(), name='lista_citas'),
+    path('obtener-datos/', ObtenerDatosView.as_view(), name='obtener_datos'),
+    #api para traer todos los medicos, mascotas, clientes
+    
+    #citas por envio atraves de js
+    path('crm/cita/js/add/', RegistroCitaView.as_view(), name='registro_cita'),
+    path('crm/cita/js/edit/<int:cita_id>/', EditarCitaView.as_view(), name='editar_cita'),
+    path('crm/cita/js/delete/<int:cita_id>/', EliminarCitaView.as_view(), name='eliminar_cita'),
 ]

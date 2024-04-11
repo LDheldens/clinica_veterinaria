@@ -1,0 +1,52 @@
+#myModal {
+    display: none;
+    background-color: rgba(22, 21, 21, 0.5);
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+}
+.modal-contenedor{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+#myModal .modal-content {
+    background-color: white;
+    max-width: 400px;
+    padding: 20px;
+    border-radius: 10px;
+}
+.mensaje1 div{
+    display: flex;
+    gap: 20px;
+}
+.mensaje1 div p{
+    max-width: 220px;
+    word-wrap: break-word;
+    overflow-wrap: break-word; /* Propiedad adicional para evitar el desbordamiento horizontal */
+}
+.mensaje1 div *{
+    margin: 5px 0;
+}
+.mensaje1, .mensaje2{
+    display: none;
+}
+
+/* Estilo de las vistas del calendario */
+.fc-view {
+    border: 1px solid #0652DD;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+/* .fc-event {
+    background-color: #0652DD; 
+    color: #fff; 
+    border-color: #3788d8; 
+}
+.fc-event:hover{
+    background-color: #0652DD; 
+    color: white; 
+} */

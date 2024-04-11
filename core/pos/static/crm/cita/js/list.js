@@ -19,7 +19,7 @@ function getData() {
             {"data": "id"},
             {"data": "medico.nombre"},
             {"data": "propietario.nombre"},
-            {"data": "mascota"},
+            {"data": "mascota.nombre"},
             {"data": "fecha_cita"},
             {"data": "hora_cita"},
             {"data": null},
@@ -34,12 +34,12 @@ function getData() {
             {
                 targets: [6], // Índice de la columna del estado en los datos
                 class: 'text-center',
-                orderable: true, // Opcional, para permitir o no que la columna sea ordenable
+                orderable: true,
                 render: function (data, type, row) {
                     if (row.estado === false) {
-                        return '<span class="badge badge-warning">Pendiente</span>';
+                        return '<button class="btn btn-warning btn-xs btn-flat btn-change-status" onclick="cambiarEstado(' + row.id + ')">Pendiente</button>';
                     } else {
-                        return '<span class="badge badge-success">Confirmado</span>';
+                        return '<button class="btn btn-success btn-xs btn-flat btn-change-status" onclick="cambiarEstado(' + row.id + ')">Atendido</button>';
                     }
                 }
             },
@@ -54,12 +54,34 @@ function getData() {
                 }
             },
         ],
-        initComplete: function (settings, json) {
-
-        }
     });
 }
 
 $(function () {
     getData();
 });
+
+function cambiarEstado(citaId) {
+    console.log(citaId);
+    fetch('/pos/crm/cita/cambiar_estado/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify({
+            cita_id: citaId,
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al cambiar el estado de la cita');
+        }
+        console.log('Estado cambiado con éxito.');
+        // Actualizar la tabla de datos si es necesario
+        $('#data').DataTable().ajax.reload();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}

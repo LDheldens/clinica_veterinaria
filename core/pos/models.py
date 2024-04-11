@@ -373,7 +373,7 @@ class Paciente(models.Model):
     propietario = models.ForeignKey(Client, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=150, verbose_name='Nombre de la mascota')
     fecha_nacimiento = models.DateField(default=datetime.now, verbose_name='Fecha de nacimiento')  
-    tipo_mascota = models.OneToOneField(TipoMascota, on_delete=models.CASCADE)
+    tipo_mascota = models.ForeignKey(TipoMascota, on_delete=models.CASCADE)
     sexo = models.CharField(choices=sexo_mascota, max_length=150, default="sin especificar")
     tamanio = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Tamaño') 
     raza = models.CharField(max_length=150, null=True, blank=True)
@@ -412,14 +412,20 @@ class Cita(models.Model):
             'hora_cita': self.hora_cita.strftime('%H:%M:%S'),
             'estado': self.estado,
             'medico': {
+                'id': self.medico.id,
                 'nombre': self.medico.user.first_name if self.medico else None,
                 'apellidos': self.medico.user.last_name if self.medico else None,
             },
             'propietario': {
+                'id': self.propietario.id,  # Agregar el ID del propietario
                 'nombre': self.propietario.user.first_name if self.propietario else None,
                 'apellidos': self.propietario.user.last_name if self.propietario else None,
             },
-            'mascota': self.mascota.nombre if self.mascota else None,
+            'mascota': {
+                'id': self.mascota.id,  # Agregar el ID de la mascota
+                'nombre': self.mascota.nombre if self.mascota else None,
+                'mascota_full_data': f'{self.mascota.nombre} / {self.mascota.tipo_mascota} / {self.mascota.raza}' if self.mascota else None,
+            },
         }
         return item
 
