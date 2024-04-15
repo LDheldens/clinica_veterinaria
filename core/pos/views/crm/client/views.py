@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView, TemplateView
 
 from config import settings
-from core.pos.forms import ClientForm, User, Client, TipoMascota, TipoMascotaForm, Paciente, PacienteForm
+from core.pos.forms import ClientForm, HospitalizacionForm, User, Client, TipoMascota, TipoMascotaForm, Paciente, PacienteForm, Hospitalizacion
 from core.security.mixins import ModuleMixin, PermissionMixin
 
 class TipoMascotaListView(PermissionMixin, TemplateView):
@@ -158,6 +158,196 @@ class TipoMascotaDeleteView(PermissionMixin, DeleteView):
         return context
 
 
+class HospitalizacionListView(PermissionMixin, TemplateView):
+    template_name = 'crm/hospitalizacion/list.html'
+    permission_required = 'view_client'
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'search':
+                data = []
+                for i in Hospitalizacion.objects.filter():
+                    data.append(i.toJSON())
+            else:
+                data['error'] = 'Ha ocurrido un error'
+        except Exception as e:
+            data['error'] = str(e)
+        print(data)
+        return HttpResponse(json.dumps(data), content_type='application/json')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['create_url'] = reverse_lazy('hospitalizacion_create')
+        context['title'] = 'Listado de Hospitalización'
+        return context
+    
+class HospitalizacionCreateView(PermissionMixin, CreateView):
+    model = Hospitalizacion
+    template_name = 'crm/hospitalizacion/create.html'
+    form_class = HospitalizacionForm
+    success_url = reverse_lazy('hospitalizacion_list')
+    permission_required = 'add_client'
+
+    def validate_data(self):
+        data = {'valid': True}
+        try:
+            type = self.request.POST['type']
+            obj = self.request.POST['obj'].strip()
+            if type == 'mascota':
+                if Hospitalizacion.objects.filter(mascota_id=obj):
+                    data['valid'] = False
+        except:
+            pass
+        return JsonResponse(data)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        action = request.POST['action']
+        try:
+            if action == 'add':
+                with transaction.atomic():
+                    hospitalizacion = Hospitalizacion()
+                    hospitalizacion.mascota_id = request.POST['mascota']
+                    hospitalizacion.fecha_ingreso = request.POST['fecha_ingreso']
+                    hospitalizacion.fecha_salida = request.POST['fecha_salida']
+                    hospitalizacion.medicinas_aplicadas = request.POST['medicinas_aplicadas']
+                    hospitalizacion.motivo = request.POST['motivo']
+                    hospitalizacion.antecedentes = request.POST['antecedentes']
+                    hospitalizacion.tratamiento = request.POST['tratamiento']
+                    hospitalizacion.save()
+            elif action == 'validate_data':
+                return self.validate_data()
+            else:
+                data['error'] = 'No ha seleccionado ninguna opción'
+        except Exception as e:
+            data['error'] = str(e)
+        return HttpResponse(json.dumps(data), content_type='application/json')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['list_url'] = self.success_url
+        context['title'] = 'Nuevo registro de hospitalización'
+        context['action'] = 'add'
+        context['instance'] = None
+        return context
+
+class HospitalizacionUpdateView(PermissionMixin, UpdateView):
+    model = Hospitalizacion
+    template_name = 'crm/hospitalizacion/create.html'
+    form_class = HospitalizacionForm
+    success_url = reverse_lazy('hospitalizacion_list')
+    permission_required = 'change_client'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form(self, form_class=None):
+        instance = self.object
+        form = HospitalizacionForm(instance=instance, initial={
+            'mascota': instance.mascota,
+            'fecha_ingreso': instance.fecha_ingreso,
+            'fecha_salida': instance.fecha_salida,
+            'medicinas_aplicadas': instance.medicinas_aplicadas,
+            'motivo': instance.motivo,
+            'antecedentes': instance.antecedentes,
+            'tratamiento': instance.tratamiento,
+            'internado': instance.internado,
+        })
+        return form
+
+    def validate_data(self):
+        data = {'valid': True}
+        try:
+            type = self.request.POST['type']
+            obj = self.request.POST['obj'].strip()
+            if type == 'mascota':
+                if Hospitalizacion.objects.filter(mascota_id=obj):
+                    data['valid'] = False
+        except:
+            pass
+        return JsonResponse(data)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        action = request.POST['action']
+        try:
+            if action == 'edit':
+                with transaction.atomic():
+                    instance = self.object
+                    hospitalizacion = instance
+                    hospitalizacion.mascota_id = request.POST['mascota']
+                    hospitalizacion.fecha_ingreso = request.POST['fecha_ingreso']
+                    hospitalizacion.fecha_salida = request.POST['fecha_salida']
+                    hospitalizacion.medicinas_aplicadas = request.POST['medicinas_aplicadas']
+                    hospitalizacion.motivo = request.POST['motivo']
+                    hospitalizacion.antecedentes = request.POST['antecedentes']
+                    hospitalizacion.tratamiento = request.POST['tratamiento']
+                    hospitalizacion.internado = request.POST.get('internado', False) == 'on'
+                    hospitalizacion.save()
+            elif action == 'validate_data':
+                return self.validate_data()
+            else:
+                data['error'] = 'No ha seleccionado ninguna opción'
+        except Exception as e:
+            data['error'] = str(e)
+        return HttpResponse(json.dumps(data), content_type='application/json')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['list_url'] = self.success_url
+        context['title'] = 'Edición de una hospitalización'
+        context['action'] = 'edit'
+        context['instance'] = self.object
+        return context
+
+class HospitalizacionDeleteView(PermissionMixin, DeleteView):
+    model = Hospitalizacion
+    template_name = 'crm/hospitalizacion/delete.html'
+    success_url = reverse_lazy('hospitalizacion_list')
+    permission_required = 'delete_client'
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            with transaction.atomic():
+                instance = self.get_object()
+                instance.delete()
+        except Exception as e:
+            data['error'] = str(e)
+        return HttpResponse(json.dumps(data), content_type='application/json')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Notificación de eliminación'
+        context['list_url'] = self.success_url
+        return context
+
+class HospitalizacionUpdateInternamientoView(PermissionMixin, DeleteView):
+    model = Hospitalizacion
+    template_name = 'crm/hospitalizacion/udpate_internamiento.html'
+    success_url = reverse_lazy('hospitalizacion_list')
+    permission_required = 'delete_client'
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            with transaction.atomic():
+                instance = self.get_object()
+                instance.internado = False if instance.internado else True
+                instance.save()
+        except Exception as e:
+            data['error'] = str(e)
+        return HttpResponse(json.dumps(data), content_type='application/json')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Notificación de actualización de internamiento'
+        context['list_url'] = self.success_url
+        return context
+
 class PacienteListView(PermissionMixin, TemplateView):
     template_name = 'crm/paciente/list.html'
     permission_required = 'view_paciente'
@@ -280,6 +470,7 @@ class PacienteUpdateView(PermissionMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         data = {}
         action = request.POST['action']
+        print(request)
         try:
             if action == 'edit':
                 with transaction.atomic():

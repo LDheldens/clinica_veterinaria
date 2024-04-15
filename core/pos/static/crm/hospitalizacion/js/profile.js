@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                     validators: {
                         notEmpty: {},
                         stringLength: {
-                            max:8
+                            min: 10
                         },
                         digits: {},
                         remote: {
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                                     action: 'validate_data'
                                 };
                             },
-                            message: 'El número de DNI ya se encuentra registrado',
+                            message: 'El número de cedula ya se encuentra registrado',
                             method: 'POST',
                             headers: {
                                 'X-CSRFToken': csrftoken
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                     validators: {
                         notEmpty: {},
                         stringLength: {
-                            max:9
+                            min: 7
                         },
                         digits: {},
                         remote: {
@@ -179,8 +179,6 @@ $(function () {
         locale: 'es',
         keepOpen: false,
     });
-
-    input_birthdate.datetimepicker('date', input_birthdate.val());
 
     input_birthdate.on('change.datetimepicker', function (e) {
         fv.revalidateField('birthdate');

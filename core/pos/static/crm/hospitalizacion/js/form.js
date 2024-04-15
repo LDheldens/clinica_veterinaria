@@ -1,5 +1,6 @@
 var fv;
-var fecha_nacimiento;
+var fecha_ingreso;
+var fecha_salida;
 
 document.addEventListener('DOMContentLoaded', function (e) {
     const form = document.getElementById('frmForm');
@@ -17,70 +18,50 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 }),
             },
             fields: {
-                
-                identificacion: {
-                    validators: {
-                        notEmpty: {
-                            message: 'La identificación es obligatorio'
-                        },
-                    }
-                },
-                propietario: {
-                    validators: {
-                        notEmpty: {
-                            message: 'El propietario es obligatorio'
-                        },
-                    }
-                },
-                nombre: {
-                    validators: {
-                        stringLength: {
-                            min: 2
-                        },
-                        notEmpty: {
-                            message: 'El nombre de la mascota es obligatorio'
-                        },
-                    }
-                },
-                tipo_mascota: {
+                mascota: {
                     validators: {
                         notEmpty: {
                             message: 'El tipo de mascota es obligatorio'
                         },
                     }
                 },
-                sexo: {
+                medicinas_aplicadas: {
                     validators: {
                         notEmpty: {
-                            message: 'El sexo de la mascota es obligatorio'
+                            message: 'Las medicinas aplicadas son obligatorias'
+                        },
+                        stringLength: {
+                            min: 2
                         },
                     }
                 },
-                tamanio: {
+                motivo: {
                     validators: {
                         notEmpty: {
-                            message: 'El tamaño de la mascota es obligatorio'
+                            message: 'El motivo es obligatorio'
+                        },
+                        stringLength: {
+                            min: 2
                         },
                     }
                 },
-                // raza: {
-                //     validators: {
-                //         notEmpty: {
-                //             message: 'La raza de la mascota es obligatorio'
-                //         },
-                //     }
-                // },
-                edad: {
+                antecedentes: {
                     validators: {
                         notEmpty: {
-                            message: 'La edad de la mascota es obligatorio'
+                            message: 'Los antecedentes son obligatorios'
+                        },
+                        stringLength: {
+                            min: 2
                         },
                     }
                 },
-                peso: {
+                tratamiento: {
                     validators: {
                         notEmpty: {
-                            message: 'El peso de la mascota es obligatorio'
+                            message: 'El tratamiento es obligatorio'
+                        },
+                        stringLength: {
+                            min: 2
                         },
                     }
                 },
@@ -119,35 +100,46 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
 $(function () {
     
-    fecha_nacimiento = $('input[name="fecha_nacimiento"]');
+    
+    fecha_ingreso = $('input[name="fecha_ingreso"]');
+    fecha_salida = $('input[name="fecha_salida"]');
+    console.log({
+        fecha_ingreso,
+        fecha_salida
+    })
 
-    fecha_nacimiento.datetimepicker({
+    fecha_ingreso.datetimepicker({
         useCurrent: false,
         format: 'YYYY-MM-DD',
         locale: 'es',
         keepOpen: false,
     });
-
-    fecha_nacimiento.on('change.datetimepicker', function (e) {
-        fv.revalidateField('fecha_nacimiento');
+    fecha_salida.datetimepicker({
+        useCurrent: false,
+        format: 'YYYY-MM-DD',
+        locale: 'es',
+        keepOpen: false,
+    });
+    fecha_ingreso.on('change.datetimepicker', function (e) {
+        fv.revalidateField('fecha_ingreso');
+    });
+    fecha_salida.on('change.datetimepicker', function (e) {
+        fv.revalidateField('fecha_salida');
     });
 
-    $('input[name="identificacion"]').keypress(function (e) {
-        return validate_form_text('numbers', e, null);
-    });
-    $('input[name="nombre"]').keypress(function (e) {
+    $('input[name="mascota"]').keypress(function (e) {
         return validate_form_text('letters', e, null);
     });
-    $('input[name="tamanio"]').keypress(function (e) {
-        return validate_form_text('decimals', e, null);
+    $('input[name="medicinas_aplicadas"]').keypress(function (e) {
+        return validate_form_text('letters', e, null);
     });
-    $('input[name="edad"]').keypress(function (e) {
-        return validate_form_text('decimals', e, null);
+    $('input[name="motivo"]').keypress(function (e) {
+        return validate_form_text('letters', e, null);
     });
-    $('input[name="peso"]').keypress(function (e) {
-        return validate_form_text('decimals', e, null);
+    $('input[name="antecedentes"]').keypress(function (e) {
+        return validate_form_text('letters', e, null);
     });
-    // $('input[name="descripcion"]').keypress(function (e) {
-    //     return validate_form_text('letters', e, null);
-    // });
+    $('input[name="tratamiento"]').keypress(function (e) {
+        return validate_form_text('letters', e, null);
+    });
 });

@@ -2,6 +2,7 @@ import math
 import os
 import re
 from datetime import datetime
+from datetime import date
 from django.utils import timezone
 from django.db import models
 from django.db.models import FloatField
@@ -349,7 +350,8 @@ class PaymentsCtaCollect(models.Model):
 class Medico(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     especialidad = models.CharField(max_length = 150)
-    mobile = models.CharField(max_length=10, unique=True, verbose_name='Teléfono')
+    mobile = models.CharField(max_length=9, unique=True, verbose_name='Teléfono')
+    codigo_medico = models.CharField(max_length=10, verbose_name='Código del medico veterinario', blank=True, null=True)
     
     def __str__(self):
         return '{} / {}'.format(self.user.get_full_name(), self.user.dni)
@@ -357,6 +359,7 @@ class Medico(models.Model):
     def toJSON(self):
         item = model_to_dict(self)
         item['full_name'] = self.user.get_full_name()
+        item['imagen'] = self.user.get_image()
         item['dni'] = self.user.dni
         return item
 
@@ -379,7 +382,7 @@ class Paciente(models.Model):
     raza = models.CharField(max_length=150, null=True, blank=True)
     edad = models.IntegerField()
     peso = models.DecimalField(max_digits=5, decimal_places=2)
-    descripcion = models.TextField(null=True, blank=True, verbose_name='Descripción')
+    descripcion = models.TextField(null=True, blank=True, verbose_name='Caracteristicas del paciente')
     
     def __str__(self):
         return f'{self.nombre} / {self.tipo_mascota} / {self.raza}'    
@@ -391,6 +394,25 @@ class Paciente(models.Model):
         item['fecha_nacimiento'] = self.fecha_nacimiento.strftime('%Y-%m-%d')
         item['tamanio'] = format(self.tamanio, '.2f')
         item['peso'] = format(self.peso, '.2f')
+        return item
+
+class Diagnostico(models.Model):
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='diagnosticos')
+    fecha_diagnostico = models.DateField(default=date.today, verbose_name='Fecha del diagnóstico')
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE, verbose_name='Médico veterinario')
+    sintomas = models.CharField(max_length=100, verbose_name='Sintomas del paciente')
+    examenes_fisicos = models.TextField(verbose_name='Exámenes realizados')
+    observacion_veterinario = models.TextField(max_length=300, verbose_name='Observación del Veterinario')
+    diagnostico_provicional = models.TextField(max_length=300, verbose_name='Diagnóstico Provicional')
+
+    def __str__(self):
+        return f'Diagnóstico para {self.paciente} - {self.fecha_diagnostico.strftime("%Y-%m-%d")}'
+    
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['paciente'] = self.paciente.toJSON()
+        item['medico'] = self.medico.toJSON()
+        item['fecha_diagnostico'] = self.fecha_diagnostico.strftime('%Y-%m-%d')
         return item
 
 class Cita(models.Model):
@@ -429,6 +451,25 @@ class Cita(models.Model):
         }
         return item
 
+class Hospitalizacion(models.Model):
+    mascota = models.ForeignKey(Paciente, on_delete=models.CASCADE, verbose_name='Mascota')
+    fecha_ingreso = models.DateField(default=datetime.now, verbose_name='Fecha de ingreso')
+    fecha_salida = models.DateField(default=datetime.now, verbose_name='Fecha de salida')
+    medicinas_aplicadas = models.CharField(max_length=400, verbose_name='Medicinas aplicadas')
+    motivo = models.CharField(max_length=150, verbose_name='Motivo')
+    antecedentes = models.TextField(verbose_name='Antecedentes')
+    tratamiento = models.CharField(max_length=200, verbose_name='Tratamiento')
+    internado = models.BooleanField(default=True, verbose_name='Internado')
 
-    
-    
+    def dias_internados(self):
+        now = datetime.now().date() 
+        result = now - self.fecha_ingreso
+        return result.days
+
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['fecha_ingreso'] = self.fecha_ingreso.strftime('%Y-%m-%d')
+        item['fecha_salida'] = self.fecha_salida.strftime('%Y-%m-%d')
+        item['dias_internados'] = self.dias_internados()
+        # item['estado'] = 'internado' if self.internado else 'dado de alta',
+        return item

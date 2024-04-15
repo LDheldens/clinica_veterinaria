@@ -28,6 +28,7 @@ company.save()
 type = ModuleType()
 type.name = 'Seguridad'
 type.icon = 'fas fa-lock'
+type.name_menu = 'config'
 type.save()
 print('insertado {}'.format(type.name))
 
@@ -131,6 +132,7 @@ type = ModuleType()
 type.name = 'Consultoría'
 type.icon = 'fas fa-boxes'
 type.save()
+type.name_menu = 'config'
 print('insertado {}'.format(type.name))
 
 module = Module()
@@ -165,6 +167,7 @@ print('insertado {}'.format(module.name))
 type = ModuleType()
 type.name = 'Administrativo'
 type.icon = 'fas fa-hand-holding-usd'
+type.name_menu = 'config'
 type.save()
 print('insertado {}'.format(type.name))
 
@@ -187,6 +190,7 @@ print('insertado {}'.format(module.name))
 type = ModuleType()
 type.name = 'Calendario'
 type.icon = 'fas fa-calendar-alt'
+type.name_menu = 'clinic'
 type.save()
 print('insertado {}'.format(type.name))
 
@@ -234,14 +238,15 @@ print('insertado {}'.format(module.name))
 
 # Modulo de Usuarios
 type = ModuleType()
-type.name = 'Usuarios'
+type.name = 'Clientes'
 type.icon = 'fas fa-user-friends'
+type.name_menu = 'clinic'
 type.save()
 print('insertado {}'.format(type.name))
 
 module = Module()
 module.moduletype_id = 5
-module.name = 'Clientes'
+module.name = 'Listado de Clientes'
 module.url = '/pos/crm/client/'
 module.is_active = True
 module.is_vertical = True
@@ -253,23 +258,12 @@ for p in Permission.objects.filter(content_type__model=Client._meta.label.split(
     module.permits.add(p)
 print('insertado {}'.format(module.name))
 
-module = Module()
-module.moduletype_id = 5
-module.name = 'Pacientes'
-module.url = '/pos/crm/paciente/'
-module.is_active = True
-module.is_vertical = True
-module.is_visible = True
-module.icon = 'fas fa-paw'
-module.description = 'Permite listar pacientes'
-module.save()
-for p in Permission.objects.filter(content_type__model=Paciente._meta.label.split('.')[1].lower()):
-    module.permits.add(p)
-print('insertado {}'.format(module.name))
+
 
 type = ModuleType()
 type.name = 'Médicos'
 type.icon = 'fas fa-user-md'
+type.name_menu = 'config'
 type.save()
 print('insertado {}'.format(type.name))
 
@@ -293,6 +287,7 @@ type = ModuleType()
 type.name = 'Facturación'
 type.icon = 'fas fa-calculator'
 type.save()
+type.name_menu = 'config'
 print('insertado {}'.format(type.name))
 
 
@@ -314,6 +309,7 @@ print('insertado {}'.format(module.name))
 type = ModuleType()
 type.name = 'Reportes'
 type.icon = 'fas fa-chart-pie'
+type.name_menu = 'config'
 type.save()
 print('insertado {}'.format(type.name))
 
@@ -342,12 +338,59 @@ module.description = 'Permite ver los reportes de las cuentas por cobrar'
 module.save()
 print('insertado {}'.format(module.name))
 
+
+type = ModuleType()
+type.name = 'Diagnóstico'
+type.icon = 'fas fa-stethoscope'
+type.name_menu = 'clinic'
+type.save()
+print('insertado {}'.format(type.name))
+
+module = Module()
+module.moduletype_id = 9
+module.name = 'Listado de Diagnósticos'
+module.url = '/pos/crm/diagnostico/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-file-medical'
+module.description = 'Permite listar los diagnosticos'
+module.save()
+print('insertado {}'.format(module.name))
+
+
+
+type = ModuleType()
+type.name = 'Pacientes'
+type.icon = 'fas fa-stethoscope'
+type.name_menu = 'clinic'
+type.save()
+print('insertado {}'.format(type.name))
+
+module = Module()
+module.moduletype_id = 10
+module.name = 'Pacientes'
+module.url = '/pos/crm/paciente/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-paw'
+module.description = 'Permite listar pacientes'
+module.save()
+for p in Permission.objects.filter(content_type__model=Paciente._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
+
+
+
 module = Module()
 module.name = 'Tipo de mascotas'
 module.url = '/pos/crm/tipo_mascota/'
 module.is_active = True
 module.is_vertical = False
 module.is_visible = True
+module.name_menu = 'config'
 module.icon = 'fas fa-paw'
 module.description = 'Permite añadir un tipo de mascota'
 module.save()
@@ -355,6 +398,7 @@ print('insertado {}'.format(module.name))
 
 module = Module()
 module.name = 'Hospitalización'
+module.name_menu = 'clinic'
 module.url = '/pos/crm/hospitalizacion/'
 module.is_active = True
 module.is_vertical = False
@@ -366,6 +410,7 @@ print('insertado {}'.format(module.name))
 
 module = Module()
 module.name = 'Cambiar password'
+module.name_menu = 'config'
 module.url = '/user/update/password/'
 module.is_active = True
 module.is_vertical = False
@@ -377,6 +422,7 @@ print('insertado {}'.format(module.name))
 
 module = Module()
 module.name = 'Editar perfil'
+module.name_menu = 'config'
 module.url = '/user/update/profile/'
 module.is_active = True
 module.is_vertical = False
@@ -388,6 +434,7 @@ print('insertado {}'.format(module.name))
 
 module = Module()
 module.name = 'Editar perfil'
+module.name_menu = 'config'
 module.url = '/pos/crm/client/update/profile/'
 module.is_active = True
 module.is_vertical = False
@@ -399,6 +446,7 @@ print('insertado {}'.format(module.name))
 
 module = Module()
 module.name = 'Compañia'
+module.name_menu = 'config'
 module.url = '/pos/crm/company/update/'
 module.is_active = True
 module.is_vertical = False

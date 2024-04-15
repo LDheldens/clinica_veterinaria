@@ -72,6 +72,65 @@ class TipoMascotaForm(ModelForm):
             )
         }
 
+class HospitalizacionForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = Hospitalizacion
+        fields = fields = '__all__'
+        widgets = {
+            'mascota': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
+            'fecha_ingreso': forms.DateInput(format='%Y-%m-%d', attrs={
+                'class': 'form-control datetimepicker-input',
+                'id': 'fecha_ingreso',
+                'value': datetime.now().strftime('%Y-%m-%d'),
+                'data-toggle': 'datetimepicker',
+                'data-target': '#fecha_ingreso'
+            }),
+            'fecha_salida': forms.DateInput(format='%Y-%m-%d', attrs={
+                'class': 'form-control datetimepicker-input',
+                'id': 'fecha_salida',
+                'value': datetime.now().strftime('%Y-%m-%d'),
+                'data-toggle': 'datetimepicker',
+                'data-target': '#fecha_salida'
+            }),
+            'medicinas_aplicadas': forms.TextInput(
+                attrs={
+                    'placeholder': 'Ingrese las medicinas aplicadas',
+                    'class': 'form-control',
+                    'autocomplete': 'off'
+                }
+            ),
+            'motivo': forms.TextInput(
+                attrs={
+                    'placeholder': 'Ingrese el motivo',
+                    'class': 'form-control',
+                    'autocomplete': 'off'
+                }
+            ),
+            'antecedentes': forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'autocomplete': 'off',
+                    'rows': 3,
+                    'cols': 3,
+                    'placeholder': 'Ingrese los antecedentes de la mascota'
+                }
+            ),
+            'tratamiento': forms.TextInput(
+                attrs={
+                    'placeholder': 'Ingrese el tratamiento de la mascota',
+                    'class': 'form-control',
+                    'autocomplete': 'off'
+                }
+            ),
+            # 'internado': forms.CheckboxInput(attrs={'class': 'form-control-checkbox'})
+            # 'internado': forms.BooleanField()
+        }
+        # exclude = ['internado']
+        # internado = forms.BooleanField(initial=True, required=False)
+
 class PacienteForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -118,14 +177,14 @@ class PacienteForm(ModelForm):
                     'autocomplete': 'off'
                 }
             ),
-            'edad': forms.TextInput(
+            'edad': forms.NumberInput(
                 attrs={
                     'placeholder': 'Ingrese la edad',
                     'class': 'form-control',
                     'autocomplete': 'off'
                 }
             ),
-            'peso': forms.TextInput(
+            'peso': forms.NumberInput(
                 attrs={
                     'placeholder': 'Ingrese el peso',
                     'class': 'form-control',
@@ -193,7 +252,7 @@ class ClientForm(ModelForm):
         'class': 'form-control',
         'autocomplete': 'off',
         'placeholder': 'Ingrese su número de cedula'
-    }), label='Número de cedula', max_length=10)
+    }), label='Número de DNI', max_length=8)
 
     email = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
@@ -388,8 +447,15 @@ class CitaForm(forms.ModelForm):
             'mascota': 'Mascota',
         }
         widgets = {
-            'fecha_cita': forms.DateInput(format='%Y-%m-%d',attrs={'type': 'date', 'class': 'form-control'}),
-            'hora_cita': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
+            'fecha_cita': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={
+                    'type': 'date',
+                    'class': 'form-control px-5',
+                    'value': timezone.now().strftime('%Y-%m-%d')
+                }
+            ),
+            'hora_cita': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control px-5'}),
             'medico': forms.Select(attrs={'class': 'form-control'}),
             'asunto': forms.TextInput(attrs={'class': 'form-control'}),
             'descripcion': forms.Textarea(attrs={'class': 'form-control'}),
@@ -403,7 +469,7 @@ class MedicoForm(ModelForm):
 
     class Meta:
         model = Medico
-        fields = ['especialidad', 'first_name', 'last_name', 'dni', 'email', 'mobile']
+        fields = ['especialidad', 'first_name', 'last_name', 'dni', 'email', 'mobile','codigo_medico']
         widgets = {
             'especialidad': forms.TextInput(
                 attrs={
@@ -445,8 +511,30 @@ class MedicoForm(ModelForm):
         'autocomplete': 'off',
         'placeholder': 'Ingrese su email'
     }), label='Email', max_length=50)
+    
+    codigo_medico = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'autocomplete': 'off',
+        'placeholder': 'Ingrese su email'
+    }), max_length=10)
 
-    # image = forms.ImageField(widget=forms.FileInput(attrs={
-    #     'class': 'form-control',
-    #     'autocomplete': 'off'
-    # }), label='Imagen')
+    image = forms.ImageField(widget=forms.FileInput(attrs={
+        'class': 'form-control',
+        'autocomplete': 'off'
+    }), label='Imagen')
+
+class DiagnosticoForm(forms.ModelForm):
+    class Meta:
+        model = Diagnostico
+        fields = '__all__'
+        widgets = {
+            'paciente': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
+            'fecha_diagnostico': forms.DateInput(format='%Y-%m-%d', attrs={
+                'id': 'fecha_diagnostico',
+            }),
+            'medico': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
+            'sintomas': forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'}),
+            'examenes_fisicos': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'observacion_veterinario': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'diagnostico_provicional': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }

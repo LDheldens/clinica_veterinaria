@@ -10,6 +10,7 @@ from core.pos.views.crm.client.views import *
 from core.pos.views.crm.cita.views import *
 from core.pos.views.crm.medico.views import *
 from core.pos.views.crm.calendario.views import *
+from core.pos.views.crm.diagnostico.views import *
 from core.pos.views.crm.sale.print.views import *
 
 
@@ -58,6 +59,13 @@ urlpatterns = [
     path('crm/tipo_mascota/update/<int:pk>/', TipoMascotaUpdateView.as_view(), name='tipo_mascota_update'),
     path('crm/tipo_mascota/delete/<int:pk>/', TipoMascotaDeleteView.as_view(), name='tipo_mascota_delete'),
     
+    # Hospitalización
+    path('crm/hospitalizacion/', HospitalizacionListView.as_view(), name='hospitalizacion_list'),
+    path('crm/hospitalizacion/add/', HospitalizacionCreateView.as_view(), name='hospitalizacion_create'),
+    path('crm/hospitalizacion/update/<int:pk>/', HospitalizacionUpdateView.as_view(), name='hospitalizacion_update'),
+    path('crm/hospitalizacion/delete/<int:pk>/', HospitalizacionDeleteView.as_view(), name='hospitalizacion_delete'),
+    path('crm/hospitalizacion/update_internamiento/<int:pk>/', HospitalizacionUpdateInternamientoView.as_view(), name='hospitalizacion_update_internamiento'),
+
     # paciente
     path('crm/paciente/', PacienteListView.as_view(), name='paciente_list'),
     path('crm/paciente/add/', PacienteCreateView.as_view(), name='paciente_create'),
@@ -70,15 +78,23 @@ urlpatterns = [
     path('crm/cita/add/', CitaCreateView.as_view(), name='cita_create'),
     path('crm/cita/update/<int:pk>/', CitaUpdateView.as_view(), name='cita_update'),
     path('crm/cita/delete/<int:pk>/', CitaDeleteView.as_view(), name='cita_delete'),
+    path('crm/cita/cargar_mascotas/', CargarMascotasView.as_view(), name='cargar_mascotas'),
     
     #calendario
     path('crm/calendario/', CalendarioListView.as_view(), name='calendario'),
     path('api/citas/', ListaCitasView.as_view(), name='lista_citas'),
-    path('obtener-datos/', ObtenerDatosView.as_view(), name='obtener_datos'),
+    
     #api para traer todos los medicos, mascotas, clientes
+    path('obtener-datos/', ObtenerDatosView.as_view(), name='obtener_datos'),
     
     #citas por envio atraves de js
     path('crm/cita/js/add/', RegistroCitaView.as_view(), name='registro_cita'),
     path('crm/cita/js/edit/<int:cita_id>/', EditarCitaView.as_view(), name='editar_cita'),
     path('crm/cita/js/delete/<int:cita_id>/', EliminarCitaView.as_view(), name='eliminar_cita'),
+    
+    #diagnostico
+    path('crm/diagnostico/', DiagnosticoListView.as_view(), name='diagnostico_list'),
+    path('crm/diagnostico/add/', DiagnosticoCreateView.as_view(), name='diagnostico_create'),
+    path('crm/diagnostico/update/<int:pk>/', DiagnosticoUpdateView.as_view(), name='diagnostico_update'),
+    path('crm/diagnostico/delete/<int:pk>/', DiagnosticoDeleteView.as_view(), name='diagnostico_delete'),
 ]

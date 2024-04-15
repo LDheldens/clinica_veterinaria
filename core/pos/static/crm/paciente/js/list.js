@@ -23,6 +23,7 @@ function getData() {
             {"data": "tipo_mascota"},
             {"data": "sexo"},
             {"data": "edad"},
+            {"data": "peso"},
             {"data": "id"},
         ],
         columnDefs: [
@@ -35,39 +36,7 @@ function getData() {
                 }
             },
             {
-                targets: [1],
-                class: 'text-center',
-                orderable: false,
-                render: function (data, type, row) {
-                    return data
-                }
-            },
-            {
-                targets: [2],
-                class: 'text-center',
-                orderable: false,
-                render: function (data, type, row) {
-                    return data
-                }
-            },
-            {
-                targets: [3],
-                class: 'text-center',
-                orderable: false,
-                render: function (data, type, row) {
-                    return data
-                }
-            },
-            {
-                targets: [4],
-                class: 'text-center',
-                orderable: false,
-                render: function (data, type, row) {
-                    return data
-                }
-            },
-            {
-                targets: [5],
+                targets: [1,2,3,4,5],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
@@ -80,6 +49,14 @@ function getData() {
                 orderable: false,
                 render: function (data, type, row) {
                     return data + ' año'
+                }
+            },
+            {
+                targets: [7],
+                class: 'text-center',
+                orderable: false,
+                render: function (data, type, row) {
+                    return data + ' KG'
                 }
             },
             {

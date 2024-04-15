@@ -20,7 +20,9 @@ function getData() {
             {"data": "full_name"},
             {"data": "dni"},
             {"data": "mobile"},
+            {"data": null},
             {"data": "especialidad"},
+            {"data": "codigo_medico"},
             {"data": null},
         ],
         columnDefs: [
@@ -30,7 +32,18 @@ function getData() {
                 orderable: false
             },
             {
-                targets: [5],
+                targets: [4],
+                class: 'text-center',
+                orderable: false,
+                render: function (data, type, row) {
+                    var imagen = `
+                        <img src="${row.imagen}" width="80" height="80" style="object-fit: cover;">
+                    `
+                    return imagen
+                }
+            },
+            {
+                targets: [7],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {

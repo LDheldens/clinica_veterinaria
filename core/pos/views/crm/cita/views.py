@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView, TemplateView, View
 
 from config import settings
-from core.pos.forms import ClientForm, User, Client, Cita, CitaForm
+from core.pos.forms import ClientForm, User, Client, Cita, CitaForm, Paciente
 from core.security.mixins import ModuleMixin, PermissionMixin
 
 
@@ -34,7 +34,7 @@ class CitaListView(PermissionMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['create_url'] = reverse_lazy('client_create')
+        context['create_url'] = reverse_lazy('cita_create')
         context['title'] = 'Listado de Citas'
         return context
 
@@ -44,35 +44,58 @@ class CitaCreateView(PermissionMixin, CreateView):
     template_name = 'crm/cita/create.html'
     form_class = CitaForm
     success_url = reverse_lazy('cita_list')
-    permission_required = 'add_client'
+    permission_required = 'add_cita'
 
     def post(self, request, *args, **kwargs):
-        form = CitaForm(request.POST, request.FILES)
-        if form.is_valid():
-            # Realizar la validación del cruce de citas aquí
-            fecha_cita = form.cleaned_data['fecha_cita']
-            hora_cita = form.cleaned_data['hora_cita']
-            medico = form.cleaned_data['medico']
+        data = {}
+        action = request.POST['action']
+        try:
+            if action == 'add':
+                with transaction.atomic():
+                    # Validar datos antes de crear la cita
+                    validation_result = self.validate_data()
+                    if not validation_result['valid']:
+                        return JsonResponse(validation_result)
+
+                    # Crear la instancia de Cita y asignar los campos
+                    cita = Cita()
+                    cita.medico_id = request.POST['medico']
+                    cita.asunto = request.POST['asunto']
+                    cita.descripcion = request.POST['descripcion']
+                    cita.fecha_cita = request.POST['fecha_cita']
+                    cita.hora_cita = request.POST['hora_cita']
+                    cita.propietario_id = request.POST['propietario']
+                    cita.mascota_id = request.POST['mascota']
+                    cita.save()
+            elif action == 'validate_data':
+                return self.validate_data()
+            else:
+                data['error'] = 'No ha seleccionado ninguna opción'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)
+
+    def validate_data(self):
+        data = {'valid': True}
+        try:
+            fecha_cita = self.request.POST['fecha_cita']
+            hora_cita = self.request.POST['hora_cita']
+            medico = self.request.POST['medico']
 
             # Verificar si hay una cita previa con la misma fecha, hora y médico
             citas_en_mismo_horario = Cita.objects.filter(
-                medico=medico,
+                medico_id=medico,
                 fecha_cita=fecha_cita,
                 hora_cita=hora_cita
             ).exists()
 
             if citas_en_mismo_horario:
-                messages.error(request, "El médico ya tiene otra cita programada para este horario.")
-                return render(request, self.template_name, {'form': form})
-
-            form.save()
-            return HttpResponseRedirect(self.success_url)
-        else:
-            # Si el formulario no es válido, mostrar solo el mensaje de cruce de horario en el template
-            error_messages = form.errors.get('__all__', [])
-            if "El médico ya tiene otra cita programada para este horario." in error_messages:
-                messages.error(request, "El médico ya tiene otra cita programada para este horario.")
-            return render(request, self.template_name, {'form': form})
+                data['valid'] = False
+                data['error'] = 'Ya existe una cita programada para este médico en la misma fecha y hora.'
+        except Exception as e:
+            data['valid'] = False
+            data['error'] = str(e)
+        return data
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -81,46 +104,71 @@ class CitaCreateView(PermissionMixin, CreateView):
         context['action'] = 'add'
         context['instance'] = None
         return context
-
+    
 class CitaUpdateView(PermissionMixin, UpdateView):
     model = Cita
     template_name = 'crm/cita/create.html'
     form_class = CitaForm
     success_url = reverse_lazy('cita_list')
-    permission_required = 'change_client'
-    
-    def post(self, request, *args, **kwargs):
-        instance = self.get_object()  # Obtener la instancia existente a actualizar
-        form = CitaForm(request.POST, request.FILES, instance=instance)  # Pasar la instancia al formulario
-        if form.is_valid():
-            # Realizar la validación del cruce de citas aquí
-            fecha_cita = form.cleaned_data['fecha_cita']
-            hora_cita = form.cleaned_data['hora_cita']
-            medico = form.cleaned_data['medico']
+    permission_required = 'change_cita'
 
-            # Excluir la instancia actual de la consulta
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        action = request.POST['action']
+        try:
+            if action == 'update':
+                with transaction.atomic():
+                    # Validar datos antes de actualizar la cita
+                    validation_result = self.validate_data()
+                    if not validation_result['valid']:
+                        return JsonResponse(validation_result)
+
+                    # Actualizar la instancia de Cita y asignar los campos
+                    cita = self.get_object()  # Aquí se obtiene la instancia de la cita
+                    cita.medico_id = request.POST['medico']
+                    cita.asunto = request.POST['asunto']
+                    cita.descripcion = request.POST['descripcion']
+                    cita.fecha_cita = request.POST['fecha_cita']
+                    cita.hora_cita = request.POST['hora_cita']
+                    cita.propietario_id = request.POST['propietario']
+                    cita.mascota_id = request.POST['mascota']
+                    cita.save()
+            elif action == 'validate_data':
+                return self.validate_data()
+            else:
+                data['error'] = 'No ha seleccionado ninguna opción'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)
+
+    def validate_data(self):
+        data = {'valid': True}
+        try:
+            fecha_cita = self.request.POST['fecha_cita']
+            hora_cita = self.request.POST['hora_cita']
+            medico = self.request.POST['medico']
+
+            # Verificar si hay una cita previa con la misma fecha, hora y médico
             citas_en_mismo_horario = Cita.objects.filter(
-                medico=medico,
+                medico_id=medico,
                 fecha_cita=fecha_cita,
                 hora_cita=hora_cita
-            ).exclude(id=instance.id).exists()
+            ).exclude(pk=self.kwargs['pk']).exists()  # Excluir la cita actual en la validación
 
             if citas_en_mismo_horario:
-                messages.error(request, "El médico ya tiene otra cita programada para este horario.")
-                return render(request, self.template_name, {'form': form})
-
-            form.save()
-            return HttpResponseRedirect(self.success_url)
-        else:
-            # Si el formulario no es válido, mostrar los mensajes de error
-            return render(request, self.template_name, {'form': form})
+                data['valid'] = False
+                data['error'] = 'Ya existe una cita programada para este médico en la misma fecha y hora.'
+        except Exception as e:
+            data['valid'] = False
+            data['error'] = str(e)
+        return data
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['list_url'] = self.success_url
-        context['title'] = 'Actualización de cita'
+        context['title'] = 'Editar cita'
         context['action'] = 'update'
-        context['instance'] = None
         return context
 
 class CitaDeleteView(PermissionMixin, DeleteView):
@@ -248,3 +296,10 @@ class EliminarCitaView(View):
 
         # Retornar una respuesta JSON
         return JsonResponse({'mensaje': 'Cita eliminada correctamente'})
+
+class CargarMascotasView(View):
+    def get(self, request, *args, **kwargs):
+        propietario_id = request.GET.get('propietario_id')
+        mascotas = Paciente.objects.filter(propietario_id=propietario_id)
+        mascotas_data = [{'id': mascota.id, 'nombre': mascota.nombre} for mascota in mascotas]
+        return JsonResponse({'mascotas': mascotas_data})

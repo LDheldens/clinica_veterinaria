@@ -1,17 +1,18 @@
 {% extends 'list.html' %}
 {% load static %}
 {% block head_list %}
-   <script src="{% static 'crm/medico/js/list.js' %}"></script>
+   <script src="{% static 'crm/diagnostico/js/list.js' %}"></script>
 {% endblock %}
 
 {% block columns %}
     <th>Nro</th>
-    <th>Nombre</th>
-    <th>DNI</th>
-    <th>N - Celular</th>
-    <th>Imagen</th>
-    <th>Especialidad</th>
-    <th>Código</th>
+    <th>Paciente</th>
+    <th>Fecha - Diagnóstico</th>
+    <th>Médico</th>
+    <th>Síntomas</th>
+    <th>Exámenes</th>
+    <th>Observaciones</th>
+    <th>Diagnóstico</th>
     <th class="text-center">Opciones</th>
 {% endblock %}
 
