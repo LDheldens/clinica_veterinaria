@@ -48,7 +48,7 @@ function getData() {
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
-                    return data + ' año'
+                    return data + ' ' + row.unidad_edad
                 }
             },
             {

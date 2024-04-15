@@ -85,6 +85,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                     }
                 },
             },
+            excluded: ':disabled'
         }
     )
         .on('core.element.validated', function (e) {
@@ -142,7 +143,7 @@ $(function () {
         return validate_form_text('decimals', e, null);
     });
     $('input[name="edad"]').keypress(function (e) {
-        return validate_form_text('decimals', e, null);
+        return validate_form_text('numbers', e, null);
     });
     $('input[name="peso"]').keypress(function (e) {
         return validate_form_text('decimals', e, null);

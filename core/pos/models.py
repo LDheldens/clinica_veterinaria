@@ -11,7 +11,7 @@ from django.db.models.functions import Coalesce
 from django.forms import model_to_dict
 from django.core.exceptions import ValidationError
 from config import settings
-from core.pos.choices import payment_condition, payment_method, voucher, sexo_mascota
+from core.pos.choices import payment_condition, payment_method, voucher, sexo_mascota, unidad_edad
 from core.user.models import User
 
 
@@ -372,7 +372,7 @@ class TipoMascota(models.Model):
         return f'{self.tipo_mascota}'   
   
 class Paciente(models.Model):
-    identificacion = models.IntegerField(verbose_name='Identificación de la mascota')
+    identificacion = models.CharField(max_length=150, verbose_name='Identificación de la mascota')
     propietario = models.ForeignKey(Client, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=150, verbose_name='Nombre de la mascota')
     fecha_nacimiento = models.DateField(default=datetime.now, verbose_name='Fecha de nacimiento')  
@@ -380,6 +380,7 @@ class Paciente(models.Model):
     sexo = models.CharField(choices=sexo_mascota, max_length=150, default="sin especificar")
     tamanio = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Tamaño') 
     raza = models.CharField(max_length=150, null=True, blank=True)
+    unidad_edad = models.CharField(max_length=20, choices=unidad_edad, default="año(s)", verbose_name='Unidad de edad')
     edad = models.IntegerField()
     peso = models.DecimalField(max_digits=5, decimal_places=2)
     descripcion = models.TextField(null=True, blank=True, verbose_name='Caracteristicas del paciente')
@@ -389,6 +390,7 @@ class Paciente(models.Model):
     
     def toJSON(self):
         item = model_to_dict(self)
+        print(item)
         item['tipo_mascota'] = self.tipo_mascota.toJSON()['tipo_mascota']
         item['propietario'] = self.propietario.toJSON()['user']['full_name']
         item['fecha_nacimiento'] = self.fecha_nacimiento.strftime('%Y-%m-%d')

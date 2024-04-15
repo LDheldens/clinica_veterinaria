@@ -373,7 +373,7 @@ class PacienteListView(PermissionMixin, TemplateView):
         context['title'] = 'Listado de Pacientes'
         return context
     
-class PacienteCreateView(PermissionMixin, CreateView):
+class PacienteCreateView( CreateView):
     model = Paciente
     template_name = 'crm/paciente/create.html'
     form_class = PacienteForm
@@ -407,6 +407,7 @@ class PacienteCreateView(PermissionMixin, CreateView):
                     paciente.sexo = request.POST['sexo']
                     paciente.tamanio = request.POST['tamanio']
                     paciente.raza = request.POST['raza']
+                    paciente.unidad_edad = request.POST['unidad_edad']
                     paciente.edad = request.POST['edad']
                     paciente.peso = request.POST['peso']
                     paciente.descripcion = request.POST['descripcion']
@@ -449,10 +450,12 @@ class PacienteUpdateView(PermissionMixin, UpdateView):
             'sexo': instance.sexo,
             'tamanio': instance.tamanio,
             'raza': instance.raza,
+            'unidad_edad': instance.unidad_edad,
             'edad': instance.edad,
             'peso': instance.peso,
             'descripcion': instance.descripcion,
         })
+        form.set_intial(instance.identificacion)
         return form
 
     def validate_data(self):
@@ -484,6 +487,7 @@ class PacienteUpdateView(PermissionMixin, UpdateView):
                     paciente.sexo = request.POST['sexo']
                     paciente.tamanio = request.POST['tamanio']
                     paciente.raza = request.POST['raza']
+                    paciente.unidad_edad = request.POST['unidad_edad']
                     paciente.edad = request.POST['edad']
                     paciente.peso = request.POST['peso']
                     paciente.edad = request.POST['edad']

@@ -109,6 +109,7 @@ function submit_formdata_with_ajax_form(fv) {
     var form = fv.form;
     var submitButton = fv.form.querySelector('[type="submit"]');
     var parameters = new FormData($(form)[0]);
+    parameters.append('identificacion', form.querySelector('input[name="identificacion"]').value);
     $.confirm({
         // type: 'blue',
         theme: 'material',

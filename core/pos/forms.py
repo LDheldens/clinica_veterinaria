@@ -1,5 +1,7 @@
 from django.forms import ModelForm
 from django import forms
+from django.db import connection
+
 
 from .models import *
 
@@ -131,10 +133,27 @@ class HospitalizacionForm(ModelForm):
         # exclude = ['internado']
         # internado = forms.BooleanField(initial=True, required=False)
 
+
+def obtener_proximo_id(modelo):
+    # Obtener el nombre de la tabla
+    nombre_tabla = modelo._meta.db_table
+
+    # Obtener el último ID insertado
+    with connection.cursor() as cursor:
+        cursor.execute(f"SELECT COALESCE(MAX(id), 0) + 1 FROM {nombre_tabla}")
+        row = cursor.fetchone()
+
+    # Obtener el próximo ID
+    proximo_id = row[0]
+
+    return proximo_id
+
 class PacienteForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
+        self.initial['identificacion'] = 'SBT-' + str(obtener_proximo_id(Paciente))
+    def set_intial(self, value):
+        self.initial['identificacion'] = value
     class Meta:
         model = Paciente
         fields = fields = '__all__'
@@ -143,6 +162,7 @@ class PacienteForm(ModelForm):
                 attrs={
                     'placeholder': 'Ingrese la identificacion',
                     'class': 'form-control',
+                    'disabled': 'true',
                     'autocomplete': 'off'
                 }
             ),
@@ -197,7 +217,7 @@ class PacienteForm(ModelForm):
                     'autocomplete': 'off',
                     'rows': 3,
                     'cols': 3,
-                    'placeholder': 'Ingrese una descripción'
+                    'placeholder': 'Ingrese una descripción del paciente que lo describa'
                 }
             ),
         }
