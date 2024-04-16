@@ -388,7 +388,17 @@ class PacienteCreateView( CreateView):
             if type == 'identificacion':
                 if Paciente.objects.filter(identificacion=obj):
                     data['valid'] = False
+            if type == 'dni':
+                if User.objects.filter(dni=obj):
+                    data['valid'] = False
+            elif type == 'mobile':
+                if Client.objects.filter(mobile=obj):
+                    data['valid'] = False
+            elif type == 'email':
+                if User.objects.filter(email=obj):
+                    data['valid'] = False
         except:
+            print('err')
             pass
         return JsonResponse(data)
 
@@ -414,6 +424,30 @@ class PacienteCreateView( CreateView):
                     paciente.save()
             elif action == 'validate_data':
                 return self.validate_data()
+            elif action == 'create_client':
+                with transaction.atomic():
+                    user = User()
+                    user.first_name = request.POST['first_name']
+                    user.last_name = request.POST['last_name']
+                    user.dni = request.POST['dni']
+                    user.username = user.dni
+                    if 'image' in request.FILES:
+                        user.image = request.FILES['image']
+                    user.create_or_update_password(user.dni)
+                    user.email = request.POST['email']
+                    user.save()
+
+                    client = Client()
+                    client.user_id = user.id
+                    client.mobile = request.POST['mobile']
+                    client.address = request.POST['address']
+                    client.birthdate = request.POST['birthdate']
+                    client.save()
+
+                    group = Group.objects.get(pk=settings.GROUPS.get('client'))
+                    user.groups.add(group)
+
+                    data = Client.objects.get(pk=client.id).toJSON()
             else:
                 data['error'] = 'No ha seleccionado ninguna opción'
         except Exception as e:
@@ -423,6 +457,7 @@ class PacienteCreateView( CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['list_url'] = self.success_url
+        context['frmClient'] = ClientForm()
         context['title'] = 'Nuevo registro de un paciente'
         context['action'] = 'add'
         context['instance'] = None

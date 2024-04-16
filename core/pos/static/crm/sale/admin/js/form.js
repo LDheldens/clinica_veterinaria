@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                     validators: {
                         notEmpty: {},
                         stringLength: {
-                            min: 10
+                            max: 8
                         },
                         digits: {},
                         remote: {

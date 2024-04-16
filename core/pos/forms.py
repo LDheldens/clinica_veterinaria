@@ -169,7 +169,7 @@ class PacienteForm(ModelForm):
             'propietario': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
             'nombre': forms.TextInput(
                 attrs={
-                    'placeholder': 'Ingrese el propietario',
+                    'placeholder': 'Ingrese el nombre de la mascota',
                     'class': 'form-control',
                     'autocomplete': 'off'
                 }

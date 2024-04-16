@@ -1,7 +1,194 @@
-{% extends 'form2.html' %}
+{% extends 'form.html' %}
+{% load widget_tweaks %}
+{% load security_extras %}
 {% load static %}
 {% block head_form %}
+    <style>
+        .card {
+            background-image: url('{% static 'crm/paciente/img/dog/image5.png' %}') !important;
+            background-repeat: no-repeat;
+            background-size: 90% 70%;
+            min-height: 100vh;
+            background-position: 0 420px !important;
+        }
+        @media (max-width: 768px) {
+            .card {
+                background-image: none !important;
+            }
+        }
+    </style>
     <script src="{% static 'lib/tempusdominus-bootstrap-4.5.37.0/js/tempusdominus-bootstrap.js' %}"></script>
     <link rel="stylesheet" href="{% static 'lib/tempusdominus-bootstrap-4.5.37.0/css/tempusdominus-bootstrap.css' %}"/>
     <script src="{% static 'crm/paciente/js/form.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<form novalidate class="form"  method="post" action="." enctype="multipart/form-data" id="frmForm"
+data-url="{{ list_url }}" >
+<div class="card {{ dshboard.card }}">
+  <div class="card-header">
+      <h3 class="card-title">
+          {% if action == 'add' %}
+              <i class="fas fa-plus"></i>
+          {% else %}
+              <i class="fas fa-edit"></i>
+          {% endif %}
+          {{ title }}
+      </h3>
+  </div>
+  <div class="card-body" style="display: block;">
+      <div class="container-fluid">
+          <input type="hidden" name="action" id="action" value="{{ action }}">
+          {% csrf_token %}
+          <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>{{ form.identificacion.label }}:</label>
+                        {{ form.identificacion|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+
+                <div class="col-lg-6 form-group">
+                    <label>{{ form.propietario.label }}:</label>
+                    <div class="d-flex">
+                        {{ form.propietario|add_class:'form-control'|attr:"autocomplete:off" }}
+                        {% if action == 'add' %}
+                        <div class="input-group-append">
+                            <button class="btn btn-primary dropdown-toggle" type="button"
+                                    data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false"><i class="fas fa-tasks"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" style="cursor: pointer;">
+                                <a class="dropdown-item btnAddClient">
+                                    <i class="fas fa-plus"></i> Crear cliente
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>{{ form.nombre.label }}:</label>
+                        {{ form.nombre|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>{{ form.tipo_mascota.label }}:</label>
+                        {{ form.tipo_mascota|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>{{ form.sexo.label }}:</label>
+                        {{ form.sexo|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>{{ form.fecha_nacimiento.label }}:</label>
+                        {{ form.fecha_nacimiento|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>{{ form.tamanio.label }}:</label>
+                        {{ form.tamanio|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>{{ form.raza.label }}:</label>
+                        {{ form.raza|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>{{ form.unidad_edad.label }}:</label>
+                        {{ form.unidad_edad|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>{{ form.edad.label }}:</label>
+                        {{ form.edad|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>{{ form.peso.label }}:</label>
+                        {{ form.peso|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>{{ form.descripcion.label }}:</label>
+                        {{ form.descripcion|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+          </div>
+      </div>
+  </div>
+  {% block box_footer %}
+      <div class="card-footer">
+          {% block buttons %}
+              <button type="submit" class="btn btn-primary btn-flat">
+                  <i class="fas fa-save"></i> Guardar registro
+              </button>
+              <a href="{{ list_url }}" class="btn btn-danger btn-flat">
+                  <i class="fas fa-times"></i> Cancelar
+              </a>
+          {% endblock %}
+      </div>
+  {% endblock %}
+</div>
+</form>
+<div id="myModalClient" class="modal fade" role="dialog">
+    <form class="form" id="frmClient" method="POST">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <b><i class="fa fa-plus"></i> Nuevo registro de un cliente</b>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        {% for field in frmClient.visible_fields %}
+                            {% if forloop.first %}
+                                <div class="row">
+                            {% endif %}
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>{{ field.label }}:</label>
+                                {% if field|is_checkbox %}
+                                    <br>
+                                {% endif %}
+                                {{ field }}
+                            </div>
+                        </div>
+                        {% if forloop.last %}
+                            </div>
+                        {% elif forloop.counter|divisibleby:2 %}
+                            </div>
+                            <div class="row">
+                        {% endif %}
+                        {% endfor %}
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-flat btn-block">
+                        <i class="fas fa-save"></i> Guardar registro
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
 {% endblock %}
