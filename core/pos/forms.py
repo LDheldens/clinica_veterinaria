@@ -151,7 +151,7 @@ def obtener_proximo_id(modelo):
 class PacienteForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.initial['identificacion'] = 'SBT-' + str(obtener_proximo_id(Paciente))
+        self.initial['identificacion'] = 'SVT-' + str(obtener_proximo_id(Paciente))
     def set_intial(self, value):
         self.initial['identificacion'] = value
     class Meta:
@@ -162,7 +162,7 @@ class PacienteForm(ModelForm):
                 attrs={
                     'placeholder': 'Ingrese la identificacion',
                     'class': 'form-control',
-                    'disabled': 'true',
+                    # 'disabled': 'true',
                     'autocomplete': 'off'
                 }
             ),

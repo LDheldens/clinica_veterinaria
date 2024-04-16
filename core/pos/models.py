@@ -372,7 +372,7 @@ class TipoMascota(models.Model):
         return f'{self.tipo_mascota}'   
   
 class Paciente(models.Model):
-    identificacion = models.CharField(max_length=150, verbose_name='Identificación de la mascota')
+    identificacion = models.CharField(max_length=150, verbose_name='Identificación de la mascota: FORMATO (SVT-1)')
     propietario = models.ForeignKey(Client, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=150, verbose_name='Nombre de la mascota')
     fecha_nacimiento = models.DateField(default=datetime.now, verbose_name='Fecha de nacimiento')  

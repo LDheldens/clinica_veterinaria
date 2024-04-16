@@ -459,15 +459,16 @@ class PacienteUpdateView(PermissionMixin, UpdateView):
         return form
 
     def validate_data(self):
+        instance = self.object
         data = {'valid': True}
-        # try:
-        #     type = self.request.POST['type']
-        #     obj = self.request.POST['obj'].strip()
-        #     if type == 'identificacion':
-        #         if Paciente.objects.filter(identificacion=obj):
-        #             data['valid'] = False
-        # except:
-        #     pass
+        try:
+            type = self.request.POST['type']
+            obj = self.request.POST['obj'].strip()
+            if type == 'identificacion':
+                if instance.identificacion != obj and Paciente.objects.filter(identificacion=obj):
+                    data['valid'] = False
+        except:
+            pass
         return JsonResponse(data)
 
     def post(self, request, *args, **kwargs):

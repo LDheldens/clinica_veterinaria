@@ -17,13 +17,31 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 }),
             },
             fields: {
-                
                 identificacion: {
                     validators: {
                         notEmpty: {
-                            message: 'La identificación es obligatorio'
+                            message: 'La identificación es obligatoria'
                         },
-                    }
+                        regexp: {
+                            regexp: /^SVT-\d+$/,
+                            message: 'La identificación no coincide con el formato (SVT-1)'
+                        },
+                        remote: {
+                            url: pathname,
+                            data: function () {
+                                return {
+                                    obj: form.querySelector('[name="identificacion"]').value,
+                                    type: 'identificacion',
+                                    action: 'validate_data'
+                                };
+                            },
+                            message: 'La identificacion ya se encuentra registrado',
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': csrftoken
+                            },
+                        }
+                    },
                 },
                 propietario: {
                     validators: {
@@ -85,7 +103,8 @@ document.addEventListener('DOMContentLoaded', function (e) {
                     }
                 },
             },
-            excluded: ':disabled'
+            
+            // excluded: ':disabled'
         }
     )
         .on('core.element.validated', function (e) {
@@ -133,9 +152,9 @@ $(function () {
         fv.revalidateField('fecha_nacimiento');
     });
 
-    $('input[name="identificacion"]').keypress(function (e) {
-        return validate_form_text('numbers', e, null);
-    });
+    // $('input[name="identificacion"]').keypress(function (e) {
+    //     return validate_form_text('letters_numbers_spaceless', e, null);
+    // });
     $('input[name="nombre"]').keypress(function (e) {
         return validate_form_text('letters', e, null);
     });
