@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Receta Médica</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            margin: 0 auto;
+        }
+
+        /* Estilos del encabezado */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .company-name {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 10px 0;
+            font-size: 20px;
+        }
+
+        .company-details {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        /* Estilos del cuerpo */
+        .body {
+            margin-bottom: 20px;
+        }
+
+        .medication-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .medication-table th, .medication-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        /* Estilos del pie de página */
+        .footer {
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Encabezado -->
+        <div class="header">
+            <img src="{{ company.get_image }}" class="logo" alt="Logo">
+            <a href="{{ company.get_image }}">RUTA DE LA IMAGEN</a>
+            <div class="company-name">{{ company.name }}</div>
+            <div>{{company.image}} dfgdfgfd</div>
+            <div class="company-details">
+                {{ company.address }}<br>
+                Celular: {{ company.mobile }} | Teléfono: {{ company.phone }}<br>
+                Web: {{ company.website }}<br>
+                RUC N°: {{ company.ruc }}
+            </div>
+        </div>
+        
+        <!-- Cuerpo -->
+        <div class="body">
+            <h2>Receta Médica</h2>
+            <table class="medication-table">
+                <thead>
+                    <tr>
+                        <th>Medicamento</th>
+                        <th>Indicaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for med in receta.medicamentos %}
+                        <tr>
+                            <td>{{ med.medicamento }}</td>
+                            <td>{{ med.indicaciones }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pie de página -->
+        <div class="footer">
+            <div class="footer-text">
+                Gracias por confiar en nosotros. ¡Que te mejores pronto!
+            </div>
+        </div>
+    </div>
+</body>
+</html>

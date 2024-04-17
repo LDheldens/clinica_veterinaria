@@ -32,9 +32,49 @@ function getData() {
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
-                    var buttons = '<a href="/pos/crm/diagnostico/update/' + row.id + '/" class="btn btn-warning btn-xs btn-flat"><i class="fas fa-edit"></i></a> ';
-                    buttons += '<a href="/pos/crm/diagnostico/delete/' + row.id + '/" class="btn btn-danger btn-xs btn-flat"><i class="fas fa-trash-alt"></i></a>';
-                    return buttons;
+                    return `
+                        <div class="dropdown">
+                            <button class="btn-list-actas dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Acciones</button>
+                            <div 
+                                class="dropdown-menu" aria-labelledby="dropdownMenuButton"
+                            >
+                                <a 
+                                    class="dropdown-item" 
+                                    href="/pos/crm/diagnostico/update/${row.id}/"
+                                >
+                                    <i class="fas fa-edit text-warning"></i> Editar
+                                </a>
+
+                                <a class="dropdown-item" href="/pos/crm/diagnostico/delete/${row.id}/"><i class="fas fa-trash-alt text-danger"></i> Eliminar</a>
+
+                                <button 
+                                    type="button" 
+                                    class="dropdown-item" 
+                                    data-id="${row.id}" onclick="registrarHospitalizacion(${row.id})"
+                                >
+                                    <i class="fas fa-hospital"></i> Hospitalización
+                                </button>
+
+                                <button 
+                                    type="button" 
+                                    class="dropdown-item" 
+                                    data-id="${row.id}" 
+                                    onclick="agregarReceta(${row.paciente.id})"
+                                >
+                                    <i class="fas fa-prescription"></i> Generar Receta
+                                </button>
+
+                                <button 
+                                    type="button" 
+                                    class="dropdown-item" 
+                                    data-id="${row.id}" 
+                                    onclick="agregarCirugia(${row.paciente.id},${row.cliente.id},${row.medico.id})"
+                                >
+                                    <i class="fas fa-syringe"></i> Registrar Cirugia
+                                </button>
+                            </div>
+                        </div>
+                    `;
                 }
             },
             {
@@ -42,6 +82,7 @@ function getData() {
                 class: 'text-center',
             },
         ],
+        order: [], 
         initComplete: function (settings, json) {
 
         }

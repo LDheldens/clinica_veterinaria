@@ -8,7 +8,9 @@
     <script src="{% static 'lib/datatables-1.10.25/js/dataTables.bootstrap4.min.js' %}"></script>
     <script src="{% static 'lib/datatables-1.10.25/plugins/responsive-2.2.9/js/dataTables.responsive.min.js' %}"></script>
     <script src="{% static 'lib/datatables-1.10.25/plugins/responsive-2.2.9/js/responsive.bootstrap4.min.js' %}"></script>
-    
+    <script type="text/javascript" src="{% static 'js/toastify-js.js' %}"></script>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/toastify.min.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/modal.css' %}">
     <!--Block head list-->
     {% block head_list %}{% endblock %}
 {% endblock %}
@@ -50,10 +52,12 @@
             <div class="card-footer">
                 <!--Block box footer buttons-->
                 {% block box_footer_buttons %}
-                    {% if create_url %}
-                        <a href="{{ create_url }}" class="btn btn-primary btn-flat">
-                            <i class="fas fa-plus"></i> Nuevo Registro
-                        </a>
+                    {% if request.path != '/pos/crm/receta/'  %}
+                        {% if create_url %}
+                            <a href="{{ create_url }}" class="btn btn-primary btn-flat">
+                                <i class="fas fa-plus"></i> Nuevo Registro
+                            </a>
+                        {% endif %}
                     {% endif %}
                     <!--Block box footer add buttons-->
                     {% block box_footer_add_button %}{% endblock %}
@@ -67,6 +71,12 @@
         {% block box_footer_after %}{% endblock %}
     </div>
     
+    <!-- INCLUIR EL MODAL -->
+    {% if request.path == '/pos/crm/diagnostico/' or request.path == '/pos/crm/receta/' %}
+        {% include 'modal.html' %}
+    {% endif %}
+
+
     {% block javascript_list %}
         <script type="application/javascript">
             var table;

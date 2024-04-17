@@ -17,6 +17,7 @@ function getData() {
         },
         columns: [
             {"data": "id"},
+            {"data": "paciente"},
             {"data": "fecha_ingreso"},
             {"data": "medicinas_aplicadas"},
             {"data": "dias_internados"},
@@ -33,7 +34,7 @@ function getData() {
                 }
             },
             {
-                targets: [1],
+                targets: [0,1,2,3,4],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
@@ -41,23 +42,7 @@ function getData() {
                 }
             },
             {
-                targets: [2],
-                class: 'text-center',
-                orderable: false,
-                render: function (data, type, row) {
-                    return data
-                }
-            },
-            {
-                targets: [3],
-                class: 'text-center',
-                orderable: false,
-                render: function (data, type, row) {
-                    return data
-                }
-            },
-            {
-                targets: [4],
+                targets: [5],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
@@ -71,7 +56,7 @@ function getData() {
                 }
             },
             {
-                targets: [5],
+                targets: [6],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {

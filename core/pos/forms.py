@@ -271,7 +271,7 @@ class ClientForm(ModelForm):
     dni = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
         'autocomplete': 'off',
-        'placeholder': 'Ingrese su número de cedula'
+        'placeholder': 'Ingrese su número de dni'
     }), label='Número de DNI', max_length=8)
 
     email = forms.CharField(widget=forms.TextInput(attrs={
@@ -523,7 +523,7 @@ class MedicoForm(ModelForm):
     dni = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
         'autocomplete': 'off',
-        'placeholder': 'Ingrese su número de cedula'
+        'placeholder': 'Ingrese su número de dni'
     }), label='Número de DNI', max_length=8)
 
     email = forms.CharField(widget=forms.TextInput(attrs={
@@ -557,4 +557,22 @@ class DiagnosticoForm(forms.ModelForm):
             'examenes_fisicos': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'observacion_veterinario': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'diagnostico_provicional': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }
+
+class CirugiaForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CirugiaForm, self).__init__(*args, **kwargs)
+        self.initial['fecha'] = timezone.now().strftime('%Y-%m-%d')
+        self.initial['hora'] = timezone.now().strftime('%H:%M')
+
+    class Meta:
+        model = Cirugia
+        fields = '__all__'
+        widgets = {
+            'cliente': forms.Select(attrs={'class': 'form-control'}),
+            'paciente': forms.Select(attrs={'class': 'form-control'}),
+            'medico': forms.Select(attrs={'class': 'form-control'}),
+            'fecha': forms.DateInput(format='%Y-%m-%d', attrs={'class': 'form-control px-5', 'type': 'date'}),
+            'hora': forms.TimeInput(format='%H:%M', attrs={'class': 'form-control px-5', 'type': 'time'}),
+            'firma_propietario': forms.FileInput(attrs={'class': 'form-control-file'}),
         }

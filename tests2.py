@@ -131,8 +131,8 @@ print('insertado {}'.format(module.name))
 type = ModuleType()
 type.name = 'Consultoría'
 type.icon = 'fas fa-boxes'
-type.save()
 type.name_menu = 'config'
+type.save()
 print('insertado {}'.format(type.name))
 
 module = Module()
@@ -286,8 +286,8 @@ print('insertado {}'.format(module.name))
 type = ModuleType()
 type.name = 'Facturación'
 type.icon = 'fas fa-calculator'
-type.save()
 type.name_menu = 'config'
+type.save()
 print('insertado {}'.format(type.name))
 
 
@@ -369,7 +369,7 @@ print('insertado {}'.format(type.name))
 
 module = Module()
 module.moduletype_id = 10
-module.name = 'Pacientes'
+module.name = 'Listado de Pacientes'
 module.url = '/pos/crm/paciente/'
 module.is_active = True
 module.is_vertical = True
@@ -378,6 +378,48 @@ module.icon = 'fas fa-paw'
 module.description = 'Permite listar pacientes'
 module.save()
 for p in Permission.objects.filter(content_type__model=Paciente._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
+type = ModuleType()
+type.name = 'Recetas'
+type.icon = 'fas fa-book'
+type.name_menu = 'clinic'
+type.save()
+print('insertado {}'.format(type.name))
+
+module = Module()
+module.moduletype_id = 11
+module.name = 'Listado de Recetas'
+module.url = '/pos/crm/receta/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-list'
+module.description = 'Permite listar pacientes'
+module.save()
+for p in Permission.objects.filter(content_type__model=Receta._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
+type = ModuleType()
+type.name = 'Cirugias'
+type.icon = 'fas fa-syringe'
+type.name_menu = 'clinic'
+type.save()
+print('insertado {}'.format(type.name))
+
+module = Module()
+module.moduletype_id = 12
+module.name = 'Listado de Cirugias'
+module.url = '/pos/crm/cirugia/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-notes-medical'
+module.description = 'Permite listar las Cirugias'
+module.save()
+for p in Permission.objects.filter(content_type__model=Cirugia._meta.label.split('.')[1].lower()):
     module.permits.add(p)
 print('insertado {}'.format(module.name))
 

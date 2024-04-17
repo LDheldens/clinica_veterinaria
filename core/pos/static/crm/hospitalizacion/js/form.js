@@ -23,6 +23,21 @@ document.addEventListener('DOMContentLoaded', function (e) {
                         notEmpty: {
                             message: 'El tipo de mascota es obligatorio'
                         },
+                        remote: {
+                            url: pathname,
+                            data: function () {
+                                return {
+                                    obj: form.querySelector('[name="mascota"]').value,
+                                    type: 'mascota',
+                                    action: 'validate_data'
+                                };
+                            },
+                            message: 'Este paciente ya esta internado',
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': csrftoken
+                            },
+                        }
                     }
                 },
                 medicinas_aplicadas: {
