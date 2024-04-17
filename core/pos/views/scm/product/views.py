@@ -1,7 +1,6 @@
 import json
 from datetime import datetime
 from io import BytesIO
-
 import xlsxwriter
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
@@ -21,36 +20,32 @@ class ProductListView(PermissionMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         data = {}
-        action = request.POST['action']
         try:
+            action = request.POST.get('action')
             if action == 'search':
-                data = []
-                for p in Product.objects.filter():
-                    data.append(p.toJSON())
+                data = [p.toJSON() for p in Product.objects.all()]
             elif action == 'upload_excel':
-                with transaction.atomic():
-                    archive = request.FILES['archive']
-                    workbook = load_workbook(filename=archive, data_only=True)
-                    excel = workbook[workbook.sheetnames[0]]
-                    for row in range(2, excel.max_row + 1):
-                        product = Product()
-                        id = int(excel.cell(row=row, column=1).value)
-                        if Product.objects.filter(id=id).exists():
-                            product = Product.objects.get(pk=id)
-                        product.name = excel.cell(row=row, column=2).value
-                        name = excel.cell(row=row, column=3).value
-                        if not Category.objects.filter(name=name).exists():
-                            category = Category()
-                            category.name = name
-                            category.save()
-                        else:
-                            category = Category.objects.get(name=name)
-                        product.category_id = category.id
-                        product.price = float(excel.cell(row=row, column=4).value)
-                        product.pvp = float(excel.cell(row=row, column=5).value)
-                        product.save()
+                archive = request.FILES.get('archive')
+                if archive:
+                    with transaction.atomic():
+                        workbook = load_workbook(filename=archive, data_only=True)
+                        excel = workbook[workbook.sheetnames[0]]
+                        for row in range(2, excel.max_row + 1):
+                            product = Product()
+                            id = int(excel.cell(row=row, column=1).value)
+                            if Product.objects.filter(id=id).exists():
+                                product = Product.objects.get(pk=id)
+                            product.name = excel.cell(row=row, column=2).value
+                            name = excel.cell(row=row, column=3).value
+                            category, _ = Category.objects.get_or_create(name=name)
+                            product.category = category
+                            product.price = float(excel.cell(row=row, column=4).value)
+                            product.pvp = float(excel.cell(row=row, column=5).value)
+                            product.save()
+                else:
+                    data['error'] = 'No se ha proporcionado un archivo para subir.'
             else:
-                data['error'] = 'No ha ingresado una opción'
+                data['error'] = 'Opción no válida.'
         except Exception as e:
             data['error'] = str(e)
         return HttpResponse(json.dumps(data), content_type='application/json')

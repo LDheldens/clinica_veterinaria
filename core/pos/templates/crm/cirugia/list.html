@@ -1,20 +1,16 @@
 {% extends 'list.html' %}
 {% load static %}
 {% block head_list %}
-    
-   <script src="{% static 'crm/diagnostico/js/list.js' %}"></script>
-   <script src="{% static 'crm/diagnostico/js/modal.js' %}"></script>
+   <script src="{% static 'crm/cirugia/js/list.js' %}"></script>
 {% endblock %}
 
 {% block columns %}
     <th>Nro</th>
     <th>Paciente</th>
-    <th>Fecha - Diagnóstico</th>
+    <th>Propietario</th>
     <th>Médico</th>
-    <th>Síntomas</th>
-    <th>Exámenes</th>
-    <th>Observaciones</th>
-    <th>Diagnóstico</th>
+    <th>Fecha</th>
+    <th>Hora</th>
     <th class="text-center">Opciones</th>
 {% endblock %}
 

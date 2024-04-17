@@ -1,5 +1,4 @@
 var fv;
-var input_fecha;
 
 document.addEventListener('DOMContentLoaded', function (e) {
     const form = document.getElementById('frmForm');
@@ -17,53 +16,46 @@ document.addEventListener('DOMContentLoaded', function (e) {
             }),
         },
         fields: {
-            // Ajusta los campos y las validaciones según tu formulario de cita
+            // Ajusta los campos y las validaciones según tu formulario de cirugía
+            paciente: {
+                validators: {
+                    notEmpty: {
+                        message: 'El nombre del cachorro es obligatorio'
+                    },
+                }
+            },
             medico: {
                 validators: {
                     notEmpty: {
-                        message: 'El médico es obligatorio'
+                        message: 'El nombre del médico es obligatorio'
                     },
                 }
             },
-            asunto: {
+            cliente: {
                 validators: {
                     notEmpty: {
-                        message: 'El asunto es obligatorio'
+                        message: 'El nombre del cliente es obligatorio'
                     },
                 }
             },
-            descripcion: {
+            fecha: {
                 validators: {
                     notEmpty: {
-                        message: 'La descripción es obligatoria'
+                        message: 'La fecha es obligatoria'
                     },
                 }
             },
-            propietario: {
+            hora: {
                 validators: {
                     notEmpty: {
-                        message: 'El propietario es obligatorio'
+                        message: 'La hora es obligatoria'
                     },
                 }
             },
-            fecha_cita: {
+            firma_propietario: {
                 validators: {
                     notEmpty: {
-                        message: 'La fecha de la cita es obligatoria'
-                    },
-                }
-            },
-            hora_cita: {
-                validators: {
-                    notEmpty: {
-                        message: 'La hora de la cita es obligatoria'
-                    },
-                }
-            },
-            mascota: {
-                validators: {
-                    notEmpty: {
-                        message: 'La mascota es obligatoria'
+                        message: 'La firma del propietario es obligatoria'
                     },
                 }
             },
@@ -100,21 +92,14 @@ document.addEventListener('DOMContentLoaded', function (e) {
 });
 
 $(function () {
-
     // Validaciones adicionales para campos de texto
-    $('input[name="mascota"]').keypress(function (e) {
+    $('input[name="cachorro"]').keypress(function (e) {
         return validate_form_text('letters', e, null);
     });
-    $('input[name="medicinas_aplicadas"]').keypress(function (e) {
+    $('input[name="medico"]').keypress(function (e) {
         return validate_form_text('letters', e, null);
     });
-    $('input[name="motivo"]').keypress(function (e) {
-        return validate_form_text('letters', e, null);
-    });
-    $('input[name="antecedentes"]').keypress(function (e) {
-        return validate_form_text('letters', e, null);
-    });
-    $('input[name="tratamiento"]').keypress(function (e) {
+    $('input[name="cliente"]').keypress(function (e) {
         return validate_form_text('letters', e, null);
     });
 });

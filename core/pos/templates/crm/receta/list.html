@@ -1,0 +1,22 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+    <script src="{% static 'crm/receta/js/list.js' %}"></script>
+    <script src="{% static 'crm/receta/js/modal.js' %}"></script>
+{% endblock %}
+
+{% block columns %}
+    <th>Nro</th>
+    <th>Nombre de la mascota</th>
+    <th class="text-center">Receta</th>
+
+    <th class="text-center">Opciones</th>
+{% endblock %}
+
+{% block rows %}
+
+{% endblock %}
+
+{% block javascript_list %}
+
+{% endblock %}

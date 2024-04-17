@@ -1,7 +1,10 @@
 {% extends 'list.html' %}
 {% load static %}
 {% block head_list %}
-   <script src="{% static 'crm/paciente/js/list.js' %}"></script>
+    
+    <script src="{% static 'crm/paciente/js/list.js' %}"></script>
+
+    {% comment %} <script src="{% static 'crm/paciente/js/modal.js' %}"></script> {% endcomment %}
 {% endblock %}
 
 {% block columns %}

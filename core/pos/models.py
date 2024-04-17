@@ -1,6 +1,7 @@
 import math
 import os
 import re
+# from django.contrib.postgres.fields import JSONField
 from datetime import datetime
 from datetime import date
 from django.utils import timezone
@@ -96,23 +97,23 @@ class Product(models.Model):
         item = model_to_dict(self)
         item['category'] = self.category.toJSON()
         item['price'] = format(self.price, '.2f')
-        item['price_promotion'] = format(self.get_price_promotion(), '.2f')
-        item['price_current'] = format(self.get_price_current(), '.2f')
+        # item['price_promotion'] = format(self.get_price_promotion(), '.2f')
+        # item['price_current'] = format(self.get_price_current(), '.2f')
         item['pvp'] = format(self.pvp, '.2f')
         item['image'] = self.get_image()
         return item
 
-    def get_price_promotion(self):
-        promotions = self.promotionsdetail_set.filter(promotion__state=True)
-        if promotions.exists():
-            return promotions[0].price_final
-        return 0.00
+    # def get_price_promotion(self):
+    #     promotions = self.promotionsdetail_set.filter(promotion__state=True)
+    #     if promotions.exists():
+    #         return promotions[0].price_final
+    #     return 0.00
 
-    def get_price_current(self):
-        price_promotion = self.get_price_promotion()
-        if price_promotion > 0:
-            return price_promotion
-        return self.pvp
+    # def get_price_current(self):
+    #     price_promotion = self.get_price_promotion()
+    #     if price_promotion > 0:
+    #         return price_promotion
+    #     return self.pvp
 
     def get_image(self):
         if self.image:
@@ -412,6 +413,7 @@ class Diagnostico(models.Model):
         item = model_to_dict(self)
         item['paciente'] = self.paciente.toJSON()
         item['medico'] = self.medico.toJSON()
+        item['cliente'] = self.paciente.propietario.toJSON()
         item['fecha_diagnostico'] = self.fecha_diagnostico.strftime('%Y-%m-%d')
         return item
 
@@ -471,5 +473,52 @@ class Hospitalizacion(models.Model):
         item['fecha_ingreso'] = self.fecha_ingreso.strftime('%Y-%m-%d')
         item['fecha_salida'] = self.fecha_salida.strftime('%Y-%m-%d')
         item['dias_internados'] = self.dias_internados()
+        item['paciente'] = self.mascota.nombre
         # item['estado'] = 'internado' if self.internado else 'dado de alta',
         return item
+    
+    
+class Receta(models.Model):
+    mascota = models.ForeignKey(Paciente, on_delete=models.CASCADE, verbose_name='Mascota')
+    medicamentos = models.JSONField()
+    
+    def toJSON(self):
+        return {
+            'id': self.id,
+            'mascota': self.mascota.nombre,  # Cambia por el campo adecuado de tu modelo Paciente
+            'medicamentos': self.medicamentos,
+            # Agrega otros campos si los necesitas
+        }
+        
+class Cirugia(models.Model):
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, verbose_name='Mascota')
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE, verbose_name='Médico veterinario')
+    cliente = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='Propietario')
+    fecha = models.DateField(verbose_name='Fecha de la cirugía')
+    hora = models.TimeField(verbose_name='Hora de la cirugía')
+    firma_propietario = models.ImageField(upload_to='firmas/', verbose_name='Firma del propietario')
+
+    def __str__(self):
+        return f'Cirugía de {self.paciente.nombre} - {self.fecha} {self.hora}'
+
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['paciente'] = self.paciente.toJSON()
+        item['medico'] = self.medico.toJSON()
+        item['cliente'] = self.cliente.toJSON()
+        item['fecha'] = self.fecha.strftime('%Y-%m-%d')
+        item['hora'] = self.hora.strftime('%H:%M:%S')
+        # No es recomendable devolver la imagen directamente en JSON
+        # Pero puedes devolver la URL para acceder a la firma si es necesario
+        item['firma_propietario'] = self.get_firma_url()
+        return item
+
+    def get_firma_url(self):
+        if self.firma_propietario:
+            return '{}{}'.format(settings.MEDIA_URL, self.firma_propietario)
+        return None
+
+    class Meta:
+        verbose_name = 'Cirugía'
+        verbose_name_plural = 'Cirugías'
+        ordering = ['-fecha', '-hora']

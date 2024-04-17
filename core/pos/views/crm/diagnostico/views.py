@@ -14,7 +14,10 @@ class DiagnosticoListView(TemplateView):
         try:
             action = request.POST['action']
             if action == 'search':
-                data = [diagnostico.toJSON() for diagnostico in Diagnostico.objects.all()]
+                # Obtener todos los diagnósticos ordenados por fecha de diagnóstico de más recientes a más antiguas
+                diagnosticos = Diagnostico.objects.all().order_by('-fecha_diagnostico')
+                # Convertir los diagnósticos a formato JSON
+                data = [diagnostico.toJSON() for diagnostico in diagnosticos]
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
@@ -26,7 +29,7 @@ class DiagnosticoListView(TemplateView):
         context['create_url'] = reverse_lazy('diagnostico_create')
         context['title'] = 'Listado de Diagnósticos'
         return context
-
+    
 class DiagnosticoCreateView(CreateView):
     model = Diagnostico
     template_name = 'crm/diagnostico/create.html'
@@ -35,6 +38,7 @@ class DiagnosticoCreateView(CreateView):
 
     def post(self, request, *args, **kwargs):
         data = {}
+        print(request.POST)
         action = request.POST.get('action')
         try:
             if action == 'add':

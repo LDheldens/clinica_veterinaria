@@ -1,3 +1,4 @@
+
 function getData() {
     $('#data').DataTable({
         responsive: true,

@@ -1,5 +1,5 @@
 import json
-
+from django.db.models import Q
 from django.contrib.auth.models import Group
 from django.db import transaction
 from django.http import JsonResponse, HttpResponse
@@ -193,30 +193,52 @@ class HospitalizacionCreateView(PermissionMixin, CreateView):
     def validate_data(self):
         data = {'valid': True}
         try:
-            type = self.request.POST['type']
-            obj = self.request.POST['obj'].strip()
-            if type == 'mascota':
-                if Hospitalizacion.objects.filter(mascota_id=obj):
-                    data['valid'] = False
-        except:
-            pass
+            mascota_id = self.request.POST['mascota']
+            
+            # Verificar si la mascota ya tiene una hospitalización activa
+            if Hospitalizacion.objects.filter(Q(mascota_id=mascota_id) & Q(internado=True)).exists():
+                data['valid'] = False
+        except Exception as e:
+            data['valid'] = False
+            data['error'] = str(e)
         return JsonResponse(data)
 
     def post(self, request, *args, **kwargs):
         data = {}
         action = request.POST['action']
+        print(request.POST)
         try:
             if action == 'add':
                 with transaction.atomic():
+                    print('XD SI DENTRO AL TOMIC')
                     hospitalizacion = Hospitalizacion()
                     hospitalizacion.mascota_id = request.POST['mascota']
                     hospitalizacion.fecha_ingreso = request.POST['fecha_ingreso']
                     hospitalizacion.fecha_salida = request.POST['fecha_salida']
                     hospitalizacion.medicinas_aplicadas = request.POST['medicinas_aplicadas']
                     hospitalizacion.motivo = request.POST['motivo']
+                    print('HASTA AQUI')
                     hospitalizacion.antecedentes = request.POST['antecedentes']
                     hospitalizacion.tratamiento = request.POST['tratamiento']
                     hospitalizacion.save()
+                    print('Hospitalización guardada:', hospitalizacion)
+            elif action == 'add2':
+                hospitalizacion = Hospitalizacion()
+                hospitalizacion.mascota_id = request.POST['mascota']
+                
+                if Hospitalizacion.objects.filter(mascota_id=request.POST['mascota'], internado=True).exists():
+                    data['error'] = 'La mascota ya está hospitalizada e internada.'
+                    return JsonResponse(data)
+                
+                hospitalizacion.fecha_ingreso = request.POST['fecha_ingreso']
+                hospitalizacion.fecha_salida = request.POST['fecha_salida']
+                hospitalizacion.medicinas_aplicadas = request.POST['medicinas_aplicadas']
+                hospitalizacion.motivo = request.POST['motivo']
+                hospitalizacion.antecedentes = request.POST['antecedentes']
+                hospitalizacion.tratamiento = request.POST['tratamiento']
+                hospitalizacion.save()
+                print('Hospitalización guardada:', hospitalizacion)
+                
             elif action == 'validate_data':
                 return self.validate_data()
             else:

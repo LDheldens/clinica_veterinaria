@@ -11,6 +11,8 @@ from core.pos.views.crm.cita.views import *
 from core.pos.views.crm.medico.views import *
 from core.pos.views.crm.calendario.views import *
 from core.pos.views.crm.diagnostico.views import *
+from core.pos.views.crm.receta.views import *
+from core.pos.views.crm.cirugia.views import *
 from core.pos.views.crm.sale.print.views import *
 
 
@@ -97,4 +99,18 @@ urlpatterns = [
     path('crm/diagnostico/add/', DiagnosticoCreateView.as_view(), name='diagnostico_create'),
     path('crm/diagnostico/update/<int:pk>/', DiagnosticoUpdateView.as_view(), name='diagnostico_update'),
     path('crm/diagnostico/delete/<int:pk>/', DiagnosticoDeleteView.as_view(), name='diagnostico_delete'),
+    
+    #recetas 
+    path('crm/receta/', RecetaListView.as_view(), name='receta_list'),
+    path('crm/receta/add/', RecetaCreateView.as_view(), name='receta_create'),
+    path('crm/receta/update/<int:pk>/', RecetaUpdateView.as_view(), name='receta_update'),
+    path('crm/receta/delete/<int:pk>/', RecetaDeleteView.as_view(), name='receta_delete'),
+    path('crm/receta/<int:pk>/', RecetaDetailView.as_view(), name='receta_detail'),
+    path('crm/receta/print/<int:pk>/', RecetaPrintView.as_view(), name='receta_print'),
+    path('crm/ver/receta/', PrevisualizarRecetaView.as_view(),name='xd'),
+    
+    path('crm/cirugia/', CirugiaListView.as_view(), name='cirugia_list'),
+    path('crm/cirugia/add/', CirugiaCreateView.as_view(), name='cirugia_create'),
+    path('crm/cirugia/update/<int:pk>/', CirugiaUpdateView.as_view(), name='cirugia_update'),
+    path('crm/cirugia/delete/<int:pk>/', CirugiaDeleteView.as_view(), name='cirugia_delete'),
 ]

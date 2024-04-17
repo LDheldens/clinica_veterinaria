@@ -538,3 +538,21 @@ class DiagnosticoForm(forms.ModelForm):
             'observacion_veterinario': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'diagnostico_provicional': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
+
+class CirugiaForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CirugiaForm, self).__init__(*args, **kwargs)
+        self.initial['fecha'] = timezone.now().strftime('%Y-%m-%d')
+        self.initial['hora'] = timezone.now().strftime('%H:%M')
+
+    class Meta:
+        model = Cirugia
+        fields = '__all__'
+        widgets = {
+            'cliente': forms.Select(attrs={'class': 'form-control'}),
+            'paciente': forms.Select(attrs={'class': 'form-control'}),
+            'medico': forms.Select(attrs={'class': 'form-control'}),
+            'fecha': forms.DateInput(format='%Y-%m-%d', attrs={'class': 'form-control px-5', 'type': 'date'}),
+            'hora': forms.TimeInput(format='%H:%M', attrs={'class': 'form-control px-5', 'type': 'time'}),
+            'firma_propietario': forms.FileInput(attrs={'class': 'form-control-file'}),
+        }
