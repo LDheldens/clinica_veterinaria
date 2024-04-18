@@ -104,11 +104,13 @@ class HospitalizacionForm(ModelForm):
                     'autocomplete': 'off'
                 }
             ),
-            'motivo': forms.TextInput(
+            'motivo': forms.Textarea(
                 attrs={
                     'placeholder': 'Ingrese el motivo',
                     'class': 'form-control',
-                    'autocomplete': 'off'
+                    'autocomplete': 'off',
+                    'rows': 3,
+                    'cols': 3,
                 }
             ),
             'antecedentes': forms.Textarea(
@@ -557,14 +559,16 @@ class DiagnosticoForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'paciente': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
-            'fecha_diagnostico': forms.DateInput(format='%Y-%m-%d', attrs={
-                'id': 'fecha_diagnostico',
-            }),
+            'fecha_diagnostico': forms.DateInput(format='%Y-%m-%d', attrs={'class': 'form-control', 'id': 'fecha_diagnostico', 'type': 'date'}),
             'medico': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
-            'sintomas': forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'}),
-            'examenes_fisicos': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'observacion_veterinario': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'temperatura': forms.NumberInput(attrs={'class': 'form-control', 'step': 'any'}),
+            'mucosa': forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'}),
+            'motivo_consulta': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'sintomas': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'examenes_realizados': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'observaciones_veterinario': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'diagnostico_provicional': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'condicion_llegada': forms.Textarea(attrs={'class': 'form-control', 'autocomplete': 'off','rows': 3}),
         }
 
 class CirugiaForm(forms.ModelForm):
@@ -580,6 +584,7 @@ class CirugiaForm(forms.ModelForm):
             'cliente': forms.Select(attrs={'class': 'form-control'}),
             'paciente': forms.Select(attrs={'class': 'form-control'}),
             'medico': forms.Select(attrs={'class': 'form-control'}),
+            'motivo': forms.TextInput(attrs={'class': 'form-control'}),
             'fecha': forms.DateInput(format='%Y-%m-%d', attrs={'class': 'form-control px-5', 'type': 'date'}),
             'hora': forms.TimeInput(format='%H:%M', attrs={'class': 'form-control px-5', 'type': 'time'}),
             'firma_propietario': forms.FileInput(attrs={'class': 'form-control-file'}),

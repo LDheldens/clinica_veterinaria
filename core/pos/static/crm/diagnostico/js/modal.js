@@ -4,9 +4,9 @@ let btnCloseModal;
 let formReceta;
 let formHospitalizacion;
 let formCirugia;
-let pacienteId;
-let clienteId;
-let medicoId;
+let pacienteId = null;
+let clienteId = null;
+let medicoId = null;
 let tableTitulares;
 let btnAgregarMedicamento; 
 let contenedorMedicamentos; 
@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     sectionReceta = document.querySelector('.sectionReceta')
     sectionHospitalizacion = document.querySelector('.sectionHospitalizacion')
     sectionCirugia = document.querySelector('.sectionCirugia')
+    const btnFormato = document.querySelector('#btn-formato-pdf')
 
     btnAgregarMedicamento.addEventListener('click', (e)=>{
         e.preventDefault()
@@ -38,6 +39,26 @@ document.addEventListener('DOMContentLoaded',()=>{
     formReceta.addEventListener('submit', enviarFormulario)
     formHospitalizacion.addEventListener('submit', enviarFormularioH)
     formCirugia.addEventListener('submit',enviarFormularioC)
+
+    // #logica para obtener el formato pdf
+    btnFormato.addEventListener('click', (e) => {
+        if (medicoId == null || clienteId == null || pacienteId == null) {
+            alert('Ingresa todos los campos')
+            return;
+        } 
+        const fecha = document.getElementById('fecha').value; // Obtener el valor del campo fecha
+        const hora = document.getElementById('hora').value; // Obtener el valor del campo hora
+
+        if (fecha=='' || hora=='') {
+            alert('Ingresa todos los campos de fecha y hora')
+            return;
+        }
+        const url = `/pos/crm/cirugia/print/${pacienteId}/${clienteId}/${medicoId}/${fecha}/${hora}`;
+        
+
+        // Abre una nueva pestaña en el navegador con la URL especificada
+        window.open(url, '_blank');
+    });
    
 })
 
@@ -187,6 +208,7 @@ function enviarFormularioH(e) {
 
     formData.append('action', 'add2');
     formData.append('mascota', pacienteId);
+    console.log(pacienteId)
 
     let campoVacioEncontrado = false;
 
@@ -240,6 +262,13 @@ function enviarFormularioH(e) {
                 className: "toastify-error",
                 icon: "error" 
             }).showToast();
+        }else{
+            Toastify({
+                text: "Hospitalización registrada de manera exitosa",
+                duration: 3000, // Duración en milisegundos
+                gravity: "top", // Posición de la notificación: "top", "bottom", "center"
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)", // Color de fondo
+            }).showToast();
         }
     })
     .catch(error => {
@@ -278,7 +307,8 @@ function agregarReceta(id){
     mostrarModal()
 }
 
-function agregarCirugia(idPaciente, idCliente, idMedico){
+function agregarCirugia(idPaciente, idCliente, idMedico, idDiagnostico){
+    obtenerDetalleDiagnostico(idDiagnostico,'#id_motivo')
     pacienteId= idPaciente
     clienteId = idCliente
     medicoId = idMedico
@@ -288,7 +318,29 @@ function agregarCirugia(idPaciente, idCliente, idMedico){
     mostrarModal()
 }
 
-function registrarHospitalizacion(id){
+function obtenerDetalleDiagnostico(id, selectorId) {
+    // URL de la vista para obtener el detalle de la cirugía
+    const url = `/pos/crm/diagnostico/${id}/`;
+    fetch(url)
+        .then(response => {
+
+            if (!response.ok) {
+                throw new Error('Ocurrió un error al obtener el detalle de la cirugía.');
+            }
+
+            return response.json();
+        })
+        .then(data => {
+           document.querySelector(selectorId).value= data.motivo
+        })
+        .catch(error => {
+            console.error(error); 
+        });
+}
+
+
+function registrarHospitalizacion(id, idDiagnostico){
+    obtenerDetalleDiagnostico(idDiagnostico,'#motivo')
     pacienteId = id
     sectionReceta.style.display='none'
     sectionCirugia.style.display='none'

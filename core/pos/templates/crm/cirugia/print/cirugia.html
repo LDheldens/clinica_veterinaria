@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acuerdo para Intervenciones Quirúrgicas</title>
+    <style>
+        /* Estilos CSS */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h2{
+            text-align: center;
+        }
+        p.p {
+            margin-bottom: 10px;
+            line-height: 2; /* Ajusta este valor según la separación que desees */
+        }
+        .firmas {
+            margin-top: 50px;
+            display: flex;
+            text-align: center;
+            justify-content: space-between;
+        }
+        .bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Acuerdo para Intervenciones Quirúrgicas</h2>
+        <p class="p">Yo: <span class="bold">{{ propietario.user}}</span> autorizo que se intervenga quirúrgicamente a mi mascota <span class="bold">{{ paciente.nombre }}</span>. Asumiendo que en toda intervención quirúrgica existe un riesgo imprevisible y que dicho profesional es un Especialista en la materia y confiando en su idoneidad, me comprometo a no entablar querella judicial ni reclamo alguno al médico veterinario Dr. <span class="bold">{{ medico.user }}</span> en caso ocurra algún incidente durante la intervención.</p>
+
+        <p>Fecha: {{ fecha }} </p>
+        <p>
+            Hora: {{ hora.hour }} : {{ hora.minute }}
+        </p>
+        <div class="firmas">
+            <div>
+                <hr>
+                <p>Nombres y Apellidos y N C.M.V.P</p>
+                <p>del médico veterinario responsable</p>
+            </div>
+            <div>
+                <hr>
+                <p>Nombre: {{medico.user }}</p>
+                <p>DNI: {{medico.user.dni}}</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

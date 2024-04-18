@@ -99,6 +99,7 @@ urlpatterns = [
     path('crm/diagnostico/add/', DiagnosticoCreateView.as_view(), name='diagnostico_create'),
     path('crm/diagnostico/update/<int:pk>/', DiagnosticoUpdateView.as_view(), name='diagnostico_update'),
     path('crm/diagnostico/delete/<int:pk>/', DiagnosticoDeleteView.as_view(), name='diagnostico_delete'),
+    path('crm/diagnostico/<int:pk>/', DiagnosticoDetailView.as_view(), name='cirugia_detail'),  # Nueva URL para el detalle
     
     #recetas 
     path('crm/receta/', RecetaListView.as_view(), name='receta_list'),
@@ -113,4 +114,7 @@ urlpatterns = [
     path('crm/cirugia/add/', CirugiaCreateView.as_view(), name='cirugia_create'),
     path('crm/cirugia/update/<int:pk>/', CirugiaUpdateView.as_view(), name='cirugia_update'),
     path('crm/cirugia/delete/<int:pk>/', CirugiaDeleteView.as_view(), name='cirugia_delete'),
+
+    # path('crm/cirugia/print/<int:paciente_id>/<int:propietario_id>/<int:medico_id>/', CirugiaPrintView.as_view(), name='cirugia_print'),
+    path('crm/cirugia/print/<int:paciente_id>/<int:propietario_id>/<int:medico_id>/<fecha>/<hora>/', CirugiaPrintView.as_view(), name='cirugia_print'),
 ]

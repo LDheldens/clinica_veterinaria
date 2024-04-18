@@ -153,7 +153,7 @@ class MedicoUpdateView(PermissionMixin, UpdateView):
                 if User.objects.filter(email=obj).exclude(id=instance.user.id):
                     data['valid'] = False
             elif type == 'codigo_medico':
-                if Medico.objects.filter(codigo_medico=obj):
+                if Medico.objects.filter(codigo_medico=obj).exclude(id=instance.id, codigo_medico=obj):
                     data['valid'] = False
         except:
             pass

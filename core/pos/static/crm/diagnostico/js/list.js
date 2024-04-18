@@ -21,12 +21,20 @@ function getData() {
             {"data": "fecha_diagnostico"},
             {"data": "medico.full_name"},
             {"data": "sintomas"},
-            {"data": "examenes_fisicos"},
-            {"data": "observacion_veterinario"},
+            {"data": "examenes_realizados"},
+            {"data": "observaciones_veterinario"},
             {"data": "diagnostico_provicional"},
             {"data": null},
         ],
         columnDefs: [
+            {
+                targets: [7],
+                class: 'text-center asunto',
+                orderable: false,
+                render: function (data, type, row) {
+                    return data
+                }
+            },
             {
                 targets: [-1],
                 class: 'text-center',
@@ -50,7 +58,7 @@ function getData() {
                                 <button 
                                     type="button" 
                                     class="dropdown-item" 
-                                    data-id="${row.id}" onclick="registrarHospitalizacion(${row.id})"
+                                    data-id="${row.id}" onclick="registrarHospitalizacion(${row.paciente.id},${row.id})"
                                 >
                                     <i class="fas fa-hospital"></i> Hospitalización
                                 </button>
@@ -66,9 +74,9 @@ function getData() {
 
                                 <button 
                                     type="button" 
-                                    class="dropdown-item" 
+                                    class="dropdown-item btn-cirugia" 
                                     data-id="${row.id}" 
-                                    onclick="agregarCirugia(${row.paciente.id},${row.cliente.id},${row.medico.id})"
+                                    onclick="agregarCirugia(${row.paciente.id},${row.cliente.id},${row.medico.id},${row.id})"
                                 >
                                     <i class="fas fa-syringe"></i> Registrar Cirugia
                                 </button>
