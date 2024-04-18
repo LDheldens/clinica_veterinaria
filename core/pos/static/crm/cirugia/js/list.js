@@ -20,13 +20,33 @@ function getData() {
             {"data": "paciente.nombre"},
             {"data": "cliente.user.first_name"},
             {"data": "medico.full_name"},
+            {"data": null},
             {"data": "fecha"},
             {"data": "hora"},
             {"data": null},
         ],
         columnDefs: [
             {
-                targets: [6],
+                targets: [4],
+                class: 'text-center',
+                orderable: false,
+                render: function (data, type, row) {
+                    if (row.firma_propietario!=null) {
+                        return `
+                            <a href="${row.firma_propietario}" class="btn btn-danger btn-sm" target="_blank">
+                                <i class="fas fa-file-pdf mr-1"></i> Ver documento
+                            </a>
+                        `;
+                    }else{
+                        return `
+                            <span class="badge badge-warning">Sin documento</span>
+                        `
+                    }
+                }
+                
+            },
+            {
+                targets: [7],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {

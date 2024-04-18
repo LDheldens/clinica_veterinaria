@@ -6,3 +6,12 @@
     <script src="{% static 'crm/cirugia/js/form.js' %}"></script>
     <script src="{% static 'crm/cirugia/js/cirugia.js' %}"></script>
 {% endblock %}
+
+{% block btn %}
+    <button 
+        class="btn btn-info" 
+        id="btn-formato-pdf"
+        type="button">
+            <i class="fas fa-file-download fa-lg"></i> Descargar acuerdo
+    </button>          
+{% endblock btn %}

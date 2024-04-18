@@ -403,10 +403,15 @@ class Diagnostico(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='diagnosticos')
     fecha_diagnostico = models.DateField(default=date.today, verbose_name='Fecha del diagnóstico')
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE, verbose_name='Médico veterinario')
-    sintomas = models.CharField(max_length=100, verbose_name='Sintomas del paciente')
-    examenes_fisicos = models.TextField(verbose_name='Exámenes realizados')
-    observacion_veterinario = models.TextField(max_length=300, verbose_name='Observación del Veterinario')
-    diagnostico_provicional = models.TextField(max_length=300, verbose_name='Diagnóstico Provicional')
+    temperatura = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Temperatura del paciente', null=True)
+    mucosa = models.CharField(max_length=50, verbose_name='Estado de las mucosas', null=True)
+    motivo_consulta = models.TextField(verbose_name='Motivo de consulta', null=True )
+    sintomas = models.TextField(verbose_name='Síntomas del paciente', null=True)
+    examenes_realizados = models.TextField(verbose_name='Exámenes realizados', null=True)
+    observaciones_veterinario = models.TextField(verbose_name='Observaciones del veterinario', null=True)
+    diagnostico_provicional = models.TextField(max_length=300, verbose_name='Diagnóstico Provicional', null=True)
+    condicion_llegada = models.TextField(max_length=50, null=True, verbose_name='Condición de llegada')
+
 
     def __str__(self):
         return f'Diagnóstico para {self.paciente} - {self.fecha_diagnostico.strftime("%Y-%m-%d")}'
@@ -498,7 +503,7 @@ class Cirugia(models.Model):
     cliente = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='Propietario')
     fecha = models.DateField(verbose_name='Fecha de la cirugía')
     hora = models.TimeField(verbose_name='Hora de la cirugía')
-    firma_propietario = models.ImageField(upload_to='firmas/', verbose_name='Firma del propietario para el consentimiento de la cirugia')
+    firma_propietario = models.FileField(upload_to='firmas/', verbose_name='Firma del propietario para el consentimiento de la cirugia')
 
     def __str__(self):
         return f'Cirugía de {self.paciente.nombre} - {self.fecha} {self.hora}'

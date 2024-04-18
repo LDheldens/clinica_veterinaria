@@ -30,6 +30,27 @@ document.addEventListener('DOMContentLoaded', function (e) {
             //         }
             //     }
             // },
+            temperatura: {
+                validators: {
+                    notEmpty: {
+                        message: 'La temperatura del diagnóstico es obligatoria'
+                    }
+                }
+            },
+            motivo_consulta: {
+                validators: {
+                    notEmpty: {
+                        message: 'El motivo del diagnóstico es obligatoria'
+                    }
+                }
+            },
+            mucosa: {
+                validators: {
+                    notEmpty: {
+                        message: 'La mucosa del diagnóstico es obligatoria'
+                    }
+                }
+            },
             medico: {
                 validators: {
                     notEmpty: {
@@ -44,14 +65,21 @@ document.addEventListener('DOMContentLoaded', function (e) {
                     }
                 }
             },
-            examenes_fisicos: {
+            examenes_realizados: {
                 validators: {
                     notEmpty: {
                         message: 'Este campo es obligatorio'
                     }
                 }
             },
-            observacion_veterinario: {
+            condicion_llegada: {
+                validators: {
+                    notEmpty: {
+                        message: 'Este campo es obligatorio'
+                    }
+                }
+            },
+            observaciones_veterinario: {
                 validators: {
                     notEmpty: {
                         message: 'La observación del veterinario es obligatoria'

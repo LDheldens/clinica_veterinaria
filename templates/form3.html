@@ -34,21 +34,38 @@
                     {# Forms Visible #}
                     <div class="row">
                         {% for field in form.visible_fields %}
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label>{{ field.label }}:</label>
-                                    {% if field|is_checkbox %}
-                                         <br>{{ field }}
-                                    {% else %}
-                                        {{ field|add_class:'form-control'|attr:"autocomplete:off" }}
-                                    {% endif %}
+                            {% if forloop.counter0 < 3 %}
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>{{ field.label }}:</label>
+                                        {% if field|is_checkbox %}
+                                             <br>{{ field }}
+                                        {% else %}
+                                            {{ field|add_class:'form-control'|attr:"autocomplete:off" }}
+                                        {% endif %}
+                                    </div>
                                 </div>
-                            </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
-                    {% block btn %}
-                    
-                    {% endblock btn %}
+                    <hr>  <!-- Añade una línea horizontal después de los tres primeros campos -->
+                    <h4 class="my-3">Constantes Fisiológicas</h4>  <!-- Subtítulo para los otros campos -->
+                    <div class="row">
+                        {% for field in form.visible_fields %}
+                            {% if forloop.counter0 >= 3 %}
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>{{ field.label }}:</label>
+                                        {% if field|is_checkbox %}
+                                             <br>{{ field }}
+                                        {% else %}
+                                            {{ field|add_class:'form-control'|attr:"autocomplete:off" }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
             {% block box_footer %}

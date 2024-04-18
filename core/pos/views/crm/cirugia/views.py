@@ -1,10 +1,15 @@
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView
+from datetime import datetime
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, View
 from django.http import HttpResponse
 import json
 from django.db import transaction
-from core.pos.models import Cirugia
+from core.pos.models import Cirugia, Client, Medico, Paciente
 from core.pos.forms import CirugiaForm
+from django.shortcuts import get_object_or_404
+from django.template.loader import get_template
+import weasyprint
 
 class CirugiaListView(TemplateView):
     template_name = 'crm/cirugia/list.html'
@@ -92,7 +97,12 @@ class CirugiaUpdateView(UpdateView):
                     cirugia.cliente_id = request.POST.get('cliente')
                     cirugia.fecha = request.POST.get('fecha')
                     cirugia.hora = request.POST.get('hora')
-                    cirugia.firma_propietario = request.POST.get('firma_propietario')
+                    # Verifica si se proporciona una nueva firma
+                    nueva_firma = request.FILES.get('firma_propietario')
+                    if nueva_firma:
+                        # Si se proporciona una nueva firma, elimina la firma anterior
+                        cirugia.firma_propietario.delete(save=False)
+                        cirugia.firma_propietario = nueva_firma
                     cirugia.save()
             else:
                 data['error'] = 'No ha seleccionado ninguna opción'
@@ -126,3 +136,46 @@ class CirugiaDeleteView(DeleteView):
         context['title'] = 'Eliminar Cirugía'
         context['list_url'] = self.success_url
         return context
+    
+#vista para imprimir el acuerdo 
+class CirugiaPrintView(View):
+    success_url = reverse_lazy('cirugia_list')
+
+    def get(self, request, *args, **kwargs):
+        try:
+            # Obtén los IDs de los modelos desde la URL
+            paciente_id = self.kwargs['paciente_id']
+            propietario_id = self.kwargs['propietario_id']
+            medico_id = self.kwargs['medico_id']
+            
+            # Obtén la fecha y la hora de los parámetros de la URL
+            fecha = self.kwargs['fecha']
+            hora = self.kwargs['hora']
+            
+            # Convierte la cadena de fecha y hora en objetos datetime si es necesario
+            fecha_obj = datetime.strptime(fecha, '%Y-%m-%d').date()
+            hora_obj = datetime.strptime(hora, '%H:%M').time()
+            
+            # Obtén los objetos de los modelos correspondientes
+            paciente = get_object_or_404(Paciente, pk=paciente_id)
+            propietario = get_object_or_404(Client, pk=propietario_id)
+            medico = get_object_or_404(Medico, pk=medico_id)
+            
+            context = {
+                'paciente': paciente,
+                'propietario': propietario,
+                'medico': medico,
+                'fecha': fecha_obj,
+                'hora': hora_obj,
+            }
+            
+            template = get_template('crm/cirugia/print/cirugia.html')
+            html_template = template.render(context)
+            
+            # Convierte el HTML a PDF y devuélvelo como respuesta
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'filename="cirugia.pdf"'
+            weasyprint.HTML(string=html_template).write_pdf(response)
+            return response
+        except (Paciente.DoesNotExist, Client.DoesNotExist, Medico.DoesNotExist, Cirugia.DoesNotExist) as e:
+            return HttpResponseRedirect(self.get_success_url())

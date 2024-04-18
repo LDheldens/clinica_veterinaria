@@ -4,9 +4,9 @@ let btnCloseModal;
 let formReceta;
 let formHospitalizacion;
 let formCirugia;
-let pacienteId;
-let clienteId;
-let medicoId;
+let pacienteId = null;
+let clienteId = null;
+let medicoId = null;
 let tableTitulares;
 let btnAgregarMedicamento; 
 let contenedorMedicamentos; 
@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     sectionReceta = document.querySelector('.sectionReceta')
     sectionHospitalizacion = document.querySelector('.sectionHospitalizacion')
     sectionCirugia = document.querySelector('.sectionCirugia')
+    const btnFormato = document.querySelector('#btn-formato-pdf')
 
     btnAgregarMedicamento.addEventListener('click', (e)=>{
         e.preventDefault()
@@ -38,6 +39,26 @@ document.addEventListener('DOMContentLoaded',()=>{
     formReceta.addEventListener('submit', enviarFormulario)
     formHospitalizacion.addEventListener('submit', enviarFormularioH)
     formCirugia.addEventListener('submit',enviarFormularioC)
+
+    // #logica para obtener el formato pdf
+    btnFormato.addEventListener('click', (e) => {
+        if (medicoId == null || clienteId == null || pacienteId == null) {
+            alert('Ingresa todos los campos')
+            return;
+        } 
+        const fecha = document.getElementById('fecha').value; // Obtener el valor del campo fecha
+        const hora = document.getElementById('hora').value; // Obtener el valor del campo hora
+
+        if (fecha=='' || hora=='') {
+            alert('Ingresa todos los campos de fecha y hora')
+            return;
+        }
+        const url = `/pos/crm/cirugia/print/${pacienteId}/${clienteId}/${medicoId}/${fecha}/${hora}`;
+        
+
+        // Abre una nueva pestaña en el navegador con la URL especificada
+        window.open(url, '_blank');
+    });
    
 })
 

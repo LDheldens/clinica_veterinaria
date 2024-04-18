@@ -1,4 +1,5 @@
 import json
+from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import timezone
 from django.urls import reverse_lazy
 from django.http import HttpResponse, JsonResponse
@@ -12,17 +13,18 @@ class DiagnosticoListView(TemplateView):
     def post(self, request, *args, **kwargs):
         data = {}
         try:
-            action = request.POST['action']
+            action = request.POST.get('action')
             if action == 'search':
                 # Obtener todos los diagnósticos ordenados por fecha de diagnóstico de más recientes a más antiguas
                 diagnosticos = Diagnostico.objects.all().order_by('-fecha_diagnostico')
-                # Convertir los diagnósticos a formato JSON
+                # Convertir los diagnósticos a formato JSON utilizando DjangoJSONEncoder
                 data = [diagnostico.toJSON() for diagnostico in diagnosticos]
+                return JsonResponse(data, encoder=DjangoJSONEncoder, safe=False)
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
             data['error'] = str(e)
-        return HttpResponse(json.dumps(data), content_type='application/json')
+        return JsonResponse(data)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -38,7 +40,6 @@ class DiagnosticoCreateView(CreateView):
 
     def post(self, request, *args, **kwargs):
         data = {}
-        print(request.POST)
         action = request.POST.get('action')
         try:
             if action == 'add':
@@ -47,10 +48,14 @@ class DiagnosticoCreateView(CreateView):
                     diagnostico.paciente_id = request.POST.get('paciente')
                     diagnostico.fecha_diagnostico = request.POST.get('fecha_diagnostico')
                     diagnostico.medico_id = request.POST.get('medico')
+                    diagnostico.temperatura = float(request.POST.get('temperatura', 0))  # Convertir a float
+                    diagnostico.mucosa = request.POST.get('mucosa')
+                    diagnostico.motivo_consulta = request.POST.get('motivo_consulta')
                     diagnostico.sintomas = request.POST.get('sintomas')
-                    diagnostico.examenes_fisicos = request.POST.get('examenes_fisicos')
-                    diagnostico.observacion_veterinario = request.POST.get('observacion_veterinario')
+                    diagnostico.examenes_realizados = request.POST.get('examenes_realizados')
+                    diagnostico.observaciones_veterinario = request.POST.get('observaciones_veterinario')
                     diagnostico.diagnostico_provicional = request.POST.get('diagnostico_provicional')
+                    diagnostico.condicion_llegada = request.POST.get('condicion_llegada')
                     diagnostico.save()
             elif action == 'validate_data':
                 return self.validate_data()
@@ -58,8 +63,7 @@ class DiagnosticoCreateView(CreateView):
                 data['error'] = 'No ha seleccionado ninguna opción'
         except Exception as e:
             data['error'] = str(e)
-        return HttpResponse(json.dumps(data), content_type='application/json')
-
+        return JsonResponse(data)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -76,6 +80,7 @@ class DiagnosticoUpdateView(UpdateView):
     success_url = reverse_lazy('diagnostico_list')
 
     def post(self, request, *args, **kwargs):
+        print('PROBANDO', request.POST)
         data = {}
         action = request.POST.get('action')
         try:
@@ -87,12 +92,16 @@ class DiagnosticoUpdateView(UpdateView):
                     fecha_diagnostico_str = request.POST.get('fecha_diagnostico')
                     # Convierte la cadena de fecha a un objeto datetime.date
                     fecha_diagnostico = timezone.datetime.strptime(fecha_diagnostico_str, '%Y-%m-%d').date()
-                    diagnostico.fecha_diagnostico = fecha_diagnostico
                     diagnostico.medico_id = request.POST.get('medico')
+                    diagnostico.temperatura = float(request.POST.get('temperatura', 0))
+                    diagnostico.fecha_diagnostico = fecha_diagnostico
+                    diagnostico.mucosa = request.POST.get('mucosa')
+                    diagnostico.motivo_consulta = request.POST.get('motivo_consulta')
                     diagnostico.sintomas = request.POST.get('sintomas')
-                    diagnostico.examenes_fisicos = request.POST.get('examenes_fisicos')
-                    diagnostico.observacion_veterinario = request.POST.get('observacion_veterinario')
+                    diagnostico.examenes_realizados = request.POST.get('examenes_realizados')
+                    diagnostico.observaciones_veterinario = request.POST.get('observaciones_veterinario')
                     diagnostico.diagnostico_provicional = request.POST.get('diagnostico_provicional')
+                    diagnostico.condicion_llegada = request.POST.get('condicion_llegada')
                     diagnostico.save()
             elif action == 'validate_data':
                 return self.validate_data()

@@ -113,4 +113,6 @@ urlpatterns = [
     path('crm/cirugia/add/', CirugiaCreateView.as_view(), name='cirugia_create'),
     path('crm/cirugia/update/<int:pk>/', CirugiaUpdateView.as_view(), name='cirugia_update'),
     path('crm/cirugia/delete/<int:pk>/', CirugiaDeleteView.as_view(), name='cirugia_delete'),
+    # path('crm/cirugia/print/<int:paciente_id>/<int:propietario_id>/<int:medico_id>/', CirugiaPrintView.as_view(), name='cirugia_print'),
+    path('crm/cirugia/print/<int:paciente_id>/<int:propietario_id>/<int:medico_id>/<fecha>/<hora>/', CirugiaPrintView.as_view(), name='cirugia_print'),
 ]
