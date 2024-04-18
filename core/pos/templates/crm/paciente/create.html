@@ -10,7 +10,11 @@
             background-size: 90% 70%;
             min-height: 100vh;
             background-position: 0 420px !important;
+            {% comment %} opacity: 0.75; {% endcomment %}
         }
+        {% comment %} .card::before {
+            opacity: 0.75;
+        } {% endcomment %}
         @media (max-width: 768px) {
             .card {
                 background-image: none !important;
@@ -106,12 +110,6 @@ data-url="{{ list_url }}" >
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label>{{ form.unidad_edad.label }}:</label>
-                        {{ form.unidad_edad|add_class:'form-control'|attr:"autocomplete:off" }}
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="form-group">
                         <label>{{ form.edad.label }}:</label>
                         {{ form.edad|add_class:'form-control'|attr:"autocomplete:off" }}
                     </div>
@@ -126,6 +124,12 @@ data-url="{{ list_url }}" >
                     <div class="form-group">
                         <label>{{ form.descripcion.label }}:</label>
                         {{ form.descripcion|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>{{ form.declaracion_jurada.label }}:</label>
+                        {{ form.declaracion_jurada|add_class:'form-control'|attr:"autocomplete:off" }}
                     </div>
                 </div>
           </div>

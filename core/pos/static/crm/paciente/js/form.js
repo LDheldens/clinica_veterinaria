@@ -179,6 +179,8 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 parameters,
                 function (request) {
                     var newOption = new Option(request.user.full_name + ' / ' + request.user.dni, request.id, false, true);
+                    console.log(newOption)
+                    console.log(request.user.full_name + ' / ' + request.user.dni, request.id)
                     select_client.append(newOption).trigger('change');
                     fv.revalidateField('propietario');
                     $('#myModalClient').modal('hide');
@@ -203,6 +205,17 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 }),
             },
             fields: {
+                fecha_nacimiento: {
+                    validators: {
+                        notEmpty: {
+                            message: 'La fecha es obligatoria'
+                        },
+                        date: {
+                            format: 'YYYY-MM-DD',
+                            message: 'La fecha no es válida'
+                        }
+                    },
+                },
                 identificacion: {
                     validators: {
                         notEmpty: {
@@ -274,11 +287,16 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 //         },
                 //     }
                 // },
-                edad: {
+                declaracion_jurada: {
                     validators: {
-                        notEmpty: {
-                            message: 'La edad de la mascota es obligatorio'
-                        },
+                        validators: {
+                            file: {
+                                extension: 'pdf',
+                                type: 'application/pdf',
+                                maxFiles: 1,
+                                message: 'Introduce un archivo de pdf válido'
+                            }
+                        }
                     }
                 },
                 peso: {
@@ -324,7 +342,21 @@ document.addEventListener('DOMContentLoaded', function (e) {
 });
 
 $(function () {
-    select_client = $('select[name="client"]');
+    $('input[name="fecha_nacimiento"]').on('input', function() {
+        // console.log('El valor del input ha cambiado a: ', $(this).val());
+        const fechaNacimiento = new Date($(this).val());
+        const hoy = new Date();
+        let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+        // Verificar si el cumpleaños ya pasó este año
+        if (hoy.getMonth() < fechaNacimiento.getMonth() || 
+            (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
+            edad--;
+        }
+        // console.log('Edad:', edad);
+        $('input[name="edad"]').val(edad + ' año(s)')
+    });
+
+    select_client = $('select[name="propietario"]');
     current_date = new moment().format("YYYY-MM-DD");
     fecha_nacimiento = $('input[name="fecha_nacimiento"]');
     fecha_nacimiento.datetimepicker({

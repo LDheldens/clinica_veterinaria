@@ -19,11 +19,12 @@ function getData() {
         columns: [
             {"data": "id"},
             {"data": "propietario"},
+            {"data": "declaracion_jurada"},
             {"data": "nombre"},
             {"data": "fecha_nacimiento"},
             {"data": "tipo_mascota"},
             {"data": "sexo"},
-            {"data": "edad"},
+            {"data": "fecha_nacimiento"},
             {"data": "peso"},
             {"data": "id"},
         ],
@@ -37,7 +38,27 @@ function getData() {
                 }
             },
             {
-                targets: [1,2,3,4,5],
+                targets: [1],
+                class: 'text-center',
+                orderable: false,
+                render: function (data, type, row, meta) {
+                    return data
+                }
+            },
+            {
+                targets: [2],
+                class: 'text-center',
+                orderable: false,
+                render: function (data, type, row, meta) {
+                    if(data) {
+                        return `<i class="fas fa-file-pdf text-danger"></i> <a href="${data}">Ver pdf</a>`
+                    } else {
+                        return `Sin pdf`
+                    }
+                }
+            },
+            {
+                targets: [3,4,5,6],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
@@ -45,15 +66,23 @@ function getData() {
                 }
             },
             {
-                targets: [6],
+                targets: [7],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
-                    return data + ' ' + row.unidad_edad
+                    const fechaNacimiento = new Date(data);
+                    const hoy = new Date();
+                    let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+                    // Verificar si el cumpleaños ya pasó este año
+                    if (hoy.getMonth() < fechaNacimiento.getMonth() || 
+                        (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
+                        edad--;
+                    }
+                    return edad + ' año(s)'
                 }
             },
             {
-                targets: [7],
+                targets: [8],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {

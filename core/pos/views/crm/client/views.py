@@ -439,8 +439,8 @@ class PacienteCreateView( CreateView):
                     paciente.sexo = request.POST['sexo']
                     paciente.tamanio = request.POST['tamanio']
                     paciente.raza = request.POST['raza']
-                    paciente.unidad_edad = request.POST['unidad_edad']
-                    paciente.edad = request.POST['edad']
+                    if 'declaracion_jurada' in request.FILES:
+                        paciente.declaracion_jurada = request.FILES['declaracion_jurada']
                     paciente.peso = request.POST['peso']
                     paciente.descripcion = request.POST['descripcion']
                     paciente.save()
@@ -507,10 +507,9 @@ class PacienteUpdateView(PermissionMixin, UpdateView):
             'sexo': instance.sexo,
             'tamanio': instance.tamanio,
             'raza': instance.raza,
-            'unidad_edad': instance.unidad_edad,
-            'edad': instance.edad,
             'peso': instance.peso,
             'descripcion': instance.descripcion,
+            'declaracion_jurada': instance.declaracion_jurada,
         })
         form.set_intial(instance.identificacion)
         return form
@@ -545,10 +544,10 @@ class PacienteUpdateView(PermissionMixin, UpdateView):
                     paciente.sexo = request.POST['sexo']
                     paciente.tamanio = request.POST['tamanio']
                     paciente.raza = request.POST['raza']
-                    paciente.unidad_edad = request.POST['unidad_edad']
-                    paciente.edad = request.POST['edad']
+                    if 'declaracion_jurada' in request.FILES:
+                        paciente.declaracion_jurada = request.FILES['declaracion_jurada']
                     paciente.peso = request.POST['peso']
-                    paciente.edad = request.POST['edad']
+                    # paciente.edad = request.POST['edad']
                     paciente.descripcion = request.POST['descripcion']
                     paciente.save()
             elif action == 'validate_data':

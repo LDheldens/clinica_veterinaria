@@ -12,7 +12,7 @@ from django.db.models.functions import Coalesce
 from django.forms import model_to_dict
 from django.core.exceptions import ValidationError
 from config import settings
-from core.pos.choices import payment_condition, payment_method, voucher, sexo_mascota, unidad_edad
+from core.pos.choices import payment_condition, payment_method, voucher, sexo_mascota
 from core.user.models import User
 
 
@@ -353,6 +353,7 @@ class Medico(models.Model):
     especialidad = models.CharField(max_length = 150)
     mobile = models.CharField(max_length=9, unique=True, verbose_name='Teléfono')
     codigo_medico = models.CharField(max_length=10, verbose_name='Código del medico veterinario', blank=True, null=True)
+    certificado = models.FileField(upload_to='documentos/', verbose_name='Certificado')
     
     def __str__(self):
         return '{} / {}'.format(self.user.get_full_name(), self.user.dni)
@@ -362,6 +363,7 @@ class Medico(models.Model):
         item['full_name'] = self.user.get_full_name()
         item['imagen'] = self.user.get_image()
         item['dni'] = self.user.dni
+        item['certificado'] = self.certificado.url if self.certificado else ''
         return item
 
 class TipoMascota(models.Model):
@@ -381,22 +383,22 @@ class Paciente(models.Model):
     sexo = models.CharField(choices=sexo_mascota, max_length=150, default="sin especificar")
     tamanio = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Tamaño') 
     raza = models.CharField(max_length=150, null=True, blank=True)
-    unidad_edad = models.CharField(max_length=20, choices=unidad_edad, default="año(s)", verbose_name='Unidad de edad')
-    edad = models.IntegerField()
+    # edad = models.IntegerField()
+    declaracion_jurada = models.FileField(upload_to='documentos/', verbose_name='Declaracion jurada del propietario')
     peso = models.DecimalField(max_digits=5, decimal_places=2)
-    descripcion = models.TextField(null=True, blank=True, verbose_name='Caracteristicas del paciente')
+    descripcion = models.TextField(null=True, blank=True, verbose_name='Caracteristicas del paciente')  
     
     def __str__(self):
         return f'{self.nombre} / {self.tipo_mascota} / {self.raza}'    
     
     def toJSON(self):
-        item = model_to_dict(self)
-        print(item)
+        item = model_to_dict(self, exclude=[])
         item['tipo_mascota'] = self.tipo_mascota.toJSON()['tipo_mascota']
         item['propietario'] = self.propietario.toJSON()['user']['full_name']
         item['fecha_nacimiento'] = self.fecha_nacimiento.strftime('%Y-%m-%d')
         item['tamanio'] = format(self.tamanio, '.2f')
         item['peso'] = format(self.peso, '.2f')
+        item['declaracion_jurada'] = self.declaracion_jurada.url if self.declaracion_jurada else ''
         return item
 
 class Diagnostico(models.Model):
@@ -407,6 +409,7 @@ class Diagnostico(models.Model):
     examenes_fisicos = models.TextField(verbose_name='Exámenes realizados')
     observacion_veterinario = models.TextField(max_length=300, verbose_name='Observación del Veterinario')
     diagnostico_provicional = models.TextField(max_length=300, verbose_name='Diagnóstico Provicional')
+    temperatura = models.DecimalField(decimal_places=2, max_digits=9, verbose_name='Temperatura')
 
     def __str__(self):
         return f'Diagnóstico para {self.paciente} - {self.fecha_diagnostico.strftime("%Y-%m-%d")}'

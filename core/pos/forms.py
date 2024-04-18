@@ -197,13 +197,7 @@ class PacienteForm(ModelForm):
                     'autocomplete': 'off'
                 }
             ),
-            'edad': forms.NumberInput(
-                attrs={
-                    'placeholder': 'Ingrese la edad',
-                    'class': 'form-control',
-                    'autocomplete': 'off'
-                }
-            ),
+           
             'peso': forms.NumberInput(
                 attrs={
                     'placeholder': 'Ingrese el peso',
@@ -220,7 +214,17 @@ class PacienteForm(ModelForm):
                     'placeholder': 'Ingrese una descripción del paciente que lo describa'
                 }
             ),
+            'declaracion_jurada': forms.FileInput(attrs={
+                'class': 'form-control',
+                'autocomplete': 'off'
+            })
         }
+    edad = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'autocomplete': 'off',
+        'placeholder': 'Edad nula',
+        'disabled': 'true'
+    }), label='Edad', max_length=50)
 
 class ClientForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -232,7 +236,7 @@ class ClientForm(ModelForm):
         widgets = {
             'mobile': forms.TextInput(
                 attrs={
-                    'placeholder': 'Ingrese su número celular',
+                    'placeholder': 'Ingrese su número de celular',
                     'class': 'form-control',
                     'autocomplete': 'off'
                 }
@@ -489,7 +493,7 @@ class MedicoForm(ModelForm):
 
     class Meta:
         model = Medico
-        fields = ['especialidad', 'first_name', 'last_name', 'dni', 'email', 'mobile','codigo_medico']
+        fields = ['especialidad', 'first_name', 'last_name', 'dni', 'email', 'mobile','codigo_medico', 'certificado']
         widgets = {
             'especialidad': forms.TextInput(
                 attrs={
@@ -500,12 +504,16 @@ class MedicoForm(ModelForm):
             ),
             'mobile': forms.TextInput(
                 attrs={
-                    'placeholder': 'Ingrese su número celular',
+                    'placeholder': 'Ingrese su número de celular',
                     'class': 'form-control',
                     'autocomplete': 'off',
                     'max_length':9
                 }
             ),
+            'certificado': forms.FileInput(attrs={
+                'class': 'form-control',
+                'autocomplete': 'off'
+            })
         }
 
     first_name = forms.CharField(widget=forms.TextInput(attrs={
@@ -535,7 +543,7 @@ class MedicoForm(ModelForm):
     codigo_medico = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
         'autocomplete': 'off',
-        'placeholder': 'Ingrese su email'
+        'placeholder': 'Ingrese su codigo medico'
     }), max_length=10)
 
     image = forms.ImageField(widget=forms.FileInput(attrs={

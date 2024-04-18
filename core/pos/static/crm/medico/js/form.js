@@ -16,6 +16,18 @@ document.addEventListener('DOMContentLoaded', function (e) {
             }),
         },
         fields: {
+            certificado: {
+                validators: {
+                    validators: {
+                        file: {
+                            extension: 'pdf',
+                            type: 'application/pdf',
+                            maxFiles: 1,
+                            message: 'Introduce un archivo de pdf válido'
+                        }
+                    }
+                }
+            },
             especialidad: {
                 validators: {
                     notEmpty: {

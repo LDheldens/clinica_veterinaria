@@ -89,6 +89,8 @@ class MedicoCreateView(PermissionMixin, CreateView):
                     medico.mobile = request.POST['mobile']
                     medico.especialidad = request.POST['especialidad']
                     medico.codigo_medico= request.POST['codigo_medico']
+                    if 'certificado' in request.FILES:
+                        medico.certificado = request.FILES['certificado']
                     medico.save()
 
                     group = Group.objects.get(pk=settings.GROUPS.get('medic'))
@@ -128,6 +130,7 @@ class MedicoUpdateView(PermissionMixin, UpdateView):
             'dni': instance.user.dni,
             'email': instance.user.email,
             'image': instance.user.image,
+            'certificado': instance.certificado,
             'mobile': instance.mobile,  # Agregamos el campo mobile
             'especialidad': instance.especialidad,  # Agregamos el campo especialidad
             'codigo_medico': instance.codigo_medico,  # Agregamos el campo especialidad
@@ -172,14 +175,16 @@ class MedicoUpdateView(PermissionMixin, UpdateView):
                         user.remove_image()
                     if 'image' in request.FILES:
                         user.image = request.FILES['image']
+                   
                     user.email = request.POST['email']
                     user.save()
-
                     medico = instance
                     medico.user_id = user.id
                     medico.mobile = request.POST['mobile']
                     medico.especialidad = request.POST['especialidad']
                     medico.codigo_medico = request.POST['codigo_medico']
+                    if 'certificado' in request.FILES:
+                        medico.certificado = request.FILES['certificado']
                     medico.save()
             elif action == 'validate_data':
                 return self.validate_data()
