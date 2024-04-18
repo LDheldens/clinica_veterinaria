@@ -14,13 +14,13 @@ dashboard.sidebar = 'sidebar-light-primary'
 dashboard.save()
 
 company = Company()
-company.name = 'CONAFORD'
+company.name = 'VETERINARIA'
 company.ruc = '000000000000001'
-company.email = 'conaford@gmail.com'
+company.email = 'veterianaria@gmail.com'
 company.phone = '0000001'
 company.mobile = '123456789'
-company.desc = 'Consultora y asesoria'
-company.website = 'conaford.com'
+company.desc = 'Salud y cuidado animal'
+company.website = 'veterinaria.com'
 company.address = 'Jr. Ucayali SN'
 company.igv = 18.00
 company.save()

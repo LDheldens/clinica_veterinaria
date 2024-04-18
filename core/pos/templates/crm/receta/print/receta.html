@@ -27,8 +27,8 @@
         }
 
         img {
-            width: 100px;
-            height: 100px;
+            width: 200px;
+            height: 200px;
         }
 
         .company-name {
@@ -39,7 +39,7 @@
         }
 
         .company-details {
-            font-size: 14px;
+            font-size: 20px;
             margin-bottom: 20px;
         }
 
@@ -74,10 +74,7 @@
     <div class="container">
         <!-- Encabezado -->
         <div class="header">
-            <img src="{{ company.get_image }}" class="logo" alt="Logo">
             <img src="http://127.0.0.1:8000/media/company/2024/04/17/logo23.png" class="logo" alt="Logo">
-            <a href="{{ company.get_image }}">RUTA DE LA IMAGEN</a>
-            <div>{{ company.get_image }}</div>
             <div class="company-name">{{ company.name }}</div>
             <div class="company-details">
                 {{ company.address }}<br>
