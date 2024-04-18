@@ -1,11 +1,12 @@
 from django.urls import reverse_lazy
+from django.http import JsonResponse
 from datetime import datetime
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, View
 from django.http import HttpResponse
 import json
 from django.db import transaction
-from core.pos.models import Cirugia, Client, Medico, Paciente
+from core.pos.models import Cirugia, Client, Medico, Paciente, Diagnostico
 from core.pos.forms import CirugiaForm
 from django.shortcuts import get_object_or_404
 from django.template.loader import get_template
@@ -49,6 +50,7 @@ class CirugiaCreateView(CreateView):
                     cirugia.paciente_id =  request.POST.get('paciente')
                     cirugia.medico_id = request.POST.get('medico')
                     cirugia.cliente_id = request.POST.get('cliente')
+                    cirugia.motivo= request.POST.get('motivo')
                     cirugia.fecha = request.POST.get('fecha')
                     cirugia.hora = request.POST.get('hora')
                     cirugia.firma_propietario = request.FILES.get('firma_propietario')
@@ -59,6 +61,7 @@ class CirugiaCreateView(CreateView):
                 cirugia.paciente_id =  request.POST.get('paciente')
                 cirugia.medico_id = request.POST.get('medico')
                 cirugia.cliente_id = request.POST.get('cliente')
+                cirugia.motivo= request.POST.get('motivo')
                 cirugia.fecha = request.POST.get('fecha')
                 cirugia.hora = request.POST.get('hora')
                 cirugia.firma_propietario = request.FILES.get('firma_propietario')
@@ -95,6 +98,7 @@ class CirugiaUpdateView(UpdateView):
                     cirugia.paciente_id =  request.POST.get('paciente')
                     cirugia.medico_id = request.POST.get('medico')
                     cirugia.cliente_id = request.POST.get('cliente')
+                    cirugia.motivo= request.POST.get('motivo')
                     cirugia.fecha = request.POST.get('fecha')
                     cirugia.hora = request.POST.get('hora')
                     # Verifica si se proporciona una nueva firma
@@ -136,7 +140,9 @@ class CirugiaDeleteView(DeleteView):
         context['title'] = 'Eliminar Cirugía'
         context['list_url'] = self.success_url
         return context
-    
+  
+
+  
 #vista para imprimir el acuerdo 
 class CirugiaPrintView(View):
     success_url = reverse_lazy('cirugia_list')

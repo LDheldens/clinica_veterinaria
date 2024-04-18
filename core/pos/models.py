@@ -501,6 +501,7 @@ class Cirugia(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, verbose_name='Mascota')
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE, verbose_name='Médico veterinario')
     cliente = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='Propietario')
+    motivo = models.TextField(verbose_name='Motivo', null=True)
     fecha = models.DateField(verbose_name='Fecha de la cirugía')
     hora = models.TimeField(verbose_name='Hora de la cirugía')
     firma_propietario = models.FileField(upload_to='firmas/', verbose_name='Firma del propietario para el consentimiento de la cirugia')

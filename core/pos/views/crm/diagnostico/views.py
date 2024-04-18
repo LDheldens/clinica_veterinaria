@@ -1,9 +1,10 @@
 import json
+from django.shortcuts import get_object_or_404
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import timezone
 from django.urls import reverse_lazy
 from django.http import HttpResponse, JsonResponse
-from django.views.generic import CreateView, UpdateView, DeleteView, TemplateView
+from django.views.generic import CreateView, UpdateView, DeleteView, TemplateView, View
 from django.db import transaction
 from core.pos.forms import DiagnosticoForm, Diagnostico
 
@@ -138,3 +139,23 @@ class DiagnosticoDeleteView(DeleteView):
         context['title'] = 'Eliminar diagnóstico'
         context['list_url'] = self.success_url
         return context
+    
+class DiagnosticoDetailView(View):
+    model = Diagnostico
+
+    def get(self, request, *args, **kwargs):
+        print('PROBANDO: FTGHGF')
+        # Obtener el id de la URL
+        diagnostico_id = kwargs.get('pk')
+
+        # Obtener la instancia de Diagnostico o devolver un error 404 si no se encuentra
+        diagnostico = get_object_or_404(Diagnostico, pk=diagnostico_id)
+
+        # Crear el diccionario de datos para la respuesta JSON
+        data = {
+            'id': diagnostico.id,
+            'motivo': diagnostico.diagnostico_provicional
+        }
+
+        # Devolver la respuesta JSON
+        return JsonResponse(data)

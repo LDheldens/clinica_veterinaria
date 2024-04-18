@@ -20,6 +20,7 @@ function getData() {
             {"data": "paciente.nombre"},
             {"data": "cliente.user.first_name"},
             {"data": "medico.full_name"},
+            {"data": "motivo",width: '17%'},
             {"data": null},
             {"data": "fecha"},
             {"data": "hora"},
@@ -27,7 +28,7 @@ function getData() {
         ],
         columnDefs: [
             {
-                targets: [4],
+                targets: [5],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
@@ -46,7 +47,7 @@ function getData() {
                 
             },
             {
-                targets: [7],
+                targets: [8],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {

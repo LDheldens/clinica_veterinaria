@@ -208,6 +208,7 @@ function enviarFormularioH(e) {
 
     formData.append('action', 'add2');
     formData.append('mascota', pacienteId);
+    console.log(pacienteId)
 
     let campoVacioEncontrado = false;
 
@@ -261,6 +262,13 @@ function enviarFormularioH(e) {
                 className: "toastify-error",
                 icon: "error" 
             }).showToast();
+        }else{
+            Toastify({
+                text: "Hospitalización registrada de manera exitosa",
+                duration: 3000, // Duración en milisegundos
+                gravity: "top", // Posición de la notificación: "top", "bottom", "center"
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)", // Color de fondo
+            }).showToast();
         }
     })
     .catch(error => {
@@ -299,7 +307,8 @@ function agregarReceta(id){
     mostrarModal()
 }
 
-function agregarCirugia(idPaciente, idCliente, idMedico){
+function agregarCirugia(idPaciente, idCliente, idMedico, idDiagnostico){
+    obtenerDetalleDiagnostico(idDiagnostico,'#id_motivo')
     pacienteId= idPaciente
     clienteId = idCliente
     medicoId = idMedico
@@ -309,7 +318,29 @@ function agregarCirugia(idPaciente, idCliente, idMedico){
     mostrarModal()
 }
 
-function registrarHospitalizacion(id){
+function obtenerDetalleDiagnostico(id, selectorId) {
+    // URL de la vista para obtener el detalle de la cirugía
+    const url = `/pos/crm/diagnostico/${id}/`;
+    fetch(url)
+        .then(response => {
+
+            if (!response.ok) {
+                throw new Error('Ocurrió un error al obtener el detalle de la cirugía.');
+            }
+
+            return response.json();
+        })
+        .then(data => {
+           document.querySelector(selectorId).value= data.motivo
+        })
+        .catch(error => {
+            console.error(error); 
+        });
+}
+
+
+function registrarHospitalizacion(id, idDiagnostico){
+    obtenerDetalleDiagnostico(idDiagnostico,'#motivo')
     pacienteId = id
     sectionReceta.style.display='none'
     sectionCirugia.style.display='none'
