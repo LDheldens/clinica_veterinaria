@@ -1,4 +1,3 @@
-
 function getData() {
     $('#data').DataTable({
         responsive: true,
@@ -50,7 +49,7 @@ function getData() {
                 orderable: false,
                 render: function (data, type, row, meta) {
                     if(data) {
-                        return `<i class="fas fa-file-pdf text-danger target="_blank""></i> <a href="${data}">Ver pdf</a>`
+                        return `<a target="_blank" href="${data}"><i class="fas fa-file-pdf" style="color: red;"></i> Ver pdf</a>`
                     } else {
                         return `Sin pdf`
                     }

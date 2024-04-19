@@ -389,6 +389,8 @@ class Paciente(models.Model):
     declaracion_jurada = models.FileField(upload_to='documentos/', verbose_name='Declaracion jurada del propietario')
     peso = models.DecimalField(max_digits=5, decimal_places=2)
     descripcion = models.TextField(null=True, blank=True, verbose_name='Caracteristicas del paciente')  
+    alergias = models.TextField(null=True, verbose_name='Alergias del Paciente')  
+    foto = models.ImageField(upload_to='fotos_pacientes/',null=True, verbose_name='Foto del Paciente')
     
     def __str__(self):
         return f'{self.nombre} / {self.tipo_mascota} / {self.raza}'    
@@ -402,13 +404,13 @@ class Paciente(models.Model):
 
     def toJSON(self):
         item = model_to_dict(self, exclude=['fecha_nacimiento_value'])
-        # print(item)
         item['tipo_mascota'] = self.tipo_mascota.toJSON()['tipo_mascota']
         item['propietario'] = self.propietario.toJSON()['user']['full_name']
         item['edad'] = self.getEdad()
         item['tamanio'] = format(self.tamanio, '.2f')
         item['peso'] = format(self.peso, '.2f')
         item['declaracion_jurada'] = self.declaracion_jurada.url if self.declaracion_jurada else ''
+        item['foto'] = self.foto.url if self.foto else ''
         return item
 
 class Diagnostico(models.Model):
@@ -424,6 +426,10 @@ class Diagnostico(models.Model):
     diagnostico_provicional = models.TextField(max_length=300, verbose_name='Diagnóstico Provicional', null=True)
     condicion_llegada = models.TextField(max_length=50, null=True, verbose_name='Condición de llegada')
 
+    #ultimos campos agregados
+    frecuencia_cardiaca = models.IntegerField(verbose_name='Frecuencia Cardíaca', null=True)
+    frecuencia_respiratoria = models.IntegerField(verbose_name='Frecuencia Respiratoria', null=True)
+    esterilizado = models.BooleanField(verbose_name='Esterilizado', default=False)
 
     def __str__(self):
         return f'Diagnóstico para {self.paciente} - {self.fecha_diagnostico.strftime("%Y-%m-%d")}'

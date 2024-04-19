@@ -154,8 +154,12 @@ class PacienteForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.initial['identificacion'] = 'SVT-' + str(obtener_proximo_id(Paciente))
+        self.fields['declaracion_jurada'].widget.attrs['accept'] = '.pdf, .docx'
+        self.fields['foto'].widget.attrs['accept'] = 'image/jpeg, image/jpg, image/png'
+        
     def set_intial(self, value):
         self.initial['identificacion'] = value
+
     class Meta:
         model = Paciente
         fields = fields = '__all__'
@@ -220,12 +224,25 @@ class PacienteForm(ModelForm):
                 attrs={
                     'class': 'form-control',
                     'autocomplete': 'off',
-                    'rows': 3,
+                    'rows': 2,
                     'cols': 3,
                     'placeholder': 'Ingrese una descripción del paciente que lo describa'
                 }
             ),
+            'alergias': forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'autocomplete': 'off',
+                    'rows': 2,
+                    'cols': 3,
+                    'placeholder': 'Ingrese las alergias del paciente'
+                }
+            ),
             'declaracion_jurada': forms.FileInput(attrs={
+                'class': 'form-control',
+                'autocomplete': 'off'
+            }),
+            'foto': forms.FileInput(attrs={
                 'class': 'form-control',
                 'autocomplete': 'off'
             })
@@ -236,6 +253,12 @@ class PacienteForm(ModelForm):
     #     'placeholder': 'Edad nula',
     #     'disabled': 'true'
     # }), label='Edad', max_length=50)
+    alergiaPregunt = forms.ChoiceField(
+        choices=[('no', 'No'),('si', 'Sí')],
+        label='¿Tiene alguna alergia?',
+        required=False
+    )
+
 
 class ClientForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -566,6 +589,9 @@ class DiagnosticoForm(forms.ModelForm):
     class Meta:
         model = Diagnostico
         fields = '__all__'
+        labels = {
+            'esterilizado': '¿Está esterilizado?',
+        }
         widgets = {
             'paciente': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
             'fecha_diagnostico': forms.DateInput(format='%Y-%m-%d', attrs={'class': 'form-control', 'id': 'fecha_diagnostico', 'type': 'date'}),
@@ -578,6 +604,10 @@ class DiagnosticoForm(forms.ModelForm):
             'observaciones_veterinario': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'diagnostico_provicional': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'condicion_llegada': forms.Textarea(attrs={'class': 'form-control', 'autocomplete': 'off','rows': 3}),
+            'frecuencia_cardiaca': forms.NumberInput(attrs={'class': 'form-control'}),
+            'frecuencia_respiratoria': forms.NumberInput(attrs={'class': 'form-control'}),
+            'esterilizado': forms.CheckboxInput(attrs={'class': ''}),
+
         }
 
 class CirugiaForm(forms.ModelForm):
@@ -596,5 +626,5 @@ class CirugiaForm(forms.ModelForm):
             'motivo': forms.TextInput(attrs={'class': 'form-control'}),
             'fecha': forms.DateInput(format='%Y-%m-%d', attrs={'class': 'form-control px-5', 'type': 'date'}),
             'hora': forms.TimeInput(format='%H:%M', attrs={'class': 'form-control px-5', 'type': 'time'}),
-            'firma_propietario': forms.FileInput(attrs={'class': 'form-control-file'}),
+            'firma_propietario': forms.FileInput(attrs={'class': 'form-control-file ml-6'}),
         }

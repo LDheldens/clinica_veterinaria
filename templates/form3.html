@@ -52,8 +52,24 @@
                     <h4 class="my-3">Constantes Fisiológicas</h4>  <!-- Subtítulo para los otros campos -->
                     <div class="row">
                         {% for field in form.visible_fields %}
-                            {% if forloop.counter0 >= 3 %}
+                            {% if forloop.counter0 >= 3 and forloop.counter0 <= 10 %}
                                 <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>{{ field.label }}:</label>
+                                        {% if field|is_checkbox %}
+                                             <br>{{ field }}
+                                        {% else %}
+                                            {{ field|add_class:'form-control'|attr:"autocomplete:off" }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="row">
+                        {% for field in form.visible_fields %}
+                            {% if forloop.counter0 >= 11 %}
+                                <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>{{ field.label }}:</label>
                                         {% if field|is_checkbox %}
