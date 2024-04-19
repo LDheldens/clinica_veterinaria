@@ -12,7 +12,7 @@ from django.db.models.functions import Coalesce
 from django.forms import model_to_dict
 from django.core.exceptions import ValidationError
 from config import settings
-from core.pos.choices import payment_condition, payment_method, voucher, sexo_mascota
+from core.pos.choices import payment_condition, payment_method, voucher, sexo_mascota, unidad_edad
 from core.user.models import User
 
 
@@ -378,12 +378,14 @@ class Paciente(models.Model):
     identificacion = models.CharField(max_length=150, verbose_name='Identificación de la mascota: FORMATO (SVT-1)')
     propietario = models.ForeignKey(Client, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=150, verbose_name='Nombre de la mascota')
-    fecha_nacimiento = models.DateField(default=datetime.now, verbose_name='Fecha de nacimiento')  
+    fecha_nacimiento = models.BooleanField(default=False, verbose_name='¿Conoces la fecha de nacimiento de tu mascota?')
+    fecha_nacimiento_value = models.DateField(default=datetime.now, verbose_name='Fecha de nacimiento')  
+    unidad_edad = models.CharField(max_length=10, choices=unidad_edad, default="año(s)", verbose_name='Unidad de edad')
+    edad = models.IntegerField(null=True, blank=True, verbose_name='Edad')
     tipo_mascota = models.ForeignKey(TipoMascota, on_delete=models.CASCADE)
     sexo = models.CharField(choices=sexo_mascota, max_length=150, default="sin especificar")
     tamanio = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Tamaño') 
     raza = models.CharField(max_length=150, null=True, blank=True)
-    # edad = models.IntegerField()
     declaracion_jurada = models.FileField(upload_to='documentos/', verbose_name='Declaracion jurada del propietario')
     peso = models.DecimalField(max_digits=5, decimal_places=2)
     descripcion = models.TextField(null=True, blank=True, verbose_name='Caracteristicas del paciente')  
@@ -391,11 +393,19 @@ class Paciente(models.Model):
     def __str__(self):
         return f'{self.nombre} / {self.tipo_mascota} / {self.raza}'    
     
+    def getEdad(self):
+        if self.fecha_nacimiento:
+            today = datetime.now().date()
+            age = today.year - self.fecha_nacimiento_value.year - ((today.month, today.day) < (self.fecha_nacimiento_value.month, self.fecha_nacimiento_value.day))
+            return f'{age} año(s)'
+        return f'{self.edad} {self.unidad_edad}'
+
     def toJSON(self):
-        item = model_to_dict(self, exclude=[])
+        item = model_to_dict(self, exclude=['fecha_nacimiento_value'])
+        # print(item)
         item['tipo_mascota'] = self.tipo_mascota.toJSON()['tipo_mascota']
         item['propietario'] = self.propietario.toJSON()['user']['full_name']
-        item['fecha_nacimiento'] = self.fecha_nacimiento.strftime('%Y-%m-%d')
+        item['edad'] = self.getEdad()
         item['tamanio'] = format(self.tamanio, '.2f')
         item['peso'] = format(self.peso, '.2f')
         item['declaracion_jurada'] = self.declaracion_jurada.url if self.declaracion_jurada else ''

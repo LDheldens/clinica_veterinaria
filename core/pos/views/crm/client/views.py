@@ -434,7 +434,13 @@ class PacienteCreateView( CreateView):
                     paciente.identificacion = request.POST['identificacion']
                     paciente.propietario_id = request.POST['propietario']
                     paciente.nombre = request.POST['nombre']
-                    paciente.fecha_nacimiento = request.POST['fecha_nacimiento']
+
+                    paciente.fecha_nacimiento = request.POST.get('fecha_nacimiento', False) == 'on'
+                    if paciente.fecha_nacimiento:
+                        paciente.fecha_nacimiento_value = request.POST['fecha_nacimiento_value']
+                    else:
+                        paciente.unidad_edad = request.POST['unidad_edad']
+                        paciente.edad = request.POST['edad']
                     paciente.tipo_mascota_id = request.POST['tipo_mascota']
                     paciente.sexo = request.POST['sexo']
                     paciente.tamanio = request.POST['tamanio']
@@ -481,6 +487,7 @@ class PacienteCreateView( CreateView):
         context['list_url'] = self.success_url
         context['frmClient'] = ClientForm()
         context['title'] = 'Nuevo registro de un paciente'
+        # context['fecha_nacimiento'] = self.model.fecha_nacimiento
         context['action'] = 'add'
         context['instance'] = None
         return context
@@ -504,6 +511,9 @@ class PacienteUpdateView(PermissionMixin, UpdateView):
             'propietario': instance.propietario,
             'nombre': instance.nombre,
             'fecha_nacimiento': instance.fecha_nacimiento,
+            'fecha_nacimiento_value': instance.fecha_nacimiento_value,
+            'unidad_edad': instance.unidad_edad,
+            'edad': instance.edad,
             'sexo': instance.sexo,
             'tamanio': instance.tamanio,
             'raza': instance.raza,
@@ -540,7 +550,12 @@ class PacienteUpdateView(PermissionMixin, UpdateView):
                     paciente.identificacion = request.POST['identificacion']
                     paciente.propietario_id = request.POST['propietario']
                     paciente.nombre = request.POST['nombre']
-                    paciente.fecha_nacimiento = request.POST['fecha_nacimiento']
+                    paciente.fecha_nacimiento = request.POST.get('fecha_nacimiento', False) == 'on'
+                    if paciente.fecha_nacimiento:
+                        paciente.fecha_nacimiento_value = request.POST['fecha_nacimiento_value']
+                    else:
+                        paciente.unidad_edad = request.POST['unidad_edad']
+                        paciente.edad = request.POST['edad']
                     paciente.sexo = request.POST['sexo']
                     paciente.tamanio = request.POST['tamanio']
                     paciente.raza = request.POST['raza']

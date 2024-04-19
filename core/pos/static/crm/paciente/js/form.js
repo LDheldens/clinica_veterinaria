@@ -5,7 +5,7 @@ var select_client;
 var fv;
 var fvClient;
 
-var fecha_nacimiento;
+var fecha_nacimiento_value;
 var input_birthdate;
 
 document.addEventListener('DOMContentLoaded', function (e) {
@@ -205,10 +205,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 }),
             },
             fields: {
-                fecha_nacimiento: {
+                fecha_nacimiento_value: {
                     validators: {
                         notEmpty: {
-                            message: 'La fecha es obligatoria'
+                            message: 'La fecha de nacimiento es obligatoria'
                         },
                         date: {
                             format: 'YYYY-MM-DD',
@@ -337,36 +337,54 @@ document.addEventListener('DOMContentLoaded', function (e) {
             }
         })
         .on('core.form.valid', function () {
+            console.log({fv})
             submit_formdata_with_ajax_form(fv);
         });
 });
 
 $(function () {
-    $('input[name="fecha_nacimiento"]').on('input', function() {
-        // console.log('El valor del input ha cambiado a: ', $(this).val());
-        const fechaNacimiento = new Date($(this).val());
-        const hoy = new Date();
-        let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
-        // Verificar si el cumpleaños ya pasó este año
-        if (hoy.getMonth() < fechaNacimiento.getMonth() || 
-            (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
-            edad--;
+  
+    if($('input[name="fecha_nacimiento"]').is(':checked')) {
+        // show
+        $('#fecha_nacimiento_value_').removeClass('d-none')
+        // hidden
+        $('#unidad_edad').addClass('d-none')
+        $('#edad').addClass('d-none')
+    } else {
+        // hidden
+        $('#fecha_nacimiento_value_').addClass('d-none')
+        // show
+        $('#unidad_edad').removeClass('d-none')
+        $('#edad').removeClass('d-none')
+    }
+
+    $('input[name="fecha_nacimiento"]').on('change', function() {
+        if ($(this).is(':checked')) {
+            // show
+            $('#fecha_nacimiento_value_').removeClass('d-none')
+            // hidden
+            $('#unidad_edad').addClass('d-none')
+            $('#edad').addClass('d-none')
+        } else {
+            // hidden
+            $('#fecha_nacimiento_value_').addClass('d-none')
+            // show
+            $('#unidad_edad').removeClass('d-none')
+            $('#edad').removeClass('d-none')
         }
-        // console.log('Edad:', edad);
-        $('input[name="edad"]').val(edad + ' año(s)')
     });
 
     select_client = $('select[name="propietario"]');
     current_date = new moment().format("YYYY-MM-DD");
-    fecha_nacimiento = $('input[name="fecha_nacimiento"]');
-    fecha_nacimiento.datetimepicker({
+    fecha_nacimiento_value = $('input[name="fecha_nacimiento_value"]');
+    fecha_nacimiento_value.datetimepicker({
         useCurrent: false,
         format: 'YYYY-MM-DD',
         locale: 'es',
         keepOpen: false,
     });
-    fecha_nacimiento.on('change.datetimepicker', function (e) {
-        fv.revalidateField('fecha_nacimiento');
+    fecha_nacimiento_value.on('change.datetimepicker', function (e) {
+        fv.revalidateField('fecha_nacimiento_value');
     });
     
     input_birthdate = $('input[name="birthdate"]');
@@ -384,7 +402,6 @@ $(function () {
         keepOpen: false,
         maxDate: current_date
     });
-
     input_birthdate.on('change.datetimepicker', function (e) {
         fvClient.revalidateField('birthdate');
     });

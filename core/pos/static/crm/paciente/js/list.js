@@ -21,10 +21,9 @@ function getData() {
             {"data": "propietario"},
             {"data": "declaracion_jurada"},
             {"data": "nombre"},
-            {"data": "fecha_nacimiento"},
+            {"data": "edad"},
             {"data": "tipo_mascota"},
             {"data": "sexo"},
-            {"data": "fecha_nacimiento"},
             {"data": "peso"},
             {"data": "id"},
         ],
@@ -51,7 +50,7 @@ function getData() {
                 orderable: false,
                 render: function (data, type, row, meta) {
                     if(data) {
-                        return `<i class="fas fa-file-pdf text-danger"></i> <a href="${data}">Ver pdf</a>`
+                        return `<i class="fas fa-file-pdf text-danger target="_blank""></i> <a href="${data}">Ver pdf</a>`
                     } else {
                         return `Sin pdf`
                     }
@@ -67,22 +66,6 @@ function getData() {
             },
             {
                 targets: [7],
-                class: 'text-center',
-                orderable: false,
-                render: function (data, type, row) {
-                    const fechaNacimiento = new Date(data);
-                    const hoy = new Date();
-                    let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
-                    // Verificar si el cumpleaños ya pasó este año
-                    if (hoy.getMonth() < fechaNacimiento.getMonth() || 
-                        (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
-                        edad--;
-                    }
-                    return edad + ' año(s)'
-                }
-            },
-            {
-                targets: [8],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {

@@ -10,6 +10,11 @@ sexo_mascota = (
     ('hembra', 'Hembra'),
 )
 
+unidad_edad = (
+    ('año(s)', 'Año(s)'),
+    ('mes(es)', 'Mes(es)'),
+)
+
 payment_method = (
     ('efectivo', 'Efectivo'),
     ('tarjeta_debito_credito', 'Tarjeta de Debito / Credito'),

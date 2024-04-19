@@ -176,12 +176,21 @@ class PacienteForm(ModelForm):
                     'autocomplete': 'off'
                 }
             ),
-            'fecha_nacimiento': forms.DateInput(format='%Y-%m-%d', attrs={
+            'fecha_nacimiento': forms.CheckboxInput(attrs={'class': 'form-control-checkbox'}),
+            'unidad_edad': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
+            'edad': forms.NumberInput(
+                attrs={
+                    'placeholder': 'Ingrese la edad de la mascota',
+                    'class': 'form-control',
+                    'autocomplete': 'off'
+                }
+            ),
+            'fecha_nacimiento_value': forms.DateInput(format='%Y-%m-%d', attrs={
                 'class': 'form-control datetimepicker-input',
-                'id': 'fecha_nacimiento',
+                'id': 'fecha_nacimiento_value',
                 'value': datetime.now().strftime('%Y-%m-%d'),
                 'data-toggle': 'datetimepicker',
-                'data-target': '#fecha_nacimiento'
+                'data-target': '#fecha_nacimiento_value'
             }),
             'tipo_mascota': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
             'sexo': forms.Select(attrs={'class': 'form-control select2', 'style': 'width: 100%;'}),
@@ -221,12 +230,12 @@ class PacienteForm(ModelForm):
                 'autocomplete': 'off'
             })
         }
-    edad = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control',
-        'autocomplete': 'off',
-        'placeholder': 'Edad nula',
-        'disabled': 'true'
-    }), label='Edad', max_length=50)
+    # edad = forms.CharField(widget=forms.TextInput(attrs={
+    #     'class': 'form-control',
+    #     'autocomplete': 'off',
+    #     'placeholder': 'Edad nula',
+    #     'disabled': 'true'
+    # }), label='Edad', max_length=50)
 
 class ClientForm(ModelForm):
     def __init__(self, *args, **kwargs):

@@ -3,24 +3,7 @@
 {% load security_extras %}
 {% load static %}
 {% block head_form %}
-    <style>
-        .card {
-            background-image: url('{% static 'crm/paciente/img/dog/image5.png' %}') !important;
-            background-repeat: no-repeat;
-            background-size: 90% 70%;
-            min-height: 100vh;
-            background-position: 0 420px !important;
-            {% comment %} opacity: 0.75; {% endcomment %}
-        }
-        {% comment %} .card::before {
-            opacity: 0.75;
-        } {% endcomment %}
-        @media (max-width: 768px) {
-            .card {
-                background-image: none !important;
-            }
-        }
-    </style>
+   
     <script src="{% static 'lib/tempusdominus-bootstrap-4.5.37.0/js/tempusdominus-bootstrap.js' %}"></script>
     <link rel="stylesheet" href="{% static 'lib/tempusdominus-bootstrap-4.5.37.0/css/tempusdominus-bootstrap.css' %}"/>
     <script src="{% static 'crm/paciente/js/form.js' %}"></script>
@@ -92,28 +75,46 @@ data-url="{{ list_url }}" >
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label>{{ form.fecha_nacimiento.label }}:</label>
-                        {{ form.fecha_nacimiento|add_class:'form-control'|attr:"autocomplete:off" }}
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="form-group">
                         <label>{{ form.tamanio.label }}:</label>
                         {{ form.tamanio|add_class:'form-control'|attr:"autocomplete:off" }}
                     </div>
                 </div>
+
+
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label>{{ form.fecha_nacimiento.label }}</label>
+                        {{ form.fecha_nacimiento|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+                <div id="fecha_nacimiento_value_" class="d-none col-lg-12">
+                    <div class="form-group">
+                        <label>{{ form.fecha_nacimiento_value.label }}:</label>
+                        {{ form.fecha_nacimiento_value|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+                <div id="unidad_edad"  class="col-lg-6">
+                    <div class="form-group">
+                        <label>{{ form.unidad_edad.label }}:</label>
+                        {{ form.unidad_edad|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+                <div id="edad"  class="col-lg-6">
+                    <div class="form-group">
+                        <label>{{ form.edad.label }}:</label>
+                        {{ form.edad|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+                
+                
+                
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label>{{ form.raza.label }}:</label>
                         {{ form.raza|add_class:'form-control'|attr:"autocomplete:off" }}
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label>{{ form.edad.label }}:</label>
-                        {{ form.edad|add_class:'form-control'|attr:"autocomplete:off" }}
-                    </div>
-                </div>
+                
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label>{{ form.peso.label }}:</label>
