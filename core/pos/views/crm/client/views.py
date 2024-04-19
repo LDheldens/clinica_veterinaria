@@ -441,8 +441,13 @@ class PacienteCreateView( CreateView):
                     paciente.raza = request.POST['raza']
                     if 'declaracion_jurada' in request.FILES:
                         paciente.declaracion_jurada = request.FILES['declaracion_jurada']
+                        
+                    if 'foto' in request.FILES:
+                        paciente.foto= request.FILES['foto']
+                        
                     paciente.peso = request.POST['peso']
                     paciente.descripcion = request.POST['descripcion']
+                    paciente.alergias= request.POST['alergias']
                     paciente.save()
             elif action == 'validate_data':
                 return self.validate_data()
@@ -544,10 +549,17 @@ class PacienteUpdateView(PermissionMixin, UpdateView):
                     paciente.sexo = request.POST['sexo']
                     paciente.tamanio = request.POST['tamanio']
                     paciente.raza = request.POST['raza']
-                    if 'declaracion_jurada' in request.FILES:
-                        paciente.declaracion_jurada = request.FILES['declaracion_jurada']
+                    nueva_declaracion = request.FILES['declaracion_jurada']
+                    if nueva_declaracion:
+                        paciente.declaracion_jurada.delete(save=False)
+                        paciente.declaracion_jurada = nueva_declaracion
+                    
+                    nueva_foto = request.FILES.get('foto')
+                    if nueva_foto:
+                        paciente.foto.delete(save=False)
+                        paciente.foto = nueva_foto
                     paciente.peso = request.POST['peso']
-                    # paciente.edad = request.POST['edad']
+                    paciente.alergias = request.POST['alergias']
                     paciente.descripcion = request.POST['descripcion']
                     paciente.save()
             elif action == 'validate_data':

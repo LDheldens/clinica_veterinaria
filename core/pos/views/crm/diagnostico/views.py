@@ -57,6 +57,9 @@ class DiagnosticoCreateView(CreateView):
                     diagnostico.observaciones_veterinario = request.POST.get('observaciones_veterinario')
                     diagnostico.diagnostico_provicional = request.POST.get('diagnostico_provicional')
                     diagnostico.condicion_llegada = request.POST.get('condicion_llegada')
+                    diagnostico.frecuencia_cardiaca = request.POST.get('frecuencia_cardiaca', 0)
+                    diagnostico.frecuencia_respiratoria = request.POST.get('frecuencia_respiratoria', 0)
+                    diagnostico.esterilizado = True if request.POST.get('esterilizado') == 'on' else False
                     diagnostico.save()
             elif action == 'validate_data':
                 return self.validate_data()
@@ -103,6 +106,9 @@ class DiagnosticoUpdateView(UpdateView):
                     diagnostico.observaciones_veterinario = request.POST.get('observaciones_veterinario')
                     diagnostico.diagnostico_provicional = request.POST.get('diagnostico_provicional')
                     diagnostico.condicion_llegada = request.POST.get('condicion_llegada')
+                    diagnostico.frecuencia_cardiaca = request.POST.get('frecuencia_cardiaca', 0)
+                    diagnostico.frecuencia_respiratoria = request.POST.get('frecuencia_respiratoria', 0)
+                    diagnostico.esterilizado = True if request.POST.get('esterilizado') == 'on' else False
                     diagnostico.save()
             elif action == 'validate_data':
                 return self.validate_data()

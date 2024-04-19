@@ -24,6 +24,7 @@
     <script src="{% static 'lib/tempusdominus-bootstrap-4.5.37.0/js/tempusdominus-bootstrap.js' %}"></script>
     <link rel="stylesheet" href="{% static 'lib/tempusdominus-bootstrap-4.5.37.0/css/tempusdominus-bootstrap.css' %}"/>
     <script src="{% static 'crm/paciente/js/form.js' %}"></script>
+    <script src="{% static 'crm/paciente/js/paciente.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -96,28 +97,28 @@ data-url="{{ list_url }}" >
                         {{ form.fecha_nacimiento|add_class:'form-control'|attr:"autocomplete:off" }}
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-3">
                     <div class="form-group">
                         <label>{{ form.tamanio.label }}:</label>
                         {{ form.tamanio|add_class:'form-control'|attr:"autocomplete:off" }}
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-3">
                     <div class="form-group">
                         <label>{{ form.raza.label }}:</label>
                         {{ form.raza|add_class:'form-control'|attr:"autocomplete:off" }}
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label>{{ form.edad.label }}:</label>
-                        {{ form.edad|add_class:'form-control'|attr:"autocomplete:off" }}
-                    </div>
-                </div>
-                <div class="col-lg-6">
+                <div class="col-lg-3">
                     <div class="form-group">
                         <label>{{ form.peso.label }}:</label>
                         {{ form.peso|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>{{ form.edad.label }}:</label>
+                        {{ form.edad|add_class:'form-control'|attr:"autocomplete:off" }}
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -130,6 +131,25 @@ data-url="{{ list_url }}" >
                     <div class="form-group">
                         <label>{{ form.declaracion_jurada.label }}:</label>
                         {{ form.declaracion_jurada|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>{{ form.alergiaPregunt.label }}:</label>
+                        {{ form.alergiaPregunt|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>{{ form.foto.label }}:</label>
+                        {{ form.foto|add_class:'form-control'|attr:"autocomplete:off" }}
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none alergias-paciente">
+                    <div class="form-group">
+                        <label>{{ form.alergias.label }}:</label>
+                        {{ form.alergias|add_class:'form-control'|attr:"autocomplete:off" }}
                     </div>
                 </div>
           </div>

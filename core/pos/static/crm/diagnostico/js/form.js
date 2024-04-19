@@ -23,13 +23,21 @@ document.addEventListener('DOMContentLoaded', function (e) {
                     }
                 }
             },
-            // fecha_diagnostico: {
-            //     validators: {
-            //         notEmpty: {
-            //             message: 'La fecha del diagnóstico es obligatoria'
-            //         }
-            //     }
-            // },
+            frecuencia_cardiaca: {
+                validators: {
+                    notEmpty: {
+                        message: 'La frecuencia cardiaca es obligatoria'
+                    }
+                }
+            },
+            frecuencia_respiratoria: {
+                validators: {
+                    notEmpty: {
+                        message: 'La frecuencia respiratoria es obligatoria'
+                    }
+                }
+            },
+
             temperatura: {
                 validators: {
                     notEmpty: {
