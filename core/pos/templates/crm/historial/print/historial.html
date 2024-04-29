@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial Clínico de {{ paciente.nombre }}</title>
+    <style>
+        /* Estilos CSS aquí */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        span{
+            font-weight: bold;
+            margin: 0;
+            margin-right: 10px;
+        }
+        h1{
+            color: #333;
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section-paciente{
+            background-color: #dfe6e9;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .item {
+            margin-bottom: 10px;
+        }
+        .item-title {
+            font-weight: bold;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .table th {
+            background-color: #f2f2f2;
+        }
+        th,td,tr{
+            text-align: center;
+        }
+        p{
+            margin: 0;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Historial Clínico de {{ paciente.nombre }}</h1>
+        
+        <!-- Datos del paciente -->
+        <div class="section section-paciente">
+            <h2 class="section-title">Datos del Paciente</h2>
+            <div class="item">
+                <span class="item-title">Nombre:</span> {{ paciente.nombre }}
+            </div>
+            <div class="item">
+                <span class="item-title">Tipo de Mascota:</span> {{ paciente.tipo_mascota.tipo_mascota }}
+            </div>
+            <div class="item">
+                <span class="item-title">Propietario:</span> {{ paciente.propietario.user.get_full_name }}
+            </div>
+            <!-- Otros datos del paciente aquí -->
+        </div>
+        
+        <!-- Diagnósticos -->
+        <div class="section">
+            <h2 class="section-title">Diagnósticos</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nº</th>
+                        <th>Fecha del diagnóstico</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for diagnostico in diagnosticos %}
+                    <tr>
+                        <th>{{diagnostico.id}}</th>
+                        <td>{{ diagnostico.fecha_diagnostico }}</td>
+                        <td>
+                            <p>
+                                <span>Médico:</span> {{ diagnostico.medico.user.get_full_name }}
+                            </p>
+                            <p>
+                                <span>Temperatura:</span> {{ diagnostico.temperatura }}
+                            </p>
+                            <p>
+                                <span>Mucosa:</span> {{ diagnostico.mucosa }}
+                            </p>
+                            <p>
+                                <span>Motivo de consulta:</span> {{ diagnostico.motivo_consulta }}
+                            </p>
+                            <p>
+                                <span>Síntomas:</span> {{ diagnostico.sintomas }}
+                            </p>
+                            <p>
+                                <span>Exámenes realizados:</span> {{ diagnostico.examenes_realizados }}
+                            </p>
+                            <p>
+                                <span>Observaciones del veterinario:</span> {{ diagnostico.observaciones_veterinario }}
+                            </p>
+                            <p>
+                                <span>Diagnóstico Provicional:</span> {{ diagnostico.diagnostico_provicional }}
+                            </p>
+                            <p>
+                                <span>Condición de llegada:</span> {{ diagnostico.condicion_llegada }}
+                            </p>
+                            <p>
+                                <span>Frecuencia Cardiaca:</span> {{ diagnostico.frecuencia_cardiaca }}
+                            </p>
+                            <p>
+                                <span>Frecuencia Respiratoria:</span> {{ diagnostico.frecuencia_respiratoria }}
+                            </p>
+                            <p>
+                                <span>Esterilizado:</span> {% if diagnostico.esterilizado %} Sí {% else %} No {% endif %}
+                            </p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Citas -->
+        <div class="section">
+            <h2 class="section-title">Citas</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nº</th>
+                        <th>Fecha y Hora de la cita</th>
+                        <th>Información Detallada</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cita in citas %}
+                    <tr>
+                        <th>{{ cita.id }}</th>
+                        <td>
+                            <p>
+                                <span>Fecha:</span>
+                                {{ cita.fecha_cita }} 
+                            </p>
+                            <p>
+                                <span>
+                                    Hora:
+                                </span>
+                                {{ cita.hora_cita }}
+                            </p>
+                        </td>
+                        <td>
+                            <p><span>Médico:</span> {{ cita.medico.user.get_full_name }}</p>
+                            <p><span>Asunto:</span> {{ cita.asunto }}</p>
+                            <p><span>Descripción:</span> {{ cita.descripcion }}</p>
+                            <p><span>Fecha de la cita:</span> {{ cita.fecha_cita }}</p>
+                            <p><span>Hora de la cita:</span> {{ cita.hora_cita }}</p>
+                            <p><span>Propietario:</span> {{ cita.propietario.user.get_full_name }}</p>
+                            <p><span>Mascota:</span> {{ cita.mascota.nombre }}</p>
+                            <p><span>Estado:</span> {% if cita.estado %} Confirmada {% else %} Pendiente {% endif %}</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        
+        <div class="section">
+            <h2 class="section-title">Hospitalizaciones</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nº</th>
+                        <th>Fecha de ingreso y salida</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for hospitalizacion in hospitalizaciones %}
+                    <tr>
+                        <th>{{ hospitalizacion.id }}</th>
+                        <td>
+                            <p>
+                                <span>Fecha de Ingreso:</span>
+                                {{ hospitalizacion.fecha_ingreso }} 
+                            </p>
+                            <p>
+                                <span>Fecha de Salida:</span>
+                                {{ hospitalizacion.fecha_salida }}
+                            </p>
+                            
+                        </td>
+                        <td>
+                            <p><span>Motivo:</span> {{ hospitalizacion.motivo }}</p>
+                            <p><span>Antecedentes:</span> {{ hospitalizacion.antecedentes }}</p>
+                            <p><span>Tratamiento:</span> {{ hospitalizacion.tratamiento }}</p>
+                            <p><span>Internado:</span> {% if hospitalizacion.internado %} Sí {% else %} No {% endif %}</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        
+        <!-- Recetas -->
+        <div class="section">
+            <h2 class="section-title">Recetas</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nº</th>
+                        <th>Paciente</th>
+                        <th>Medicamento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for receta in recetas %}
+                    
+                    <tr>
+                        <td>{{receta.id}}</td>
+                        <td>{{ receta.mascota.nombre }}</td>
+                        <td>
+                            {% for item in receta.medicamentos  %}
+                                <p>
+                                    <span>{{item.medicamento}}: </span>
+                                    {{item.indicaciones}}
+                                </p>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Cirugías -->
+        <div class="section">
+            <h2 class="section-title">Cirugías</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nº</th>
+                        <th>Fecha de la cirugía</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cirugia in cirugias %}
+                    <tr>
+                        <td>{{ cirugia.id }}</td>
+                        <td>
+                            <p><span>Fecha:</span> {{ cirugia.fecha }}</p>
+                            <p><span>Hora:</span> {{ cirugia.hora }}</p>
+                        </td>
+                        <td>
+                            <p><span>Mascota:</span> {{ cirugia.paciente.nombre }}</p>
+                            <p><span>Médico veterinario:</span> {{ cirugia.medico.user.get_full_name }}</p>
+                            <p><span>Propietario:</span> {{ cirugia.cliente.user.get_full_name }}</p>
+                            <p><span>Motivo:</span> {{ cirugia.motivo }}</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        
+    </div>
+</body>
+</html>

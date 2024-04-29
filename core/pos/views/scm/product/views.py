@@ -53,7 +53,7 @@ class ProductListView(PermissionMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['create_url'] = reverse_lazy('product_create')
-        context['title'] = 'Listado de Productos'
+        context['title'] = 'Listado de Servicios'
         return context
 
 
@@ -105,7 +105,7 @@ class ProductCreateView(PermissionMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['list_url'] = self.success_url
-        context['title'] = 'Nuevo registro de un Producto'
+        context['title'] = 'Nuevo registro de Servicio'
         context['action'] = 'add'
         return context
 

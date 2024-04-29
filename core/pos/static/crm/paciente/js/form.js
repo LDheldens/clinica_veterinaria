@@ -373,6 +373,15 @@ $(function () {
             $('#edad').removeClass('d-none')
         }
     });
+    $('input[name="alergias_bolean"]').on('change', function() {
+        if ($(this).is(':checked')) {
+            // show
+            $('#alergias').removeClass('d-none')
+        } else {
+            // hidden
+            $('#alergias').addClass('d-none')
+        }
+    });
 
     select_client = $('select[name="propietario"]');
     current_date = new moment().format("YYYY-MM-DD");

@@ -1,0 +1,27 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+    
+    <script src="{% static 'crm/historial/js/list.js' %}"></script>
+
+{% endblock %}
+
+{% block columns %}
+    <th>Nro</th>
+    <th>Propietario</th>
+    <th>Nombre de la mascota</th>
+    <th>Foto</th>
+    <th>Edad</th>
+    <th>Tipo de mascota</th>
+    <th>Sexo</th>
+    <th>Peso</th>
+    <th class="text-center">Opciones</th>
+{% endblock %}
+
+{% block rows %}
+
+{% endblock %}
+
+{% block javascript_list %}
+
+{% endblock %}

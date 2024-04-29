@@ -25,7 +25,7 @@ function getData() {
             {data: "image"},
             {data: "price"},
             {data: "pvp"},
-            {data: "price_promotion"},
+            // {data: "price_promotion"},
             {data: "id"},
         ],
         columnDefs: [
@@ -47,7 +47,7 @@ function getData() {
                 }
             },
             {
-                targets: [-4, -5, -3],
+                targets: [ 5,6],
                 class: 'text-center',
                 render: function (data, type, row) {
                     return 'S/.' + parseFloat(data).toFixed(2);

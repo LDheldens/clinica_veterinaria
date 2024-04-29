@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView, TemplateView
 
 from config import settings
-from core.pos.forms import ClientForm, HospitalizacionForm, User, Client, TipoMascota, TipoMascotaForm, Paciente, PacienteForm, Hospitalizacion
+from core.pos.forms import ClientForm, HospitalizacionForm, User, Client, TipoMascota, TipoMascotaForm, Paciente, PacienteForm, Hospitalizacion, HistorialClinico
 from core.security.mixins import ModuleMixin, PermissionMixin
 
 class TipoMascotaListView(PermissionMixin, TemplateView):
@@ -453,8 +453,13 @@ class PacienteCreateView( CreateView):
                         
                     paciente.peso = request.POST['peso']
                     paciente.descripcion = request.POST['descripcion']
+                    paciente.alergias_bolean= request.POST.get('alergias_bolean', False) == 'on'
                     paciente.alergias= request.POST['alergias']
                     paciente.save()
+                    
+                    historial_clinico = HistorialClinico()
+                    historial_clinico.paciente = paciente
+                    historial_clinico.save()
             elif action == 'validate_data':
                 return self.validate_data()
             elif action == 'create_client':
@@ -519,6 +524,8 @@ class PacienteUpdateView(PermissionMixin, UpdateView):
             'fecha_nacimiento_value': instance.fecha_nacimiento_value,
             'unidad_edad': instance.unidad_edad,
             'edad': instance.edad,
+            'alergias_bolean': instance.alergias_bolean,
+            'alergias': instance.alergias,
             'sexo': instance.sexo,
             'tamanio': instance.tamanio,
             'raza': instance.raza,
@@ -558,22 +565,29 @@ class PacienteUpdateView(PermissionMixin, UpdateView):
                     paciente.fecha_nacimiento = request.POST.get('fecha_nacimiento', False) == 'on'
                     if paciente.fecha_nacimiento:
                         paciente.fecha_nacimiento_value = request.POST['fecha_nacimiento_value']
+                        paciente.unidad_edad = None
+                        paciente.edad = None
                     else:
                         paciente.unidad_edad = request.POST['unidad_edad']
                         paciente.edad = request.POST['edad']
+                        paciente.fecha_nacimiento_value = None
+                        
                     paciente.sexo = request.POST['sexo']
                     paciente.tamanio = request.POST['tamanio']
                     paciente.raza = request.POST['raza']
-                    nueva_declaracion = request.FILES['declaracion_jurada']
+                    
+                    nueva_declaracion = request.FILES.get('declaracion_jurada')
                     if nueva_declaracion:
                         paciente.declaracion_jurada.delete(save=False)
                         paciente.declaracion_jurada = nueva_declaracion
-                    
+                        
                     nueva_foto = request.FILES.get('foto')
                     if nueva_foto:
                         paciente.foto.delete(save=False)
                         paciente.foto = nueva_foto
+                        
                     paciente.peso = request.POST['peso']
+                    paciente.alergias_bolean= request.POST.get('alergias_bolean', False) == 'on'
                     paciente.alergias = request.POST['alergias']
                     paciente.descripcion = request.POST['descripcion']
                     paciente.save()

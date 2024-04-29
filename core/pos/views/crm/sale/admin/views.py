@@ -105,7 +105,7 @@ class SaleAdminCreateView(PermissionMixin, CreateView):
                         saledetail = SaleDetail()
                         saledetail.sale_id = sale.id
                         saledetail.product_id = prod.id
-                        saledetail.price = float(i['price_current'])
+                        saledetail.price = float(i['pvp'])
                         saledetail.cant = int(i['cant'])
                         saledetail.subtotal = saledetail.price * saledetail.cant
                         saledetail.dscto = float(i['dscto']) / 100

@@ -229,6 +229,7 @@ class PacienteForm(ModelForm):
                     'placeholder': 'Ingrese una descripción del paciente que lo describa'
                 }
             ),
+            'alergias_bolean':forms.CheckboxInput(attrs={'class': 'form-control-checkbox'}),
             'alergias': forms.Textarea(
                 attrs={
                     'class': 'form-control',
@@ -247,18 +248,6 @@ class PacienteForm(ModelForm):
                 'autocomplete': 'off'
             })
         }
-    # edad = forms.CharField(widget=forms.TextInput(attrs={
-    #     'class': 'form-control',
-    #     'autocomplete': 'off',
-    #     'placeholder': 'Edad nula',
-    #     'disabled': 'true'
-    # }), label='Edad', max_length=50)
-    alergiaPregunt = forms.ChoiceField(
-        choices=[('no', 'No'),('si', 'Sí')],
-        label='¿Tiene alguna alergia?',
-        required=False
-    )
-
 
 class ClientForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -516,9 +505,9 @@ class CitaForm(forms.ModelForm):
             'hora_cita': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control px-5'}),
             'medico': forms.Select(attrs={'class': 'form-control'}),
             'asunto': forms.TextInput(attrs={'class': 'form-control'}),
-            'descripcion': forms.Textarea(attrs={'class': 'form-control'}),
             'propietario': forms.Select(attrs={'class': 'form-control'}),
             'mascota': forms.Select(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control','rows':3}),
         }
         
 class MedicoForm(ModelForm):
@@ -627,4 +616,26 @@ class CirugiaForm(forms.ModelForm):
             'fecha': forms.DateInput(format='%Y-%m-%d', attrs={'class': 'form-control px-5', 'type': 'date'}),
             'hora': forms.TimeInput(format='%H:%M', attrs={'class': 'form-control px-5', 'type': 'time'}),
             'firma_propietario': forms.FileInput(attrs={'class': 'form-control-file ml-6'}),
+        }
+
+class BanioForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(BanioForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Banio
+        fields = ['cliente', 'paciente', 'hora_ingreso', 'hora_salida', 'detalles_banio']
+        labels = {
+            'cliente': 'Cliente',
+            'paciente': 'Mascota',
+            'hora_ingreso': 'Hora de ingreso',
+            'hora_salida': 'Hora de salida',
+            'detalles_banio': 'Detalles del baño',
+        }
+        widgets = {
+            'hora_ingreso': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control px-5'}),
+            'hora_salida': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control px-5'}),
+            'cliente': forms.Select(attrs={'class': 'form-control'}),
+            'paciente': forms.Select(attrs={'class': 'form-control'}),
+            'detalles_banio': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }

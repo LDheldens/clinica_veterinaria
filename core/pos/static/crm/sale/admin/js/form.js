@@ -2,7 +2,7 @@ var current_date;
 
 var fvSale;
 var fvClient;
-
+console.log('PROBANDO XD :v')
 var select_client;
 var input_birthdate;
 var select_paymentcondition;
@@ -35,8 +35,8 @@ var vents = {
     calculate_invoice: function () {
         var total = 0.00;
         $.each(this.details.products, function (i, item) {
-            item.cant = parseInt(item.cant);
-            item.subtotal = item.cant * parseFloat(item.price_current);
+            item.cant = 1;
+            item.subtotal = item.cant * parseFloat(item.pvp);
             item.total_dscto = (parseFloat(item.dscto) / 100) * item.subtotal;
             item.total = item.subtotal - item.total_dscto;
             total += item.total;
@@ -70,42 +70,49 @@ var vents = {
             scrollX: true,
             scrollCollapse: true,
             columns: [
-                {data: "id"},
-                {data: "name"},
-                //{data: "category.name"},
-                {data: "cant"},
-                {data: "price_current"},
-                {data: "subtotal"},
-                {data: "dscto"},
-                {data: "total_dscto"},
-                {data: "total"},
+                { data: "id", width: "5%" },  
+                { data: "name", width: "35%" }, 
+                { data: "pvp", width: "8%" },  
+                { data: "subtotal", width: "8%" }, 
+                { data: "dscto", width: "20%" }, 
+                { data: "total_dscto", width: "8%" },
+                { data: "total", width: "8%" } 
             ],
             columnDefs: [
-                {
-                    targets: [2],
-                    class: 'text-center',
-                    render: function (data, type, row) {
-                    }
-                },
-                {
-                    targets: [-6],
-                    class: 'text-center',
-                    render: function (data, type, row) {
-                        return '<input type="text" class="form-control input-sm" style="width: 100px;" autocomplete="off" name="cant" value="' + row.cant + '">';
-                    }
-                },
+
                 {
                     targets: [-3],
                     class: 'text-center',
                     render: function (data, type, row) {
-                        return '<input type="text" class="form-control input-sm" style="width: 100px;" autocomplete="off" name="dscto_unitary" value="' + row.dscto + '">';
+                        return '<input type="text" class="form-control input-sm" style="width: 80px;" autocomplete="off" name="dscto_unitary" value="' + row.dscto + '">';
                     }
                 },
                 {
-                    targets: [-1, -2, -4, -5],
+                    targets: [3],
+                    class: 'text-center',
+                    render: function (data, type, row) {
+                        return `S/. ${row.pvp}`;
+                    }
+                },
+                {
+                    targets: [5],
+                    class: 'text-center',
+                    render: function (data, type, row) {
+                        return `S/. ${row.dscto}`
+                    }
+                },
+                {
+                    targets: [2, 3],
                     class: 'text-center',
                     render: function (data, type, row) {
                         return 'S/.' + parseFloat(data).toFixed(2);
+                    }
+                },
+                {
+                    targets: [6],
+                    class: 'text-center',
+                    render: function (data, type, row) {
+                        return 'S/.' + row.pvp;
                     }
                 },
                 {
@@ -602,18 +609,34 @@ $(function () {
             vents.calculate_invoice();
             $('td:eq(5)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].subtotal.toFixed(2));
             $('td:eq(8)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total.toFixed(2));
+            console.log(vents.details.products)
+            
         })
         .on('change', 'input[name="dscto_unitary"]', function () {
             var tr = tblProducts.cell($(this).closest('td, li')).index();
             vents.details.products[tr.row].dscto = parseFloat($(this).val());
+            console.log(vents.details.products[tr.row])
+            console.log('VALUE: ', parseFloat($(this).val()))
             vents.calculate_invoice();
-            $('td:eq(7)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total_dscto.toFixed(2));
-            $('td:eq(8)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total.toFixed(2));
+            $('td:eq(5)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total_dscto.toFixed(2));
+            $('td:eq(6)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total.toFixed(2));
+            console.log(vents.details)
+            console.log(vents.details.products)
+        })
+        .on('input', 'input[name="dscto_unitary"]', function () {
+            var tr = tblProducts.cell($(this).closest('td, li')).index();
+            vents.details.products[tr.row].dscto = parseFloat($(this).val());
+            console.log(vents.details.products[tr.row])
+            console.log('VALUE: ', parseFloat($(this).val()))
+            vents.calculate_invoice();
+            $('td:eq(5)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total_dscto.toFixed(2));
+            $('td:eq(6)', tblProducts.row(tr.row).node()).html('S/.' + vents.details.products[tr.row].total.toFixed(2));
         })
         .on('click', 'a[rel="remove"]', function () {
             var tr = tblProducts.cell($(this).closest('td, li')).index();
             vents.details.products.splice(tr.row, 1);
             tblProducts.row(tr.row).remove().draw();
+            vents.calculate_invoice();
         });
 
     $('.btnSearchProducts').on('click', function () {
@@ -640,22 +663,15 @@ $(function () {
                 {data: "name"},
                 {data: "category.name"},
                 {data: "pvp"},
-                {data: "price_promotion"},
+                // {data: "price_promotion"},
                 {data: "id"},
             ],
             columnDefs: [
                 {
-                    targets: [-3, -4],
+                    targets: [2],
                     class: 'text-center',
                     render: function (data, type, row) {
-                        return 'S/.' + parseFloat(data).toFixed(2);
-                    }
-                },
-                {
-                    targets: [-2],
-                    class: 'text-center',
-                    render: function (data, type, row) {
-
+                        return `S/. ${data}`
                     }
                 },
                 {

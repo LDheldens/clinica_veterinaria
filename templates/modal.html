@@ -9,18 +9,18 @@
             <form id="formReceta" method="post" action="{{ titular_create }}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <section class="receta">
-                    <h3 class="titulo titulo-receta">Registro de Receta</h3>
+                    <h3 class="titulo titulo-receta mt-0">Registro de Receta</h3>
                     <div id="contenedor-medicamentos"></div>
                     <button 
                         type="button" 
                         id="btn-agregar-medicamento" 
-                        class="btn btn-primary"
+                        class="btn btn-primary mt-1"
                     >
                         Agregar <i class="fas fa-capsules"></i>
                     </button>
                 </section>
                 
-                <button class="btn mt-3 btn-submit btn-success fw-bold" type="submit">
+                <button class="btn mt-2 btn-submit btn-success fw-bold" type="submit">
                     Registrar
                 </button>
             </form>
@@ -30,34 +30,41 @@
             <form id="formHospitalizacion" method="post" action="{{ titular_create }}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label for="fecha_ingreso">Fecha de ingreso:</label>
                         <input type="date" name="fecha_ingreso" id="fecha_ingreso" class="form-control">
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label for="fecha_salida">Fecha de salida:</label>
                         <input type="date" name="fecha_salida" id="fecha_salida" class="form-control">
                     </div>
+                    <div class="form-group col-md-4">
+                        <label for="motivo">Motivo:</label>
+                        <input type="text" name="motivo" id="motivo" class="form-control">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="medicinas_aplicadas">Medicinas aplicadas:</label>
-                    <textarea name="medicinas_aplicadas" id="medicinas_aplicadas" class="form-control"></textarea>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="medicinas_aplicadas">Medicinas aplicadas:</label>
+                        <textarea name="medicinas_aplicadas" id="medicinas_aplicadas" class="form-control"></textarea>
+                    </div>
+                    
+                    <div class="form-group col-md-6">
+                        <label for="antecedentes">Antecedentes:</label>
+                        <textarea name="antecedentes" id="antecedentes" class="form-control"></textarea>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="motivo">Motivo:</label>
-                    <input type="text" name="motivo" id="motivo" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="antecedentes">Antecedentes:</label>
-                    <textarea name="antecedentes" id="antecedentes" class="form-control"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="tratamiento">Tratamiento:</label>
-                    <input type="text" name="tratamiento" id="tratamiento" class="form-control">
-                </div>
-                <div class="form-group form-check">
-                    <input type="checkbox" name="internado" id="internado" class="form-check-input" checked>
-                    <label class="form-check-label" for="internado">Internado</label>
+                <div class="form-row">
+                    <div class="form-group col-7">
+                        <label for="tratamiento">Tratamiento:</label>
+                        <input type="text" name="tratamiento" id="tratamiento" class="form-control">
+                    </div>
+                    <div class="form-group form-check col-5 d-flex justify-content-center align-items-center ">
+                        <div>
+                            <input type="checkbox" name="internado" id="internado" class="form-check-input" checked>
+                            <label class="form-check-label w-full" for="internado">Internado ?</label>
+                        </div>
+                    </div>
                 </div>
                 <button class="btn btn-submit mt-3 btn-success fw-bold" type="submit">
                     Registrar
@@ -68,30 +75,34 @@
             <h3 class="titulo">Registro de Cirugia</h3>
             <form id="formCirugia" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="form-group">
-                    <label for="fecha">Fecha de la cirugía:</label>
-                    <input type="date" class="form-control" id="fecha" name="fecha">
+                <div class="form-row">
+                    <div class="form-group col-12 col-md-6">
+                        <label for="fecha">Fecha de la cirugía:</label>
+                        <input type="date" class="form-control" id="fecha" name="fecha">
+                    </div>
+                    <div class="form-group col-12 col-md-6">
+                        <label for="hora">Hora de la cirugía:</label>
+                        <input type="time" class="form-control" id="hora" name="hora">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="hora">Hora de la cirugía:</label>
-                    <input type="time" class="form-control" id="hora" name="hora">
+                <div class="form-row">
+                    <div class="form-group col-12 col-md-6">
+                        <label>Motivo:</label>
+                        <input type="text" name="motivo" class="form-control form-control" autocomplete="off" required="" id="id_motivo">
+                    </div>
+                    <div class="form-group col-12 col-md-6">
+                        <label for="firma_propietario">Firma del propietario:</label>
+                        <input type="file" class="form-control-file" id="firma_propietario" name="firma_propietario">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Motivo:</label>
-                    
-                    <input type="text" name="motivo" class="form-control form-control" autocomplete="off" required="" id="id_motivo">
-                    
-                </div>
+                
                 <button 
                     class="btn btn-info" 
                     id="btn-formato-pdf"
                     type="button">
                         <i class="fas fa-file-download fa-lg"></i> Descargar acuerdo
                 </button>    
-                <div class="form-group">
-                    <label for="firma_propietario"></label>
-                    <input type="file" class="form-control-file" id="firma_propietario" name="firma_propietario">
-                </div>
+                
                 <button type="submit" class="btn btn-primary">Guardar</button>
             </form>
         </section>

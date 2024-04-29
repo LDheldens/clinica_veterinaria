@@ -13,6 +13,8 @@ from core.pos.views.crm.calendario.views import *
 from core.pos.views.crm.diagnostico.views import *
 from core.pos.views.crm.receta.views import *
 from core.pos.views.crm.cirugia.views import *
+from core.pos.views.crm.historial.views import *
+from core.pos.views.crm.banio.views import *
 from core.pos.views.crm.sale.print.views import *
 
 
@@ -117,4 +119,14 @@ urlpatterns = [
 
     # path('crm/cirugia/print/<int:paciente_id>/<int:propietario_id>/<int:medico_id>/', CirugiaPrintView.as_view(), name='cirugia_print'),
     path('crm/cirugia/print/<int:paciente_id>/<int:propietario_id>/<int:medico_id>/<fecha>/<hora>/', CirugiaPrintView.as_view(), name='cirugia_print'),
+    
+    #historial clinico
+    path('crm/historial/', HistoriaListView.as_view(), name='historial_list'),
+    path('crm/historial/print/<int:paciente_id>/', HistorialPrintView.as_view(), name='historial_print'),
+    
+    #Baño
+    path('crm/banio/', BanioListView.as_view(), name='banio_list'),
+    path('crm/banio/add/', BanioCreateView.as_view(), name='banio_create'),
+    path('crm/banio/update/<int:pk>/', BanioUpdateView.as_view(), name='banio_update'),
+    path('crm/banio/delete/<int:pk>/', BanioDeleteView.as_view(), name='banio_delete'),
 ]

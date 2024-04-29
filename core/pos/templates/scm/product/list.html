@@ -18,15 +18,15 @@
     <th>Imagen</th>
     <th>Precio de Compra</th>
     <th>Precio de Venta</th>
-    <th>Precio Promoción</th>
+    {% comment %} <th>Precio Promoción</th> {% endcomment %}
     <th class="text-center">Opciones</th>
 {% endblock %}
 
-{% block box_footer_add_button %}
+{% comment %} {% block box_footer_add_button %}
     <a class="btn btn-info btn-flat btnUpload">
         <i class="fas fa-upload"></i> Subir Excel de Productos
     </a>
-{% endblock %}
+{% endblock %} {% endcomment %}
 
 {% block javascript_list %}
     <div class="modal fade" id="myModalUploadExcel" tabindex="-1" role="dialog" aria-hidden="true">

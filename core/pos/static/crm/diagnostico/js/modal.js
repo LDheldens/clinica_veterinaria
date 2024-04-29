@@ -191,6 +191,7 @@ function enviarFormulario(e){
                 gravity: "top", // Posición de la notificación: "top", "bottom", "center"
                 backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)", // Color de fondo
             }).showToast();
+            
         } else {
             console.error('Error al crear la receta');
         }
@@ -293,6 +294,9 @@ function mostrarModal(){
 }
 
 function cerrarModal(){
+    contadorMedicamentos = 0
+    console.log(contadorMedicamentos)
+    contenedorMedicamentos.innerHTML = '';
     contenedorModal.style.display="none"
     formReceta.reset()
     formHospitalizacion.reset()
@@ -353,11 +357,11 @@ function agregarMedicamentoFormulario() {
     const nuevoMedicamentoDiv = document.createElement('div');
     nuevoMedicamentoDiv.classList.add('row');
     nuevoMedicamentoDiv.innerHTML = `
-        <div class="form-group col-4">
+        <div class="form-group col-4 mb-0">
             <label for="medicamento${contadorMedicamentos}">Medicamento:</label>
             <input type="text" name="medicamento${contadorMedicamentos}" class="form-control">
         </div>
-        <div class="form-group col-8">
+        <div class="form-group col-8 mb-0">
             <label for="indicaciones${contadorMedicamentos}">Indicaciones:</label>
             <input type="text" name="indicaciones${contadorMedicamentos}" class="form-control">
         </div>

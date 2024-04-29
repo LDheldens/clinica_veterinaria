@@ -151,13 +151,13 @@ print('insertado {}'.format(module.name))
 
 module = Module()
 module.moduletype_id = 2
-module.name = 'Productos'
+module.name = 'Servicios'
 module.url = '/pos/scm/product/'
 module.is_active = True
 module.is_vertical = True
 module.is_visible = True
 module.icon = 'fas fa-box'
-module.description = 'Permite administrar los productos del sistema'
+module.description = 'Permite administrar los servicios del sistema'
 module.save()
 for p in Permission.objects.filter(content_type__model=Product._meta.label.split('.')[1].lower()):
     module.permits.add(p)
@@ -258,6 +258,20 @@ for p in Permission.objects.filter(content_type__model=Client._meta.label.split(
     module.permits.add(p)
 print('insertado {}'.format(module.name))
 
+module = Module()
+module.moduletype_id = 5
+module.name = 'Nuevo Cliente'
+module.url = '/pos/crm/client/add/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-user-plus'
+module.description = 'Permite agregar un cliente'
+module.save()
+for p in Permission.objects.filter(content_type__model=Client._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
 
 
 type = ModuleType()
@@ -276,6 +290,20 @@ module.is_vertical = True
 module.is_visible = True
 module.icon = 'fas fa-list'
 module.description = 'Permite listar los medicos'
+module.save()
+for p in Permission.objects.filter(content_type__model=Medico._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
+module = Module()
+module.moduletype_id = 6
+module.name = 'Nuevo Médico'
+module.url = '/pos/crm/medico/add/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-user-plus'
+module.description = 'Permite registrar medicos'
 module.save()
 for p in Permission.objects.filter(content_type__model=Medico._meta.label.split('.')[1].lower()):
     module.permits.add(p)
@@ -338,6 +366,54 @@ module.description = 'Permite ver los reportes de las cuentas por cobrar'
 module.save()
 print('insertado {}'.format(module.name))
 
+module = Module()
+module.moduletype_id = 8
+module.name = 'Clientes'
+module.url = '/reports/client/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-chart-bar'
+module.description = 'Permite ver los reportes de los clientes'
+module.save()
+print('insertado {}'.format(module.name))
+
+module = Module()
+module.moduletype_id = 8
+module.name = 'Pacientes'
+module.url = '/reports/paciente/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-file-medical-alt'
+module.description = 'Permite ver los reportes de los pacientes'
+module.save()
+print('insertado {}'.format(module.name))
+
+module = Module()
+module.moduletype_id = 8
+module.name = 'Cirugias'
+module.url = '/reports/cirugia/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-notes-medical'
+module.description = 'Permite ver los reportes de las cirugias'
+module.save()
+print('insertado {}'.format(module.name))
+
+module = Module()
+module.moduletype_id = 8
+module.name = 'Hospitalización'
+module.url = '/reports/hospitalizacion/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-hospital-user'
+module.description = 'Permite ver los reportes de las hospitalizaciónes'
+module.save()
+print('insertado {}'.format(module.name))
+
 
 type = ModuleType()
 type.name = 'Diagnóstico'
@@ -356,6 +432,23 @@ module.is_visible = True
 module.icon = 'fas fa-file-medical'
 module.description = 'Permite listar los diagnosticos'
 module.save()
+for p in Permission.objects.filter(content_type__model=Diagnostico._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
+
+module = Module()
+module.moduletype_id = 9
+module.name = 'Nuevo Diagnóstico'
+module.url = '/pos/crm/diagnostico/add/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-diagnoses'
+module.description = 'Permite crear un diagnostico'
+module.save()
+for p in Permission.objects.filter(content_type__model=Diagnostico._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
 print('insertado {}'.format(module.name))
 
 
@@ -374,12 +467,27 @@ module.url = '/pos/crm/paciente/'
 module.is_active = True
 module.is_vertical = True
 module.is_visible = True
-module.icon = 'fas fa-paw'
+module.icon = 'fas fa-list'
 module.description = 'Permite listar pacientes'
 module.save()
 for p in Permission.objects.filter(content_type__model=Paciente._meta.label.split('.')[1].lower()):
     module.permits.add(p)
 print('insertado {}'.format(module.name))
+
+module = Module()
+module.moduletype_id = 10
+module.name = 'Nuevo Paciente'
+module.url = '/pos/crm/paciente/add/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-paw'
+module.description = 'Permite agregar pacientes'
+module.save()
+for p in Permission.objects.filter(content_type__model=Paciente._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
 
 type = ModuleType()
 type.name = 'Recetas'
@@ -387,6 +495,7 @@ type.icon = 'fas fa-book'
 type.name_menu = 'clinic'
 type.save()
 print('insertado {}'.format(type.name))
+
 
 module = Module()
 module.moduletype_id = 11
@@ -423,6 +532,95 @@ for p in Permission.objects.filter(content_type__model=Cirugia._meta.label.split
     module.permits.add(p)
 print('insertado {}'.format(module.name))
 
+module = Module()
+module.moduletype_id = 12
+module.name = 'Nueva Cirugia'
+module.url = '/pos/crm/cirugia/add/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-user-md'
+module.description = 'Permite registrar una  Cirugia'
+module.save()
+for p in Permission.objects.filter(content_type__model=Cirugia._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
+type = ModuleType()
+type.name = 'Hospitalizaciones'
+type.icon = 'fas fa-bed'
+type.name_menu = 'clinic'
+type.save()
+print('insertado {}'.format(type.name))
+
+module = Module()
+module.moduletype_id = 13
+module.name = 'Listado de Hospitalizaciones'
+module.name_menu = 'clinic'
+module.url = '/pos/crm/hospitalizacion/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-hospital-user'
+module.description = 'Permite listar las hospitalizaciones'
+module.save()
+for p in Permission.objects.filter(content_type__model=Hospitalizacion._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
+module = Module()
+module.moduletype_id = 13
+module.name = 'Nueva Hospitalización'
+module.name_menu = 'clinic'
+module.url = '/pos/crm/hospitalizacion/add/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-procedures'
+module.description = 'Permite agregar una hospitalización'
+module.save()
+for p in Permission.objects.filter(content_type__model=Hospitalizacion._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
+
+type = ModuleType()
+type.name = 'Baño para Mascotas'
+type.icon = 'fas fa-bed'
+type.name_menu = 'servi'
+type.save()
+print('insertado {}'.format(type.name))
+
+module = Module()
+module.moduletype_id = 14
+module.name = 'Listado de Baños'
+module.name_menu = 'servi'
+module.url = '/pos/crm/banio/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-hospital-user'
+module.description = 'Permite listar las servicios de baños'
+module.save()
+for p in Permission.objects.filter(content_type__model=Banio._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
+module = Module()
+module.moduletype_id = 14
+module.name = 'Nueva registro de Baño'
+module.name_menu = 'servi'
+module.url = '/pos/crm/banio/add/'
+module.is_active = True
+module.is_vertical = True
+module.is_visible = True
+module.icon = 'fas fa-procedures'
+module.description = 'Permite agregar una registro de Baño'
+module.save()
+for p in Permission.objects.filter(content_type__model=Banio._meta.label.split('.')[1].lower()):
+    module.permits.add(p)
+print('insertado {}'.format(module.name))
+
 
 
 
@@ -438,15 +636,16 @@ module.description = 'Permite añadir un tipo de mascota'
 module.save()
 print('insertado {}'.format(module.name))
 
+
 module = Module()
-module.name = 'Hospitalización'
+module.name = 'Historial'
 module.name_menu = 'clinic'
-module.url = '/pos/crm/hospitalizacion/'
+module.url = '/pos/crm/historial/'
 module.is_active = True
 module.is_vertical = False
 module.is_visible = True
-module.icon = 'fas fa-bed'
-module.description = 'Permite registrar una hospitalización de una mascota'
+module.icon = 'fas fa-file-medical'
+module.description = 'Permite observar los historiales clínicos'
 module.save()
 print('insertado {}'.format(module.name))
 

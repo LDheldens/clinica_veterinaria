@@ -379,21 +379,45 @@ class Paciente(models.Model):
     propietario = models.ForeignKey(Client, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=150, verbose_name='Nombre de la mascota')
     fecha_nacimiento = models.BooleanField(default=False, verbose_name='¿Conoces la fecha de nacimiento de tu mascota?')
-    fecha_nacimiento_value = models.DateField(default=datetime.now, verbose_name='Fecha de nacimiento')  
+    fecha_nacimiento_value = models.DateField(default=datetime.now, verbose_name='Fecha de nacimiento', null=True)  
     unidad_edad = models.CharField(max_length=10, choices=unidad_edad, default="año(s)", verbose_name='Unidad de edad')
     edad = models.IntegerField(null=True, blank=True, verbose_name='Edad')
     tipo_mascota = models.ForeignKey(TipoMascota, on_delete=models.CASCADE)
     sexo = models.CharField(choices=sexo_mascota, max_length=150, default="sin especificar")
     tamanio = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Tamaño') 
     raza = models.CharField(max_length=150, null=True, blank=True)
-    declaracion_jurada = models.FileField(upload_to='documentos/', verbose_name='Declaracion jurada del propietario')
+    declaracion_jurada = models.FileField(upload_to='documentos/', null=True, blank=True,verbose_name='Declaracion jurada del propietario')
     peso = models.DecimalField(max_digits=5, decimal_places=2)
-    descripcion = models.TextField(null=True, blank=True, verbose_name='Caracteristicas del paciente')  
+    descripcion = models.TextField(null=True, blank=True, verbose_name='Caracteristicas del paciente') 
+    alergias_bolean = models.BooleanField(default=False, verbose_name='¿El paciente tiene alguna alergia?')
     alergias = models.TextField(null=True, verbose_name='Alergias del Paciente')  
-    foto = models.ImageField(upload_to='fotos_pacientes/',null=True, verbose_name='Foto del Paciente')
+    foto = models.ImageField(upload_to='fotos_pacientes/',null=True, blank=True, verbose_name='Foto del Paciente')
+    
+    def get_diagnosticos(self):
+        return Diagnostico.objects.filter(paciente=self)
+
+    def get_citas(self):
+        return Cita.objects.filter(mascota=self)
+
+    def get_hospitalizaciones(self):
+        return Hospitalizacion.objects.filter(mascota=self)
+
+    def get_recetas(self):
+        return Receta.objects.filter(mascota=self)
+
+    def get_cirugias(self):
+        return Cirugia.objects.filter(paciente=self)
+
+    def get_historial_clinico(self):
+        return HistorialClinico.objects.filter(paciente=self)
     
     def __str__(self):
         return f'{self.nombre} / {self.tipo_mascota} / {self.raza}'    
+        
+    def get_image(self):
+        if self.foto:
+            return '{}{}'.format(settings.MEDIA_URL, self.foto)
+        return '{}{}'.format(settings.STATIC_URL, 'img/default/empty.png')
     
     def getEdad(self):
         if self.fecha_nacimiento:
@@ -548,3 +572,51 @@ class Cirugia(models.Model):
         verbose_name = 'Cirugía'
         verbose_name_plural = 'Cirugías'
         ordering = ['-fecha', '-hora']
+
+class HistorialClinico(models.Model):
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, verbose_name='Mascota')
+    
+    def __str__(self):
+        return f'Historial de {self.paciente.nombre}'
+    
+    def get_image(self):
+        if self.image:
+            return '{}{}'.format(settings.MEDIA_URL, self.image)
+        return '{}{}'.format(settings.STATIC_URL, 'img/default/empty.png')
+    
+    def toJSON(self):
+        item = {}
+        item['id'] = self.id
+        item['paciente_id'] = self.paciente.id
+        item['nombre'] = self.paciente.nombre
+        item['sexo'] = self.paciente.sexo
+        item['tipo_mascota'] = self.paciente.tipo_mascota.toJSON()['tipo_mascota']
+        item['propietario'] = self.paciente.propietario.user.get_full_name()
+        item['edad'] = self.paciente.getEdad()
+        item['tamanio'] = format(self.paciente.tamanio, '.2f')
+        item['peso'] = format(self.paciente.peso, '.2f')
+        item['foto'] = self.paciente.get_image()
+        return item
+    
+
+class Banio(models.Model):
+    cliente = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='Cliente')
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, verbose_name='Mascota')
+    hora_ingreso = models.TimeField(verbose_name='Hora de ingreso' ,null=True, blank=True)
+    hora_salida = models.TimeField(verbose_name='Hora de salida' ,null=True, blank=True)
+    detalles_banio = models.TextField(verbose_name='Detalles del baño', null=True, blank=True)
+
+    def __str__(self):
+        return f'Baño de {self.paciente.nombre} para {self.cliente.user.get_full_name()}'
+
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['cliente'] = self.cliente.toJSON()
+        item['paciente'] = self.paciente.toJSON()
+        item['hora_ingreso'] = self.hora_ingreso.strftime('%H:%M:%S')
+        item['hora_salida'] = self.hora_salida.strftime('%H:%M:%S')
+        return item
+
+    class Meta:
+        verbose_name = 'Baño'
+        verbose_name_plural = 'Baños'

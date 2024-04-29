@@ -1,0 +1,23 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+   <script src="{% static 'crm/banio/js/list.js' %}"></script>
+{% endblock %}
+
+{% block columns %}
+    <th>Nro</th>
+    <th>Cliente</th>
+    <th>Paciente</th>
+    <th>Hora de Ingreso</th>
+    <th>Hora de Salida</th>
+    <th>Detalles del Servicio</th>
+    <th class="text-center">Opciones</th>
+{% endblock %}
+
+{% block rows %}
+
+{% endblock %}
+
+{% block javascript_list %}
+
+{% endblock %}
